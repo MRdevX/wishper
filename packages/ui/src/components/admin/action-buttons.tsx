@@ -1,4 +1,4 @@
-import { Button } from "@repo/ui/components/button";
+import { Button } from "../button";
 import { Eye, Edit, Trash2, ExternalLink } from "lucide-react";
 
 interface ActionButtonsProps {

@@ -1,5 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui/components/card";
-import { StatsCard } from "@repo/admin/components/stats-card";
+import { StatsCard } from "@repo/ui";
 import { Users, Gift, List, TrendingUp } from "lucide-react";
 
 export default function AdminDashboard() {

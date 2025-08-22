@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui/components/card";
 import { Button } from "@repo/ui/components/button";
 import { Plus } from "lucide-react";
-import { DataTable } from "@repo/admin";
-import { ActionButtons } from "@repo/admin";
+import { DataTable } from "@repo/ui";
+import { ActionButtons } from "@repo/ui";
 import { apiClient } from "@/lib/api";
 import { ColumnDef } from "@tanstack/react-table";
 

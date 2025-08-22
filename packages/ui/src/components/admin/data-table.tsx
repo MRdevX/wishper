@@ -12,9 +12,9 @@ import {
   ColumnFiltersState,
 } from "@tanstack/react-table";
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@repo/ui/components/table";
-import { Input } from "@repo/ui/components/input";
-import { Button } from "@repo/ui/components/button";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../table";
+import { Input } from "../input";
+import { Button } from "../button";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
