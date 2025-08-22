@@ -10,9 +10,9 @@ export default registerAs(
     port: parseInt(process.env.DB_PORT || '5432', 10),
     username: process.env.DB_USERNAME || 'postgres',
     password: process.env.DB_PASSWORD || 'postgres',
-    database: process.env.DB_NAME || 'queue_worker',
+    database: process.env.DB_DATABASE || 'wishper_dev',
     entities,
-    synchronize: process.env.DB_SYNCHRONIZE === 'true',
+    synchronize: process.env.NODE_ENV === 'development',
     logging: process.env.NODE_ENV === 'development',
   }),
 );
