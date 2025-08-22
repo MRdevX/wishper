@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
 
 export interface ApiResponse<T = unknown> {
   success: boolean;
@@ -27,17 +27,19 @@ class ApiClient {
 
     try {
       const response = await fetch(url, config);
-      const data = await response.json();
 
       if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
         return {
           success: false,
-          error: data.message || `HTTP error! status: ${response.status}`,
+          error: errorData.message || `HTTP error! status: ${response.status}`,
         };
       }
 
+      const data = await response.json();
       return data;
     } catch (error) {
+      console.error("API request failed:", error);
       return {
         success: false,
         error: error instanceof Error ? error.message : "An unknown error occurred",

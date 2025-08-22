@@ -38,6 +38,12 @@ export {
 // Admin Components
 export { AdminLayout } from './components/admin/admin-layout';
 export { DataTable, SortableHeader } from './components/admin/data-table';
+export { DataTableWrapper } from './components/admin/data-table-wrapper';
+export { PageHeader } from './components/admin/page-header';
+export { LoadingState } from './components/admin/loading-state';
+export { ErrorState } from './components/admin/error-state';
+export { TableActions } from './components/admin/table-actions';
+export { UserForm } from './components/admin/user-form';
 export { ActionButtons } from './components/admin/action-buttons';
 export { StatsCard } from './components/admin/stats-card';
 

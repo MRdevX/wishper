@@ -1,141 +1,136 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui/components/card";
 import { Button } from "@repo/ui/components/button";
-import { Input } from "@repo/ui/components/input";
 import { Badge } from "@repo/ui/components/badge";
-import { Settings, Database, Globe, Shield, Bell } from "lucide-react";
+import { Settings, Database, Users, Shield, Bell } from "lucide-react";
 
 export default function SettingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
+        <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">Settings</h1>
         <p className="text-gray-600 mt-2">Manage your application settings</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Globe className="w-5 h-5 mr-2" />
-              General Settings
-            </CardTitle>
-            <CardDescription>Basic application configuration</CardDescription>
+        <Card className="border-gray-200">
+          <CardHeader className="pb-4">
+            <div className="flex items-center space-x-2">
+              <Database className="h-5 w-5 text-blue-600" />
+              <CardTitle className="text-lg">Database</CardTitle>
+            </div>
+            <CardDescription>Database configuration and status</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div>
-              <label className="text-sm font-medium mb-2 block">Application Name</label>
-              <Input defaultValue="Wishper" />
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-600">Status</span>
+              <Badge className="bg-green-100 text-green-800 border-green-200">Connected</Badge>
             </div>
-            <div>
-              <label className="text-sm font-medium mb-2 block">API Base URL</label>
-              <Input defaultValue="http://localhost:3001" />
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-600">Type</span>
+              <span className="text-sm text-gray-900">PostgreSQL</span>
             </div>
-            <div>
-              <label className="text-sm font-medium mb-2 block">Environment</label>
-              <Badge variant="outline">Development</Badge>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-600">Version</span>
+              <span className="text-sm text-gray-900">15.0</span>
             </div>
-            <Button>Save Changes</Button>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Database className="w-5 h-5 mr-2" />
-              Database Settings
-            </CardTitle>
-            <CardDescription>Database connection and configuration</CardDescription>
+        <Card className="border-gray-200">
+          <CardHeader className="pb-4">
+            <div className="flex items-center space-x-2">
+              <Users className="h-5 w-5 text-green-600" />
+              <CardTitle className="text-lg">Users</CardTitle>
+            </div>
+            <CardDescription>User management settings</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div>
-              <label className="text-sm font-medium mb-2 block">Database Type</label>
-              <Badge variant="outline">PostgreSQL</Badge>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-600">Registration</span>
+              <Badge className="bg-blue-100 text-blue-800 border-blue-200">Enabled</Badge>
             </div>
-            <div>
-              <label className="text-sm font-medium mb-2 block">Connection Status</label>
-              <Badge className="bg-green-100 text-green-800">Connected</Badge>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-600">Email Verification</span>
+              <Badge className="bg-green-100 text-green-800 border-green-200">Required</Badge>
             </div>
-            <div>
-              <label className="text-sm font-medium mb-2 block">Total Records</label>
-              <div className="text-2xl font-bold">0</div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-600">Max Users</span>
+              <span className="text-sm text-gray-900">Unlimited</span>
             </div>
-            <Button variant="outline">Test Connection</Button>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Shield className="w-5 h-5 mr-2" />
-              Security Settings
-            </CardTitle>
-            <CardDescription>Security and authentication configuration</CardDescription>
+        <Card className="border-gray-200">
+          <CardHeader className="pb-4">
+            <div className="flex items-center space-x-2">
+              <Shield className="h-5 w-5 text-purple-600" />
+              <CardTitle className="text-lg">Security</CardTitle>
+            </div>
+            <CardDescription>Security and authentication settings</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div>
-              <label className="text-sm font-medium mb-2 block">Authentication</label>
-              <Badge variant="outline">Disabled</Badge>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-600">2FA</span>
+              <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">Optional</Badge>
             </div>
-            <div>
-              <label className="text-sm font-medium mb-2 block">CORS Origins</label>
-              <Input defaultValue="http://localhost:3000" />
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-600">Session Timeout</span>
+              <span className="text-sm text-gray-900">24 hours</span>
             </div>
-            <div>
-              <label className="text-sm font-medium mb-2 block">Rate Limiting</label>
-              <Badge variant="outline">Disabled</Badge>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-600">Rate Limiting</span>
+              <Badge className="bg-green-100 text-green-800 border-green-200">Enabled</Badge>
             </div>
-            <Button variant="outline">Configure Security</Button>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Bell className="w-5 h-5 mr-2" />
-              Notification Settings
-            </CardTitle>
-            <CardDescription>Email and notification preferences</CardDescription>
+        <Card className="border-gray-200">
+          <CardHeader className="pb-4">
+            <div className="flex items-center space-x-2">
+              <Bell className="h-5 w-5 text-orange-600" />
+              <CardTitle className="text-lg">Notifications</CardTitle>
+            </div>
+            <CardDescription>Notification preferences</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div>
-              <label className="text-sm font-medium mb-2 block">Email Notifications</label>
-              <Badge variant="outline">Disabled</Badge>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-600">Email Notifications</span>
+              <Badge className="bg-green-100 text-green-800 border-green-200">Enabled</Badge>
             </div>
-            <div>
-              <label className="text-sm font-medium mb-2 block">SMTP Server</label>
-              <Input placeholder="smtp.example.com" />
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-600">Push Notifications</span>
+              <Badge className="bg-gray-100 text-gray-800 border-gray-200">Disabled</Badge>
             </div>
-            <div>
-              <label className="text-sm font-medium mb-2 block">Admin Email</label>
-              <Input placeholder="admin@example.com" />
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-600">Admin Alerts</span>
+              <Badge className="bg-green-100 text-green-800 border-green-200">Enabled</Badge>
             </div>
-            <Button variant="outline">Test Email</Button>
           </CardContent>
         </Card>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center">
-            <Settings className="w-5 h-5 mr-2" />
-            System Information
-          </CardTitle>
-          <CardDescription>Current system status and version information</CardDescription>
+      <Card className="border-gray-200">
+        <CardHeader className="pb-4">
+          <div className="flex items-center space-x-2">
+            <Settings className="h-5 w-5 text-gray-600" />
+            <CardTitle className="text-lg">System Actions</CardTitle>
+          </div>
+          <CardDescription>Important system operations</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="text-sm font-medium text-gray-500">Version</label>
-              <div className="text-sm">1.0.0</div>
-            </div>
-            <div>
-              <label className="text-sm font-medium text-gray-500">Node.js</label>
-              <div className="text-sm">v18.0.0</div>
-            </div>
-            <div>
-              <label className="text-sm font-medium text-gray-500">Uptime</label>
-              <div className="text-sm">0 days, 0 hours</div>
-            </div>
+        <CardContent className="space-y-4">
+          <div className="flex flex-wrap gap-4">
+            <Button variant="outline" className="border-gray-300 hover:bg-gray-50">
+              Clear Cache
+            </Button>
+            <Button variant="outline" className="border-gray-300 hover:bg-gray-50">
+              Backup Database
+            </Button>
+            <Button variant="outline" className="border-gray-300 hover:bg-gray-50">
+              Export Data
+            </Button>
+            <Button variant="outline" className="border-red-300 text-red-600 hover:bg-red-50">
+              Reset System
+            </Button>
           </div>
         </CardContent>
       </Card>

@@ -1,12 +1,17 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui/components/card";
-import { Button } from "@repo/ui/components/button";
-import { Input } from "@repo/ui/components/input";
-import { Badge } from "@repo/ui/components/badge";
-import { Plus, Search, Edit, Trash2, Eye, Gift } from "lucide-react";
-import { apiClient } from "@/lib/api";
+import { useState, useEffect } from 'react';
+import { Plus, Gift } from 'lucide-react';
+import { 
+  PageHeader, 
+  LoadingState, 
+  ErrorState, 
+  DataTableWrapper, 
+  TableActions 
+} from '@repo/ui';
+import { Badge } from '@repo/ui/components/badge';
+import { apiClient } from '@/lib/api';
+import { ColumnDef } from '@tanstack/react-table';
 
 interface Wishlist {
   id: string;
@@ -30,167 +35,168 @@ interface Wishlist {
 export default function WishlistsPage() {
   const [wishlists, setWishlists] = useState<Wishlist[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
-
-  useEffect(() => {
-    fetchWishlists();
-  }, []);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchWishlists = async () => {
     try {
+      setLoading(true);
+      setError(null);
       const response = await apiClient.getWishlists();
       if (response.success && response.data) {
         setWishlists(response.data as Wishlist[]);
+      } else {
+        setError(response.error || 'Failed to fetch wishlists');
       }
     } catch (error) {
-      console.error("Error fetching wishlists:", error);
+      console.error('Error fetching wishlists:', error);
+      setError('Failed to fetch wishlists');
     } finally {
       setLoading(false);
     }
   };
 
-  const filteredWishlists = wishlists.filter(
-    (wishlist) =>
-      wishlist.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      wishlist.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      wishlist.owner.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  useEffect(() => {
+    fetchWishlists();
+  }, []);
 
   const handleDeleteWishlist = async (wishlistId: string) => {
-    if (!confirm("Are you sure you want to delete this wishlist?")) return;
+    if (!confirm('Are you sure you want to delete this wishlist?')) return;
 
     try {
       const response = await apiClient.deleteWishlist(wishlistId);
       if (response.success) {
         setWishlists(wishlists.filter((wishlist) => wishlist.id !== wishlistId));
+      } else {
+        alert(response.error || 'Failed to delete wishlist');
       }
     } catch (error) {
-      console.error("Error deleting wishlist:", error);
+      console.error('Error deleting wishlist:', error);
+      alert('Failed to delete wishlist');
     }
   };
 
+  const handleAddWishlist = () => {
+    // TODO: Implement add wishlist functionality
+    alert('Add wishlist functionality coming soon!');
+  };
+
+  const columns: ColumnDef<Wishlist>[] = [
+    {
+      accessorKey: 'name',
+      header: 'Name',
+      cell: ({ row }) => {
+        const wishlist = row.original;
+        return (
+          <div>
+            <div className="font-medium text-gray-900">{wishlist.name}</div>
+            {wishlist.description && (
+              <div className="text-sm text-gray-500 truncate max-w-xs">
+                {wishlist.description}
+              </div>
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: 'owner',
+      header: 'Owner',
+      cell: ({ row }) => {
+        const owner = row.original.owner;
+        const name = owner.firstName && owner.lastName 
+          ? `${owner.firstName} ${owner.lastName}` 
+          : 'No name';
+        return (
+          <div className="text-sm">
+            <div className="font-medium text-gray-900">{name}</div>
+            <div className="text-gray-500">{owner.email}</div>
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: 'isPublic',
+      header: 'Visibility',
+      cell: ({ row }) => (
+        <Badge variant={row.original.isPublic ? 'default' : 'secondary'}>
+          {row.original.isPublic ? 'Public' : 'Private'}
+        </Badge>
+      ),
+    },
+    {
+      accessorKey: 'wishes',
+      header: 'Wishes Count',
+      cell: ({ row }) => (
+        <div className="flex items-center">
+          <Gift className="w-4 h-4 mr-1 text-gray-400" />
+          <span className="text-sm text-gray-700">
+            {row.original.wishes?.length || 0} wishes
+          </span>
+        </div>
+      ),
+    },
+    {
+      accessorKey: 'createdAt',
+      header: 'Created',
+      cell: ({ row }) => (
+        <div className="text-sm text-gray-500">
+          {new Date(row.original.createdAt).toLocaleDateString()}
+        </div>
+      ),
+    },
+    {
+      id: 'actions',
+      header: 'Actions',
+      cell: ({ row }) => (
+        <TableActions
+          onView={() => console.log('View wishlist:', row.original.id)}
+          onEdit={() => console.log('Edit wishlist:', row.original.id)}
+          onDelete={() => handleDeleteWishlist(row.original.id)}
+        />
+      ),
+    },
+  ];
+
   if (loading) {
     return (
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Wishlists</h1>
-          <p className="text-gray-600 mt-2">Manage wishlists</p>
-        </div>
-        <Card>
-          <CardContent className="p-6">
-            <div className="text-center">Loading wishlists...</div>
-          </CardContent>
-        </Card>
-      </div>
+      <LoadingState 
+        title="Wishlists" 
+        description="Manage wishlists" 
+      />
+    );
+  }
+
+  if (error) {
+    return (
+      <ErrorState 
+        title="Wishlists" 
+        description="Manage wishlists" 
+        error={error}
+        onRetry={fetchWishlists}
+      />
     );
   }
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Wishlists</h1>
-          <p className="text-gray-600 mt-2">Manage wishlists</p>
-        </div>
-        <Button>
-          <Plus className="w-4 h-4 mr-2" />
-          Add Wishlist
-        </Button>
-      </div>
+      <PageHeader
+        title="Wishlists"
+        description="Manage wishlists"
+        action={{
+          label: 'Add Wishlist',
+          icon: Plus,
+          onClick: handleAddWishlist,
+        }}
+      />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>All Wishlists</CardTitle>
-          <CardDescription>A list of all wishlists in your application</CardDescription>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <Input
-              placeholder="Search wishlists..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-        </CardHeader>
-        <CardContent>
-          {filteredWishlists.length === 0 ? (
-            <div className="text-center py-8">
-              <p className="text-gray-500">No wishlists found</p>
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b">
-                    <th className="text-left py-3 px-4 font-medium text-gray-900">Name</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-900">Owner</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-900">Visibility</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-900">Wishes Count</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-900">Created</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-900">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredWishlists.map((wishlist) => (
-                    <tr key={wishlist.id} className="border-b hover:bg-gray-50">
-                      <td className="py-3 px-4">
-                        <div>
-                          <div className="font-medium">{wishlist.name}</div>
-                          {wishlist.description && (
-                            <div className="text-sm text-gray-500 truncate max-w-xs">{wishlist.description}</div>
-                          )}
-                        </div>
-                      </td>
-                      <td className="py-3 px-4">
-                        <div className="text-sm">
-                          <div className="font-medium">
-                            {wishlist.owner.firstName && wishlist.owner.lastName
-                              ? `${wishlist.owner.firstName} ${wishlist.owner.lastName}`
-                              : "No name"}
-                          </div>
-                          <div className="text-gray-500">{wishlist.owner.email}</div>
-                        </div>
-                      </td>
-                      <td className="py-3 px-4">
-                        <Badge variant={wishlist.isPublic ? "default" : "secondary"}>
-                          {wishlist.isPublic ? "Public" : "Private"}
-                        </Badge>
-                      </td>
-                      <td className="py-3 px-4">
-                        <div className="flex items-center">
-                          <Gift className="w-4 h-4 mr-1 text-gray-400" />
-                          <span className="text-sm">{wishlist.wishes?.length || 0} wishes</span>
-                        </div>
-                      </td>
-                      <td className="py-3 px-4">
-                        <div className="text-sm text-gray-500">{new Date(wishlist.createdAt).toLocaleDateString()}</div>
-                      </td>
-                      <td className="py-3 px-4">
-                        <div className="flex space-x-2">
-                          <Button variant="ghost" size="sm">
-                            <Eye className="w-4 h-4" />
-                          </Button>
-                          <Button variant="ghost" size="sm">
-                            <Edit className="w-4 h-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleDeleteWishlist(wishlist.id)}
-                            className="text-red-600 hover:text-red-700"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+      <DataTableWrapper
+        title="All Wishlists"
+        description="A list of all wishlists in your application"
+        columns={columns}
+        data={wishlists}
+        searchKey="name"
+        searchPlaceholder="Search wishlists..."
+      />
     </div>
   );
 }
