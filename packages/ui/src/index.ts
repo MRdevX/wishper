@@ -44,6 +44,9 @@ export { LoadingState } from './components/admin/loading-state';
 export { ErrorState } from './components/admin/error-state';
 export { TableActions } from './components/admin/table-actions';
 export { UserForm } from './components/admin/user-form';
+export { WishForm } from './components/admin/wish-form';
+export { WishlistForm } from './components/admin/wishlist-form';
+export { Toast, ToastProvider, useToast } from './components/admin/toast';
 export { ActionButtons } from './components/admin/action-buttons';
 export { StatsCard } from './components/admin/stats-card';
 

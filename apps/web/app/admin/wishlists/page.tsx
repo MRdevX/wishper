@@ -1,23 +1,15 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Plus, Gift } from 'lucide-react';
-import { 
-  PageHeader, 
-  LoadingState, 
-  ErrorState, 
-  DataTableWrapper, 
-  TableActions 
-} from '@repo/ui';
-import { Badge } from '@repo/ui/components/badge';
-import { apiClient } from '@/lib/api';
-import { ColumnDef } from '@tanstack/react-table';
+import { useState, useEffect } from "react";
+import { Plus, Gift } from "lucide-react";
+import { PageHeader, LoadingState, ErrorState, DataTableWrapper, TableActions, WishlistForm, useToast } from "@repo/ui";
+import { Badge } from "@repo/ui/components/badge";
+import { apiClient } from "@/lib/api";
+import { ColumnDef } from "@tanstack/react-table";
 
 interface Wishlist {
   id: string;
   name: string;
-  description?: string;
-  isPublic: boolean;
   owner: {
     id: string;
     email: string;
@@ -36,6 +28,10 @@ export default function WishlistsPage() {
   const [wishlists, setWishlists] = useState<Wishlist[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showWishlistForm, setShowWishlistForm] = useState(false);
+  const [editingWishlist, setEditingWishlist] = useState<Wishlist | null>(null);
+  const [formLoading, setFormLoading] = useState(false);
+  const { showToast } = useToast();
 
   const fetchWishlists = async () => {
     try {
@@ -45,11 +41,11 @@ export default function WishlistsPage() {
       if (response.success && response.data) {
         setWishlists(response.data as Wishlist[]);
       } else {
-        setError(response.error || 'Failed to fetch wishlists');
+        setError(response.error || "Failed to fetch wishlists");
       }
     } catch (error) {
-      console.error('Error fetching wishlists:', error);
-      setError('Failed to fetch wishlists');
+      console.error("Error fetching wishlists:", error);
+      setError("Failed to fetch wishlists");
     } finally {
       setLoading(false);
     }
@@ -60,52 +56,84 @@ export default function WishlistsPage() {
   }, []);
 
   const handleDeleteWishlist = async (wishlistId: string) => {
-    if (!confirm('Are you sure you want to delete this wishlist?')) return;
+    if (!confirm("Are you sure you want to delete this wishlist?")) return;
 
     try {
       const response = await apiClient.deleteWishlist(wishlistId);
       if (response.success) {
         setWishlists(wishlists.filter((wishlist) => wishlist.id !== wishlistId));
+        showToast("Wishlist deleted successfully", "success");
       } else {
-        alert(response.error || 'Failed to delete wishlist');
+        showToast(response.error || "Failed to delete wishlist", "error");
       }
     } catch (error) {
-      console.error('Error deleting wishlist:', error);
-      alert('Failed to delete wishlist');
+      console.error("Error deleting wishlist:", error);
+      showToast("Failed to delete wishlist", "error");
     }
   };
 
   const handleAddWishlist = () => {
-    // TODO: Implement add wishlist functionality
-    alert('Add wishlist functionality coming soon!');
+    setEditingWishlist(null);
+    setShowWishlistForm(true);
+  };
+
+  const handleEditWishlist = (wishlist: Wishlist) => {
+    setEditingWishlist(wishlist);
+    setShowWishlistForm(true);
+  };
+
+  const handleSaveWishlist = async (wishlistData: any) => {
+    try {
+      setFormLoading(true);
+      if (editingWishlist) {
+        const response = await apiClient.updateWishlist(editingWishlist.id, wishlistData);
+        if (response.success && response.data) {
+          setWishlists(
+            wishlists.map((wishlist) => (wishlist.id === editingWishlist.id ? (response.data as Wishlist) : wishlist))
+          );
+          setShowWishlistForm(false);
+          setEditingWishlist(null);
+          showToast("Wishlist updated successfully", "success");
+        } else {
+          showToast(response.error || "Failed to update wishlist", "error");
+        }
+      } else {
+        const response = await apiClient.createWishlist(wishlistData);
+        if (response.success && response.data) {
+          setWishlists([...wishlists, response.data as Wishlist]);
+          setShowWishlistForm(false);
+          showToast("Wishlist created successfully", "success");
+        } else {
+          showToast(response.error || "Failed to create wishlist", "error");
+        }
+      }
+    } catch (error) {
+      console.error("Error saving wishlist:", error);
+      showToast("Failed to save wishlist", "error");
+    } finally {
+      setFormLoading(false);
+    }
   };
 
   const columns: ColumnDef<Wishlist>[] = [
     {
-      accessorKey: 'name',
-      header: 'Name',
+      accessorKey: "name",
+      header: "Name",
       cell: ({ row }) => {
         const wishlist = row.original;
         return (
           <div>
             <div className="font-medium text-gray-900">{wishlist.name}</div>
-            {wishlist.description && (
-              <div className="text-sm text-gray-500 truncate max-w-xs">
-                {wishlist.description}
-              </div>
-            )}
           </div>
         );
       },
     },
     {
-      accessorKey: 'owner',
-      header: 'Owner',
+      accessorKey: "owner",
+      header: "Owner",
       cell: ({ row }) => {
         const owner = row.original.owner;
-        const name = owner.firstName && owner.lastName 
-          ? `${owner.firstName} ${owner.lastName}` 
-          : 'No name';
+        const name = owner.firstName && owner.lastName ? `${owner.firstName} ${owner.lastName}` : "No name";
         return (
           <div className="text-sm">
             <div className="font-medium text-gray-900">{name}</div>
@@ -114,43 +142,31 @@ export default function WishlistsPage() {
         );
       },
     },
+
     {
-      accessorKey: 'isPublic',
-      header: 'Visibility',
-      cell: ({ row }) => (
-        <Badge variant={row.original.isPublic ? 'default' : 'secondary'}>
-          {row.original.isPublic ? 'Public' : 'Private'}
-        </Badge>
-      ),
-    },
-    {
-      accessorKey: 'wishes',
-      header: 'Wishes Count',
+      accessorKey: "wishes",
+      header: "Wishes Count",
       cell: ({ row }) => (
         <div className="flex items-center">
           <Gift className="w-4 h-4 mr-1 text-gray-400" />
-          <span className="text-sm text-gray-700">
-            {row.original.wishes?.length || 0} wishes
-          </span>
+          <span className="text-sm text-gray-700">{row.original.wishes?.length || 0} wishes</span>
         </div>
       ),
     },
     {
-      accessorKey: 'createdAt',
-      header: 'Created',
+      accessorKey: "createdAt",
+      header: "Created",
       cell: ({ row }) => (
-        <div className="text-sm text-gray-500">
-          {new Date(row.original.createdAt).toLocaleDateString()}
-        </div>
+        <div className="text-sm text-gray-500">{new Date(row.original.createdAt).toLocaleDateString()}</div>
       ),
     },
     {
-      id: 'actions',
-      header: 'Actions',
+      id: "actions",
+      header: "Actions",
       cell: ({ row }) => (
         <TableActions
-          onView={() => console.log('View wishlist:', row.original.id)}
-          onEdit={() => console.log('Edit wishlist:', row.original.id)}
+          onView={() => console.log("View wishlist:", row.original.id)}
+          onEdit={() => handleEditWishlist(row.original)}
           onDelete={() => handleDeleteWishlist(row.original.id)}
         />
       ),
@@ -158,23 +174,11 @@ export default function WishlistsPage() {
   ];
 
   if (loading) {
-    return (
-      <LoadingState 
-        title="Wishlists" 
-        description="Manage wishlists" 
-      />
-    );
+    return <LoadingState title="Wishlists" description="Manage wishlists" />;
   }
 
   if (error) {
-    return (
-      <ErrorState 
-        title="Wishlists" 
-        description="Manage wishlists" 
-        error={error}
-        onRetry={fetchWishlists}
-      />
-    );
+    return <ErrorState title="Wishlists" description="Manage wishlists" error={error} onRetry={fetchWishlists} />;
   }
 
   return (
@@ -183,7 +187,7 @@ export default function WishlistsPage() {
         title="Wishlists"
         description="Manage wishlists"
         action={{
-          label: 'Add Wishlist',
+          label: "Add Wishlist",
           icon: Plus,
           onClick: handleAddWishlist,
         }}
@@ -197,6 +201,25 @@ export default function WishlistsPage() {
         searchKey="name"
         searchPlaceholder="Search wishlists..."
       />
+
+      {showWishlistForm && (
+        <WishlistForm
+          onSubmit={handleSaveWishlist}
+          onCancel={() => {
+            setShowWishlistForm(false);
+            setEditingWishlist(null);
+          }}
+          loading={formLoading}
+          initialData={
+            editingWishlist
+              ? {
+                  name: editingWishlist.name,
+                }
+              : undefined
+          }
+          mode={editingWishlist ? "edit" : "create"}
+        />
+      )}
     </div>
   );
 }

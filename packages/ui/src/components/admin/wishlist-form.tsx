@@ -12,28 +12,26 @@ import {
 } from '../card';
 import { X } from 'lucide-react';
 
-interface UserFormData {
-  email: string;
+interface WishlistFormData {
   name: string;
 }
 
-interface UserFormProps {
-  onSubmit: (data: UserFormData) => void;
+interface WishlistFormProps {
+  onSubmit: (data: WishlistFormData) => void;
   onCancel: () => void;
   loading?: boolean;
-  initialData?: Partial<UserFormData>;
+  initialData?: Partial<WishlistFormData>;
   mode?: 'create' | 'edit';
 }
 
-export function UserForm({
+export function WishlistForm({
   onSubmit,
   onCancel,
   loading = false,
   initialData,
   mode = 'create',
-}: UserFormProps) {
-  const [formData, setFormData] = useState<UserFormData>({
-    email: '',
+}: WishlistFormProps) {
+  const [formData, setFormData] = useState<WishlistFormData>({
     name: '',
     ...initialData,
   });
@@ -49,7 +47,7 @@ export function UserForm({
     onSubmit(formData);
   };
 
-  const handleChange = (field: keyof UserFormData, value: string) => {
+  const handleChange = (field: keyof WishlistFormData, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -59,12 +57,12 @@ export function UserForm({
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 border-b border-gray-200">
           <div>
             <CardTitle className="text-xl font-semibold text-gray-900">
-              {mode === 'create' ? 'Add New User' : 'Edit User'}
+              {mode === 'create' ? 'Add New Wishlist' : 'Edit Wishlist'}
             </CardTitle>
             <CardDescription className="text-gray-600">
               {mode === 'create'
-                ? 'Create a new user account'
-                : 'Update user details'}
+                ? 'Create a new wishlist'
+                : 'Update wishlist details'}
             </CardDescription>
           </div>
           <Button
@@ -80,29 +78,18 @@ export function UserForm({
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Email *
-              </label>
-              <Input
-                type="email"
-                value={formData.email}
-                onChange={(e) => handleChange('email', e.target.value)}
-                required
-                className="w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                placeholder="user@example.com"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Name
+                Name *
               </label>
               <Input
                 type="text"
                 value={formData.name}
                 onChange={(e) => handleChange('name', e.target.value)}
+                required
                 className="w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                placeholder="Full name (optional)"
+                placeholder="Wishlist name"
               />
             </div>
+
             <div className="flex space-x-3 pt-6 border-t border-gray-200">
               <Button
                 type="button"
@@ -122,8 +109,8 @@ export function UserForm({
                     ? 'Creating...'
                     : 'Updating...'
                   : mode === 'create'
-                    ? 'Create User'
-                    : 'Update User'}
+                    ? 'Create Wishlist'
+                    : 'Update Wishlist'}
               </Button>
             </div>
           </form>

@@ -8,7 +8,8 @@ import {
   ErrorState, 
   DataTableWrapper, 
   TableActions,
-  UserForm
+  UserForm,
+  useToast
 } from '@repo/ui';
 import { apiClient } from '@/lib/api';
 import { ColumnDef } from '@tanstack/react-table';
@@ -28,7 +29,9 @@ export default function UsersPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showUserForm, setShowUserForm] = useState(false);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
   const [formLoading, setFormLoading] = useState(false);
+  const { showToast } = useToast();
 
   const fetchUsers = async () => {
     try {
@@ -59,32 +62,52 @@ export default function UsersPage() {
       const response = await apiClient.deleteUser(userId);
       if (response.success) {
         setUsers(users.filter((user) => user.id !== userId));
+        showToast('User deleted successfully', 'success');
       } else {
-        alert(response.error || 'Failed to delete user');
+        showToast(response.error || 'Failed to delete user', 'error');
       }
     } catch (error) {
       console.error('Error deleting user:', error);
-      alert('Failed to delete user');
+      showToast('Failed to delete user', 'error');
     }
   };
 
   const handleAddUser = () => {
+    setEditingUser(null);
+    setShowUserForm(true);
+  };
+
+  const handleEditUser = (user: User) => {
+    setEditingUser(user);
     setShowUserForm(true);
   };
 
   const handleCreateUser = async (userData: { email: string; name: string }) => {
     try {
       setFormLoading(true);
-      const response = await apiClient.createUser(userData);
-      if (response.success && response.data) {
-        setUsers([...users, response.data as User]);
-        setShowUserForm(false);
+      if (editingUser) {
+        const response = await apiClient.updateUser(editingUser.id, userData);
+        if (response.success && response.data) {
+          setUsers(users.map(user => user.id === editingUser.id ? response.data as User : user));
+          setShowUserForm(false);
+          setEditingUser(null);
+          showToast('User updated successfully', 'success');
+        } else {
+          showToast(response.error || 'Failed to update user', 'error');
+        }
       } else {
-        alert(response.error || 'Failed to create user');
+        const response = await apiClient.createUser(userData);
+        if (response.success && response.data) {
+          setUsers([...users, response.data as User]);
+          setShowUserForm(false);
+          showToast('User created successfully', 'success');
+        } else {
+          showToast(response.error || 'Failed to create user', 'error');
+        }
       }
     } catch (error) {
-      console.error('Error creating user:', error);
-      alert('Failed to create user');
+      console.error('Error saving user:', error);
+      showToast('Failed to save user', 'error');
     } finally {
       setFormLoading(false);
     }
@@ -122,7 +145,7 @@ export default function UsersPage() {
       cell: ({ row }) => (
         <TableActions
           onView={() => console.log('View user:', row.original.id)}
-          onEdit={() => console.log('Edit user:', row.original.id)}
+          onEdit={() => handleEditUser(row.original)}
           onDelete={() => handleDeleteUser(row.original.id)}
         />
       ),
@@ -173,8 +196,16 @@ export default function UsersPage() {
       {showUserForm && (
         <UserForm
           onSubmit={handleCreateUser}
-          onCancel={() => setShowUserForm(false)}
+          onCancel={() => {
+            setShowUserForm(false);
+            setEditingUser(null);
+          }}
           loading={formLoading}
+          initialData={editingUser ? {
+            email: editingUser.email,
+            name: editingUser.name || editingUser.firstName || editingUser.lastName || '',
+          } : undefined}
+          mode={editingUser ? 'edit' : 'create'}
         />
       )}
     </div>

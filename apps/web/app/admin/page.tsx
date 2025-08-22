@@ -1,15 +1,84 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui/components/card";
 import { StatsCard } from "@repo/ui";
 import { Users, Gift, List, TrendingUp } from "lucide-react";
+import { apiClient } from '@/lib/api';
+
+interface DashboardStats {
+  totalUsers: number;
+  totalWishes: number;
+  totalWishlists: number;
+  activeUsers: number;
+}
 
 export default function AdminDashboard() {
+  const [stats, setStats] = useState<DashboardStats>({
+    totalUsers: 0,
+    totalWishes: 0,
+    totalWishlists: 0,
+    activeUsers: 0,
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        setLoading(true);
+        const [usersResponse, wishesResponse, wishlistsResponse] = await Promise.all([
+          apiClient.getUsers(),
+          apiClient.getWishes(),
+          apiClient.getWishlists(),
+        ]);
+
+        const users = usersResponse.success ? (usersResponse.data as any[]) || [] : [];
+        const wishes = wishesResponse.success ? (wishesResponse.data as any[]) || [] : [];
+        const wishlists = wishlistsResponse.success ? (wishlistsResponse.data as any[]) || [] : [];
+
+        setStats({
+          totalUsers: users.length,
+          totalWishes: wishes.length,
+          totalWishlists: wishlists.length,
+          activeUsers: users.length, // For now, assume all users are active
+        });
+      } catch (error) {
+        console.error('Error fetching dashboard stats:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatsCard title="Total Users" value="0" description="+0% from last month" icon={Users} />
-        <StatsCard title="Total Wishes" value="0" description="+0% from last month" icon={Gift} />
-        <StatsCard title="Total Wishlists" value="0" description="+0% from last month" icon={List} />
-        <StatsCard title="Active Users" value="0" description="+0% from last month" icon={TrendingUp} />
+        <StatsCard 
+          title="Total Users" 
+          value={loading ? "..." : stats.totalUsers.toString()} 
+          description="+0% from last month" 
+          icon={Users} 
+        />
+        <StatsCard 
+          title="Total Wishes" 
+          value={loading ? "..." : stats.totalWishes.toString()} 
+          description="+0% from last month" 
+          icon={Gift} 
+        />
+        <StatsCard 
+          title="Total Wishlists" 
+          value={loading ? "..." : stats.totalWishlists.toString()} 
+          description="+0% from last month" 
+          icon={List} 
+        />
+        <StatsCard 
+          title="Active Users" 
+          value={loading ? "..." : stats.activeUsers.toString()} 
+          description="+0% from last month" 
+          icon={TrendingUp} 
+        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
