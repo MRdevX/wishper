@@ -36,7 +36,6 @@ export class Wish extends BaseModel {
   @Column({ type: 'enum', enum: WishStatus, default: WishStatus.ACTIVE })
   status: WishStatus;
 
-  // MVP: keep this simple, one flexible JSON field for extra data (brand, trip dates, etc.)
   @Column({ type: 'jsonb', default: {} })
   details: Record<string, any>;
 }

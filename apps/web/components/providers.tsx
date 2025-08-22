@@ -4,7 +4,7 @@ import * as React from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 
 interface ProvidersProps {
-  children: any;
+  children: React.ReactNode;
 }
 
 export function Providers({ children }: ProvidersProps) {

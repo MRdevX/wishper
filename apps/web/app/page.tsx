@@ -27,6 +27,9 @@ export default function Page() {
               <Github className="w-4 h-4 mr-2" />
               GitHub
             </Button>
+            <Button variant="outline" size="lg" asChild>
+              <a href="/admin">Admin Panel</a>
+            </Button>
           </div>
         </div>
       </div>
