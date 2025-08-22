@@ -1,0 +1,24 @@
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { User } from '../../users/entities/user.entity';
+import { Wish } from '../../wishes/entities/wish.entity';
+import { BaseModel } from '../../core/base/base.entity';
+
+@Entity()
+export class Wishlist extends BaseModel {
+  @ManyToOne(() => User, (u) => u.wishlists, { onDelete: 'CASCADE' })
+  owner: User;
+
+  @Column({ length: 120 })
+  name: string;
+
+  @OneToMany(() => Wish, (w) => w.wishlist)
+  wishes: Wish[];
+}

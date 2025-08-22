@@ -1,10 +1,10 @@
-import { Repository, FindManyOptions } from 'typeorm';
+import { Repository, FindManyOptions, DeepPartial } from 'typeorm';
 import { BaseModel } from './base.entity';
 
 export abstract class BaseRepository<T extends BaseModel> {
   constructor(protected readonly repository: Repository<T>) {}
 
-  async create(data: any): Promise<T> {
+  async create(data: DeepPartial<T>): Promise<T> {
     const entity = this.repository.create(data);
     const savedEntity = await this.repository.save(entity);
     return Array.isArray(savedEntity) ? savedEntity[0] : savedEntity;
