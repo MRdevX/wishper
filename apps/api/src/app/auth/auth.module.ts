@@ -8,13 +8,24 @@ import { User } from '../users/entities/user.entity';
 import { Token } from './entities/token.entity';
 import { TokensModule } from './tokens/tokens.module';
 import { TokenService } from './services/token.service';
+import { PasswordService } from './services/password.service';
+import { UserRepository } from './repositories/user.repository';
+import { TokenRepository } from './repositories/token.repository';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, Token]), PassportModule, ConfigModule, TokensModule],
   controllers: [AuthController],
-  providers: [AuthService, TokenService, JwtStrategy, LocalStrategy],
+  providers: [
+    AuthService,
+    TokenService,
+    PasswordService,
+    UserRepository,
+    TokenRepository,
+    JwtStrategy,
+    LocalStrategy,
+  ],
   exports: [AuthService],
 })
 export class AuthModule {}

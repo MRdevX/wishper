@@ -1,17 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { UnauthorizedException, ConflictException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { User } from '../users/entities/user.entity';
-import { Token } from './entities/token.entity';
 import { TokensService } from './tokens/tokens.service';
 import { TokenService } from './services/token.service';
-import { UnauthorizedException, ConflictException } from '@nestjs/common';
+import { PasswordService } from './services/password.service';
 
 describe('AuthService', () => {
   let service: AuthService;
   let userRepository: any;
   let tokensService: any;
   let tokenService: any;
+  let passwordService: any;
 
   const mockUserRepository = {
     findOne: jest.fn(),
@@ -34,6 +35,11 @@ describe('AuthService', () => {
     deletePasswordResetToken: jest.fn(),
   };
 
+  const mockPasswordService = {
+    hash: jest.fn(),
+    compare: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -50,6 +56,10 @@ describe('AuthService', () => {
           provide: TokenService,
           useValue: mockTokenService,
         },
+        {
+          provide: PasswordService,
+          useValue: mockPasswordService,
+        },
       ],
     }).compile();
 
@@ -57,6 +67,7 @@ describe('AuthService', () => {
     userRepository = module.get(getRepositoryToken(User));
     tokensService = module.get(TokensService);
     tokenService = module.get(TokenService);
+    passwordService = module.get(PasswordService);
   });
 
   afterEach(() => {
@@ -92,13 +103,14 @@ describe('AuthService', () => {
       userRepository.save.mockResolvedValue(mockUser);
       tokensService.generateTokenPair.mockReturnValue(mockTokens);
       tokenService.createRefreshToken.mockResolvedValue({});
+      passwordService.hash.mockResolvedValue('hashedPassword');
 
       const result = await service.register(registerDto);
 
       expect(result.user.email).toBe('test@example.com');
       expect(result.user.name).toBe('Test User');
       expect(result.tokens).toEqual(mockTokens);
-      expect(result.user.password).toBeUndefined();
+      expect((result.user as any).password).toBeUndefined();
     });
 
     it('should throw ConflictException if user already exists', async () => {
@@ -136,15 +148,13 @@ describe('AuthService', () => {
       userRepository.findOne.mockResolvedValue(mockUser);
       tokensService.generateTokenPair.mockReturnValue(mockTokens);
       tokenService.createRefreshToken.mockResolvedValue({});
-
-      // Mock bcrypt.compare to return true
-      jest.spyOn(require('bcryptjs'), 'compare').mockResolvedValue(true);
+      passwordService.compare.mockResolvedValue(true);
 
       const result = await service.login(loginDto);
 
       expect(result.user.email).toBe('test@example.com');
       expect(result.tokens).toEqual(mockTokens);
-      expect(result.user.password).toBeUndefined();
+      expect((result.user as any).password).toBeUndefined();
     });
 
     it('should throw UnauthorizedException with invalid credentials', async () => {
