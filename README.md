@@ -1,14 +1,13 @@
-# Turborepo Template: Next.js + NestJS + ShadCN
+# Wishper
 
-A modern, full-stack monorepo template built with Turborepo, featuring Next.js frontend, NestJS backend, and beautiful ShadCN UI components.
+A personal project to build a robust full-stack wishlist application using modern technologies.
 
-## 🚀 Features
+## 🚀 Tech Stack
 
 - **Frontend**: Next.js 15 with App Router, TypeScript, and Tailwind CSS
-- **Backend**: NestJS with TypeScript, decorators, and dependency injection
+- **Backend**: NestJS with TypeScript and PostgreSQL
 - **UI**: ShadCN UI components with Lucide React icons
 - **Monorepo**: Turborepo for fast, incremental builds and caching
-- **Shared**: ESLint, TypeScript, and Jest configurations
 - **Package Manager**: pnpm with workspace support
 
 ## 📁 Project Structure
@@ -35,10 +34,6 @@ A modern, full-stack monorepo template built with Turborepo, featuring Next.js f
 ### Installation
 
 ```bash
-# Clone the repository
-git clone <your-repo-url>
-cd wishper-shadcn
-
 # Install dependencies
 pnpm install
 
@@ -62,77 +57,23 @@ pnpm lint
 pnpm typecheck
 ```
 
-### Adding ShadCN Components
-
-```bash
-cd apps/web
-npx shadcn@latest add <component-name>
-```
-
-## 🎨 UI Components
-
-This template includes several ShadCN components ready to use:
-
-- **Button** - Various sizes and variants
-- **Card** - Content containers with header, content, and footer
-- **Input** - Form input fields
-- **Badge** - Status indicators and labels
-
-## 🔧 Configuration
-
-### Turborepo
-
-The project uses Turborepo for build orchestration with:
-
-- Incremental builds
-- Intelligent caching
-- Parallel execution
-- Shared configurations
-
-### TypeScript
-
-Shared TypeScript configurations for:
-
-- Next.js apps
-- NestJS apps
-- React libraries
-
-### ESLint
-
-Shared ESLint configurations for:
-
-- Next.js apps
-- NestJS apps
-- React libraries
-
 ## 📦 Packages
 
 ### `@repo/ui`
 
 Shared UI components built with ShadCN and Tailwind CSS.
 
-```tsx
-import { Button } from "@repo/ui/components/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
-```
-
 ### `@repo/api`
 
 Shared DTOs and entities for the NestJS backend.
 
-```typescript
-import { CreateLinkDto, UpdateLinkDto, Link } from "@repo/api";
-```
+## 🎯 Features
 
-## 🚀 Deployment
-
-### Frontend (Next.js)
-
-Deploy to Vercel, Netlify, or any static hosting platform.
-
-### Backend (NestJS)
-
-Deploy to Railway, Render, or any Node.js hosting platform.
+- Create and manage wishlists
+- Share wishlists with family and friends
+- Track gifts and who gave them
+- Beautiful, responsive UI
+- Full-stack TypeScript application
 
 ## 📝 License
 

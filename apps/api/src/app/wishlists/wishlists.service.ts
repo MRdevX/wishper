@@ -37,10 +37,6 @@ export class WishlistsService extends BaseRepository<Wishlist> {
   }
 
   async update(id: string, updateWishlistDto: UpdateWishlistDto): Promise<Wishlist> {
-    const wishlist = await this.findById(id);
-    if (!wishlist) {
-      throw new NotFoundException(`Wishlist with ID ${id} not found`);
-    }
     const updatedWishlist = await super.update(id, updateWishlistDto);
     if (!updatedWishlist) {
       throw new NotFoundException(`Wishlist with ID ${id} not found`);
