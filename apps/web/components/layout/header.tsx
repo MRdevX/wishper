@@ -40,7 +40,7 @@ export function Header({ onMenuToggle, isMenuOpen }: IHeaderProps) {
   };
 
   return (
-    <header className='sticky top-0 z-50 border-b border-slate-200 bg-white'>
+    <header className='sticky top-0 z-30 border-b border-slate-200 bg-white'>
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
         <div className='flex h-16 items-center justify-between'>
           {/* Logo and Mobile Menu Button */}
@@ -92,7 +92,9 @@ export function Header({ onMenuToggle, isMenuOpen }: IHeaderProps) {
                       <div className='flex h-full w-full items-center justify-center rounded-full bg-gradient-to-r from-pink-500 to-rose-500 text-sm font-medium text-white'>
                         {user.name
                           ? user.name.charAt(0).toUpperCase()
-                          : user.email.charAt(0).toUpperCase()}
+                          : user.email
+                            ? user.email.charAt(0).toUpperCase()
+                            : 'U'}
                       </div>
                     </Avatar>
                   </Button>
@@ -101,7 +103,9 @@ export function Header({ onMenuToggle, isMenuOpen }: IHeaderProps) {
                   <div className='flex items-center justify-start gap-2 p-2'>
                     <div className='flex flex-col space-y-1 leading-none'>
                       {user.name && <p className='font-medium'>{user.name}</p>}
-                      <p className='w-[200px] truncate text-sm text-slate-600'>{user.email}</p>
+                      <p className='w-[200px] truncate text-sm text-slate-600'>
+                        {user.email || 'No email'}
+                      </p>
                     </div>
                   </div>
                   <DropdownMenuItem onClick={handleProfile}>

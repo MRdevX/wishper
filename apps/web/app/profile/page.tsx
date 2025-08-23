@@ -84,7 +84,9 @@ function ProfileContent() {
                     <div className='flex h-full w-full items-center justify-center rounded-full bg-gradient-to-r from-pink-500 to-rose-500 text-2xl font-bold text-white'>
                       {user?.name
                         ? user.name.charAt(0).toUpperCase()
-                        : user?.email.charAt(0).toUpperCase()}
+                        : user?.email
+                          ? user.email.charAt(0).toUpperCase()
+                          : 'U'}
                     </div>
                   </Avatar>
                 </div>

@@ -24,19 +24,19 @@ export function DashboardLayout({ children }: IDashboardLayoutProps) {
   const pathname = usePathname();
 
   return (
-    <div className='min-h-screen bg-slate-50'>
+    <div className='min-h-screen bg-slate-50 lg:flex'>
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <div className='fixed inset-0 z-40 lg:hidden' onClick={() => setSidebarOpen(false)}>
-          <div className='fixed inset-0 bg-gray-600 bg-opacity-75' />
+          <div className='fixed inset-0 bg-gray-600 bg-opacity-75 transition-opacity' />
         </div>
       )}
 
       {/* Sidebar */}
       <div
         className={`
-        fixed inset-y-0 left-0 z-50 w-64 transform bg-white shadow-lg transition-transform duration-300 ease-in-out lg:static lg:inset-0 lg:translate-x-0
-        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+        fixed inset-y-0 left-0 z-50 w-64 transform bg-white shadow-lg transition-transform duration-300 ease-in-out lg:relative lg:flex-shrink-0 lg:translate-x-0
+        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}
       >
         <div className='flex h-16 items-center justify-between border-b border-slate-200 px-6'>
@@ -114,9 +114,9 @@ export function DashboardLayout({ children }: IDashboardLayoutProps) {
       </div>
 
       {/* Main content */}
-      <div className='lg:pl-64'>
+      <div className='flex min-w-0 flex-1 flex-col'>
         <Header onMenuToggle={() => setSidebarOpen(!sidebarOpen)} isMenuOpen={sidebarOpen} />
-        <main className='py-6'>
+        <main className='flex-1 py-6'>
           <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>{children}</div>
         </main>
       </div>

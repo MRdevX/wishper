@@ -36,10 +36,11 @@ const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
       <input
         ref={ref}
         className={cn(
-          'flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm',
+          'flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-slate-900',
           'placeholder:text-slate-500',
           'focus:border-transparent focus:outline-none focus:ring-2 focus:ring-pink-500',
           'disabled:cursor-not-allowed disabled:opacity-50',
+          'dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder:text-slate-400',
           error ? 'border-red-300 focus:ring-red-500' : 'border-slate-300',
           className
         )}
@@ -60,11 +61,12 @@ const FormTextarea = React.forwardRef<HTMLTextAreaElement, FormTextareaProps>(
       <textarea
         ref={ref}
         className={cn(
-          'flex min-h-[80px] w-full rounded-md border bg-white px-3 py-2 text-sm',
+          'flex min-h-[80px] w-full rounded-md border bg-white px-3 py-2 text-sm text-slate-900',
           'placeholder:text-slate-500',
           'focus:border-transparent focus:outline-none focus:ring-2 focus:ring-pink-500',
           'disabled:cursor-not-allowed disabled:opacity-50',
           'resize-vertical',
+          'dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder:text-slate-400',
           error ? 'border-red-300 focus:ring-red-500' : 'border-slate-300',
           className
         )}
@@ -85,9 +87,10 @@ const FormSelect = React.forwardRef<HTMLSelectElement, FormSelectProps>(
       <select
         ref={ref}
         className={cn(
-          'flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm',
+          'flex h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-slate-900',
           'focus:border-transparent focus:outline-none focus:ring-2 focus:ring-pink-500',
           'disabled:cursor-not-allowed disabled:opacity-50',
+          'dark:border-slate-600 dark:bg-slate-800 dark:text-white',
           error ? 'border-red-300 focus:ring-red-500' : 'border-slate-300',
           className
         )}
