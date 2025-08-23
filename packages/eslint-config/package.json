@@ -12,6 +12,9 @@
     "./react-internal": "./react-internal.js"
   },
   "scripts": {
+    "build": "echo 'No build required for eslint config'",
+    "lint": "echo 'No lint required for eslint config'",
+    "test": "echo 'No tests for eslint config'",
     "format": "prettier --write \"**/*.{ts,tsx,md,json,js}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,md,json,js}\"",
     "format:fix": "prettier --write \"**/*.{ts,tsx,md,json,js}\""

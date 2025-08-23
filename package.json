@@ -1,6 +1,5 @@
 {
-  "name": "Whisper - An Amazingly Simple Wishlist App",
-  "version": "0.0.1",
+  "name": "wishper-monorepo",
   "private": true,
   "author": "Mahdi Rashidi <contact@mrashidi.me>",
   "scripts": {
@@ -18,7 +17,10 @@
     "start": "turbo start",
     "clean": "turbo clean",
     "clean:all": "turbo clean && rm -rf node_modules && rm -rf apps/*/node_modules && rm -rf packages/*/node_modules",
-    "version-packages": "turbo run build lint test && changeset version"
+    "version-packages": "turbo run build lint test && changeset version",
+    "version-packages:dry-run": "changeset version --dry-run",
+    "version-apps": "turbo run build lint test --filter=./apps/* && changeset version",
+    "version-all": "turbo run build lint test && changeset version"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.6",

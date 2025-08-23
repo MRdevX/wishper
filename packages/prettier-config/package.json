@@ -6,6 +6,11 @@
   "exports": {
     ".": "./index.js"
   },
+  "scripts": {
+    "build": "echo 'No build required for prettier config'",
+    "lint": "echo 'No lint required for prettier config'",
+    "test": "echo 'No tests for prettier config'"
+  },
   "devDependencies": {
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.5.14"
