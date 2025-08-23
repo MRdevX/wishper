@@ -26,9 +26,9 @@ export function PageHeader({ title, description, action }: IPageHeaderProps) {
 
     if (action.href) {
       return (
-        <a href={action.href}>
-          <Button className='bg-blue-600 hover:bg-blue-700'>{buttonContent}</Button>
-        </a>
+        <Button asChild className='bg-blue-600 hover:bg-blue-700'>
+          <a href={action.href}>{buttonContent}</a>
+        </Button>
       );
     }
 

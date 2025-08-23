@@ -49,7 +49,9 @@ export function Toast({ message, type, onClose, duration = 5000 }: IToastProps) 
 
   return (
     <div
-      className={`fixed right-4 top-4 z-50 w-full max-w-sm transition-all duration-300 ${
+      role={type === 'error' ? 'alert' : 'status'}
+      aria-live={type === 'error' ? 'assertive' : 'polite'}
+      className={`w-full max-w-sm transition-all duration-300 ${
         isVisible ? 'translate-y-0 opacity-100' : '-translate-y-2 opacity-0'
       }`}
     >
