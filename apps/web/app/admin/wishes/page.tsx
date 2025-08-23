@@ -142,8 +142,8 @@ export default function WishesPage() {
         const owner = row.original.owner;
         return (
           <div className='text-sm'>
-            <div className='font-medium text-gray-900'>{owner.name || 'No name'}</div>
-            <div className='text-gray-500'>{owner.email}</div>
+            <div className='font-medium text-gray-900'>{owner?.name || 'No name'}</div>
+            <div className='text-gray-500'>{owner?.email || '—'}</div>
           </div>
         );
       },
