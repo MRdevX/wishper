@@ -12,7 +12,7 @@ import { StatsCard } from '@repo/ui';
 import { Users, Gift, List, TrendingUp } from 'lucide-react';
 import { apiClient } from '@/lib/api';
 
-interface DashboardStats {
+interface IDashboardStats {
   totalUsers: number;
   totalWishes: number;
   totalWishlists: number;
@@ -20,7 +20,7 @@ interface DashboardStats {
 }
 
 export default function AdminDashboard() {
-  const [stats, setStats] = useState<DashboardStats>({
+  const [stats, setStats] = useState<IDashboardStats>({
     totalUsers: 0,
     totalWishes: 0,
     totalWishlists: 0,

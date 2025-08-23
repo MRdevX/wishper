@@ -1,7 +1,8 @@
 import { IsString, IsOptional, IsEnum, Length, IsObject } from 'class-validator';
+import { ICreateWishDto as CreateWishDtoSchema } from '@repo/schemas';
 import { WishStatus } from '../entities/wish.entity';
 
-export class CreateWishDto {
+export class CreateWishDto implements CreateWishDtoSchema {
   @IsString()
   @Length(1, 200)
   title: string;

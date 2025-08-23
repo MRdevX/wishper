@@ -6,16 +6,16 @@ import { Input } from '../input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../card';
 import { X } from 'lucide-react';
 
-interface UserFormData {
+interface IUserFormData {
   email: string;
   name: string;
 }
 
-interface UserFormProps {
-  onSubmit: (data: UserFormData) => void;
+interface IUserFormProps {
+  onSubmit: (data: IUserFormData) => void;
   onCancel: () => void;
   loading?: boolean;
-  initialData?: Partial<UserFormData>;
+  initialData?: Partial<IUserFormData>;
   mode?: 'create' | 'edit';
 }
 
@@ -25,8 +25,8 @@ export function UserForm({
   loading = false,
   initialData,
   mode = 'create',
-}: UserFormProps) {
-  const [formData, setFormData] = useState<UserFormData>({
+}: IUserFormProps) {
+  const [formData, setFormData] = useState<IUserFormData>({
     email: '',
     name: '',
     ...initialData,
@@ -43,7 +43,7 @@ export function UserForm({
     onSubmit(formData);
   };
 
-  const handleChange = (field: keyof UserFormData, value: string) => {
+  const handleChange = (field: keyof IUserFormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 

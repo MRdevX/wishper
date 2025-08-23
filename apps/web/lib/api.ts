@@ -1,11 +1,37 @@
+import {
+  IApiResponse,
+  IUser,
+  IWish,
+  IWishlist,
+  WishStatus,
+  IWishDetails,
+  ICreateUserDto,
+  IUpdateUserDto,
+  ICreateWishDto,
+  IUpdateWishDto,
+  ICreateWishlistDto,
+  IUpdateWishlistDto,
+} from '@repo/schemas';
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
 
-export interface ApiResponse<T = unknown> {
-  success: boolean;
-  data?: T;
-  message?: string;
-  error?: string;
-}
+// Re-export types for convenience
+export type {
+  IApiResponse as ApiResponse,
+  IUser as User,
+  IWish as Wish,
+  IWishlist as Wishlist,
+  IWishDetails as WishDetails,
+  ICreateUserDto as CreateUserDto,
+  IUpdateUserDto as UpdateUserDto,
+  ICreateWishDto as CreateWishDto,
+  IUpdateWishDto as UpdateWishDto,
+  ICreateWishlistDto as CreateWishlistDto,
+  IUpdateWishlistDto as UpdateWishlistDto,
+};
+
+// Re-export enums as values
+export { WishStatus } from '@repo/schemas';
 
 class ApiClient {
   private baseUrl: string;
@@ -14,7 +40,7 @@ class ApiClient {
     this.baseUrl = baseUrl;
   }
 
-  private async request<T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
+  private async request<T>(endpoint: string, options: RequestInit = {}): Promise<IApiResponse<T>> {
     const url = `${this.baseUrl}${endpoint}`;
 
     const config: RequestInit = {

@@ -11,26 +11,9 @@ import {
   WishlistForm,
   useToast,
 } from '@repo/ui';
-import { Badge } from '@repo/ui/components/badge';
-import { apiClient } from '@/lib/api';
-import { ColumnDef } from '@tanstack/react-table';
 
-interface Wishlist {
-  id: string;
-  name: string;
-  owner: {
-    id: string;
-    email: string;
-    firstName?: string;
-    lastName?: string;
-  };
-  wishes?: {
-    id: string;
-    title: string;
-  }[];
-  createdAt: string;
-  updatedAt: string;
-}
+import { apiClient, Wishlist } from '@/lib/api';
+import { ColumnDef } from '@tanstack/react-table';
 
 export default function WishlistsPage() {
   const [wishlists, setWishlists] = useState<Wishlist[]>([]);
@@ -143,11 +126,9 @@ export default function WishlistsPage() {
       header: 'Owner',
       cell: ({ row }) => {
         const owner = row.original.owner;
-        const name =
-          owner.firstName && owner.lastName ? `${owner.firstName} ${owner.lastName}` : 'No name';
         return (
           <div className='text-sm'>
-            <div className='font-medium text-gray-900'>{name}</div>
+            <div className='font-medium text-gray-900'>{owner.name || 'No name'}</div>
             <div className='text-gray-500'>{owner.email}</div>
           </div>
         );

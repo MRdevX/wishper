@@ -1,11 +1,11 @@
 import { Card, CardContent } from '../card';
 
-interface LoadingStateProps {
+interface ILoadingStateProps {
   title: string;
   description?: string;
 }
 
-export function LoadingState({ title, description }: LoadingStateProps) {
+export function LoadingState({ title, description }: ILoadingStateProps) {
   return (
     <div className='space-y-6'>
       <div className='flex items-center justify-between'>

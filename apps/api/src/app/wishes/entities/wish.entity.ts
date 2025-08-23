@@ -1,4 +1,5 @@
 import { Entity, Column, ManyToOne } from 'typeorm';
+import { IWish as WishSchema, WishStatus as WishStatusSchema } from '@repo/schemas';
 import { User } from '../../users/entities/user.entity';
 import { Wishlist } from '../../wishlists/entities/wishlist.entity';
 import { BaseModel } from '../../core/base/base.entity';
@@ -10,7 +11,7 @@ export enum WishStatus {
 }
 
 @Entity()
-export class Wish extends BaseModel {
+export class Wish extends BaseModel implements WishSchema {
   @ManyToOne(() => User, u => u.wishes, { onDelete: 'CASCADE' })
   owner: User;
 
@@ -32,3 +33,6 @@ export class Wish extends BaseModel {
   @Column({ type: 'jsonb', default: {} })
   details: Record<string, any>;
 }
+
+// Re-export the schema enum for consistency
+export { WishStatusSchema };

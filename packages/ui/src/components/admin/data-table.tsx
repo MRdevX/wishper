@@ -17,7 +17,7 @@ import { Input } from '../input';
 import { Button } from '../button';
 import { Search } from 'lucide-react';
 
-interface DataTableProps<TData, TValue> {
+interface IDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   searchKey?: string;
@@ -29,7 +29,7 @@ export function DataTable<TData, TValue>({
   data,
   searchKey,
   searchPlaceholder = 'Search...',
-}: DataTableProps<TData, TValue>) {
+}: IDataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
 
@@ -113,7 +113,7 @@ export function DataTable<TData, TValue>({
   );
 }
 
-interface SortableHeaderProps {
+interface ISortableHeaderProps {
   children: React.ReactNode;
   column: {
     toggleSorting: (desc?: boolean) => void;
@@ -121,7 +121,7 @@ interface SortableHeaderProps {
   };
 }
 
-export function SortableHeader({ children, column }: SortableHeaderProps) {
+export function SortableHeader({ children, column }: ISortableHeaderProps) {
   return (
     <Button
       variant='ghost'

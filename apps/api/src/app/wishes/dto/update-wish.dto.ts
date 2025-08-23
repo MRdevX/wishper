@@ -1,7 +1,8 @@
 import { IsOptional, IsString, IsEnum, Length, IsObject } from 'class-validator';
+import { IUpdateWishDto as UpdateWishDtoSchema } from '@repo/schemas';
 import { WishStatus } from '../entities/wish.entity';
 
-export class UpdateWishDto {
+export class UpdateWishDto implements UpdateWishDtoSchema {
   @IsOptional()
   @IsString()
   @Length(1, 200)

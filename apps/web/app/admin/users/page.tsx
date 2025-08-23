@@ -11,18 +11,8 @@ import {
   UserForm,
   useToast,
 } from '@repo/ui';
-import { apiClient } from '@/lib/api';
+import { apiClient, User } from '@/lib/api';
 import { ColumnDef } from '@tanstack/react-table';
-
-interface User {
-  id: string;
-  email: string;
-  firstName?: string;
-  lastName?: string;
-  name?: string;
-  createdAt: string;
-  updatedAt: string;
-}
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -121,11 +111,7 @@ export default function UsersPage() {
       header: 'Name',
       cell: ({ row }) => {
         const user = row.original;
-        const name =
-          user.firstName && user.lastName
-            ? `${user.firstName} ${user.lastName}`
-            : user.name || 'No name provided';
-        return <div className='font-medium text-gray-900'>{name}</div>;
+        return <div className='font-medium text-gray-900'>{user.name || 'No name provided'}</div>;
       },
     },
     {
@@ -203,7 +189,7 @@ export default function UsersPage() {
             editingUser
               ? {
                   email: editingUser.email,
-                  name: editingUser.name || editingUser.firstName || editingUser.lastName || '',
+                  name: editingUser.name || '',
                 }
               : undefined
           }

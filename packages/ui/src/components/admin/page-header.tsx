@@ -1,7 +1,7 @@
 import { Button } from '../button';
 import { LucideIcon } from 'lucide-react';
 
-interface PageHeaderProps {
+interface IPageHeaderProps {
   title: string;
   description?: string;
   action?: {
@@ -12,7 +12,7 @@ interface PageHeaderProps {
   };
 }
 
-export function PageHeader({ title, description, action }: PageHeaderProps) {
+export function PageHeader({ title, description, action }: IPageHeaderProps) {
   const ActionButton = () => {
     if (!action) return null;
 

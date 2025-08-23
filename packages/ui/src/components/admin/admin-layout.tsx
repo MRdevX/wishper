@@ -16,13 +16,13 @@ const navigation = [
   { name: 'Settings', href: '/admin/settings', icon: Settings },
 ];
 
-interface AdminLayoutProps {
+interface IAdminLayoutProps {
   children: React.ReactNode;
   title?: string;
   description?: string;
 }
 
-export function AdminLayout({ children, title, description }: AdminLayoutProps) {
+export function AdminLayout({ children, title, description }: IAdminLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
 

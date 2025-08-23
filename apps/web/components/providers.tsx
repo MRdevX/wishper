@@ -3,11 +3,11 @@
 import * as React from 'react';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 
-interface ProvidersProps {
+interface IProvidersProps {
   children: React.ReactNode;
 }
 
-export function Providers({ children }: ProvidersProps) {
+export function Providers({ children }: IProvidersProps) {
   return (
     <NextThemesProvider
       attribute='class'

@@ -1,7 +1,7 @@
 import { Button } from '../button';
 import { Eye, Edit, Trash2, ExternalLink } from 'lucide-react';
 
-interface ActionButtonsProps {
+interface IActionButtonsProps {
   onView?: () => void;
   onEdit?: () => void;
   onDelete?: () => void;
@@ -23,7 +23,7 @@ export function ActionButtons({
   showEdit = true,
   showDelete = true,
   showExternalLink = false,
-}: ActionButtonsProps) {
+}: IActionButtonsProps) {
   return (
     <div className='flex space-x-2'>
       {showView && onView && (

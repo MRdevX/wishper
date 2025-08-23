@@ -6,14 +6,14 @@ import { Button } from '../button';
 
 export type ToastType = 'success' | 'error' | 'info';
 
-interface ToastProps {
+interface IToastProps {
   message: string;
   type: ToastType;
   onClose: () => void;
   duration?: number;
 }
 
-export function Toast({ message, type, onClose, duration = 5000 }: ToastProps) {
+export function Toast({ message, type, onClose, duration = 5000 }: IToastProps) {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
@@ -76,13 +76,13 @@ export function Toast({ message, type, onClose, duration = 5000 }: ToastProps) {
   );
 }
 
-interface ToastContextType {
+interface IToastContextType {
   showToast: (message: string, type: ToastType) => void;
 }
 
 import { createContext, useContext, useState as useStateContext } from 'react';
 
-const ToastContext = createContext<ToastContextType | undefined>(undefined);
+const ToastContext = createContext<IToastContextType | undefined>(undefined);
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = useStateContext<

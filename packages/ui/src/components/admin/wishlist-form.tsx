@@ -6,15 +6,15 @@ import { Input } from '../input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../card';
 import { X } from 'lucide-react';
 
-interface WishlistFormData {
+interface IWishlistFormData {
   name: string;
 }
 
-interface WishlistFormProps {
-  onSubmit: (data: WishlistFormData) => void;
+interface IWishlistFormProps {
+  onSubmit: (data: IWishlistFormData) => void;
   onCancel: () => void;
   loading?: boolean;
-  initialData?: Partial<WishlistFormData>;
+  initialData?: Partial<IWishlistFormData>;
   mode?: 'create' | 'edit';
 }
 
@@ -24,8 +24,8 @@ export function WishlistForm({
   loading = false,
   initialData,
   mode = 'create',
-}: WishlistFormProps) {
-  const [formData, setFormData] = useState<WishlistFormData>({
+}: IWishlistFormProps) {
+  const [formData, setFormData] = useState<IWishlistFormData>({
     name: '',
     ...initialData,
   });
@@ -41,7 +41,7 @@ export function WishlistForm({
     onSubmit(formData);
   };
 
-  const handleChange = (field: keyof WishlistFormData, value: any) => {
+  const handleChange = (field: keyof IWishlistFormData, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 

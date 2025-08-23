@@ -2,14 +2,14 @@ import { Card, CardContent } from '../card';
 import { Button } from '../button';
 import { AlertCircle } from 'lucide-react';
 
-interface ErrorStateProps {
+interface IErrorStateProps {
   title: string;
   description?: string;
   error: string;
   onRetry?: () => void;
 }
 
-export function ErrorState({ title, description, error, onRetry }: ErrorStateProps) {
+export function ErrorState({ title, description, error, onRetry }: IErrorStateProps) {
   return (
     <div className='space-y-6'>
       <div className='flex items-center justify-between'>

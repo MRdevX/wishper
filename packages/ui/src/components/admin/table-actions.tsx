@@ -1,7 +1,7 @@
 import { Button } from '../button';
 import { Eye, Edit, Trash2, ExternalLink } from 'lucide-react';
 
-interface TableActionsProps {
+interface ITableActionsProps {
   onView?: () => void;
   onEdit?: () => void;
   onDelete?: () => void;
@@ -21,7 +21,7 @@ export function TableActions({
   showEdit = true,
   showDelete = true,
   showExternalLink = false,
-}: TableActionsProps) {
+}: ITableActionsProps) {
   return (
     <div className='flex items-center space-x-2'>
       {showView && onView && (

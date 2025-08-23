@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ca
 import { DataTable } from './data-table';
 import { ColumnDef } from '@tanstack/react-table';
 
-interface DataTableWrapperProps<TData, TValue> {
+interface IDataTableWrapperProps<TData, TValue> {
   title: string;
   description?: string;
   columns: ColumnDef<TData, TValue>[];
@@ -18,7 +18,7 @@ export function DataTableWrapper<TData, TValue>({
   data,
   searchKey,
   searchPlaceholder,
-}: DataTableWrapperProps<TData, TValue>) {
+}: IDataTableWrapperProps<TData, TValue>) {
   return (
     <Card className='border-gray-200'>
       <CardHeader className='pb-4'>

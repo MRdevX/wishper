@@ -12,31 +12,8 @@ import {
   useToast,
 } from '@repo/ui';
 import { Badge } from '@repo/ui/components/badge';
-import { apiClient } from '@/lib/api';
+import { apiClient, Wish, WishStatus, WishDetails } from '@/lib/api';
 import { ColumnDef } from '@tanstack/react-table';
-
-interface Wish {
-  id: string;
-  title: string;
-  description?: string;
-  price?: number;
-  url?: string;
-  imageUrl?: string;
-  priority: 'low' | 'medium' | 'high';
-  isPurchased: boolean;
-  owner: {
-    id: string;
-    email: string;
-    firstName?: string;
-    lastName?: string;
-  };
-  wishlist?: {
-    id: string;
-    name: string;
-  };
-  createdAt: string;
-  updatedAt: string;
-}
 
 export default function WishesPage() {
   const [wishes, setWishes] = useState<Wish[]>([]);
@@ -151,8 +128,8 @@ export default function WishesPage() {
         return (
           <div>
             <div className='font-medium text-gray-900'>{wish.title}</div>
-            {wish.description && (
-              <div className='max-w-xs truncate text-sm text-gray-500'>{wish.description}</div>
+            {wish.note && (
+              <div className='max-w-xs truncate text-sm text-gray-500'>{wish.note}</div>
             )}
           </div>
         );
@@ -163,39 +140,53 @@ export default function WishesPage() {
       header: 'Owner',
       cell: ({ row }) => {
         const owner = row.original.owner;
-        const name =
-          owner.firstName && owner.lastName ? `${owner.firstName} ${owner.lastName}` : 'No name';
         return (
           <div className='text-sm'>
-            <div className='font-medium text-gray-900'>{name}</div>
+            <div className='font-medium text-gray-900'>{owner.name || 'No name'}</div>
             <div className='text-gray-500'>{owner.email}</div>
           </div>
         );
       },
     },
     {
-      accessorKey: 'priority',
-      header: 'Priority',
-      cell: ({ row }) => (
-        <Badge className={getPriorityColor(row.original.priority)}>{row.original.priority}</Badge>
-      ),
-    },
-    {
-      accessorKey: 'price',
-      header: 'Price',
-      cell: ({ row }) => (
-        <div className='text-sm text-gray-700'>
-          {row.original.price ? `$${row.original.price.toFixed(2)}` : 'Not set'}
-        </div>
-      ),
-    },
-    {
-      accessorKey: 'isPurchased',
+      accessorKey: 'status',
       header: 'Status',
+      cell: ({ row }) => {
+        const status = row.original.status;
+        const statusColors = {
+          [WishStatus.ACTIVE]: 'bg-green-100 text-green-800 border-green-200',
+          [WishStatus.ACHIEVED]: 'bg-blue-100 text-blue-800 border-blue-200',
+          [WishStatus.ARCHIVED]: 'bg-gray-100 text-gray-800 border-gray-200',
+        };
+        return (
+          <Badge className={statusColors[status] || 'border-gray-200 bg-gray-100 text-gray-800'}>
+            {status}
+          </Badge>
+        );
+      },
+    },
+    {
+      accessorKey: 'details',
+      header: 'Details',
+      cell: ({ row }) => {
+        const details = row.original.details as WishDetails;
+        return (
+          <div className='text-sm text-gray-700'>
+            {details.price ? `$${details.price.toFixed(2)}` : 'No price'}
+            {details.priority && (
+              <div className='mt-1'>
+                <Badge className={getPriorityColor(details.priority)}>{details.priority}</Badge>
+              </div>
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: 'wishlist',
+      header: 'Wishlist',
       cell: ({ row }) => (
-        <Badge variant={row.original.isPurchased ? 'default' : 'secondary'}>
-          {row.original.isPurchased ? 'Purchased' : 'Available'}
-        </Badge>
+        <div className='text-sm text-gray-700'>{row.original.wishlist?.name || 'No wishlist'}</div>
       ),
     },
     {
@@ -210,15 +201,18 @@ export default function WishesPage() {
     {
       id: 'actions',
       header: 'Actions',
-      cell: ({ row }) => (
-        <TableActions
-          onView={() => console.log('View wish:', row.original.id)}
-          onEdit={() => handleEditWish(row.original)}
-          onDelete={() => handleDeleteWish(row.original.id)}
-          externalLink={row.original.url}
-          showExternalLink={!!row.original.url}
-        />
-      ),
+      cell: ({ row }) => {
+        const details = row.original.details as WishDetails;
+        return (
+          <TableActions
+            onView={() => console.log('View wish:', row.original.id)}
+            onEdit={() => handleEditWish(row.original)}
+            onDelete={() => handleDeleteWish(row.original.id)}
+            externalLink={details.url}
+            showExternalLink={!!details.url}
+          />
+        );
+      },
     },
   ];
 
@@ -270,14 +264,9 @@ export default function WishesPage() {
             editingWish
               ? {
                   title: editingWish.title,
-                  note: editingWish.description,
-                  status: 'ACTIVE',
-                  details: {
-                    price: editingWish.price,
-                    url: editingWish.url,
-                    imageUrl: editingWish.imageUrl,
-                    priority: editingWish.priority,
-                  },
+                  note: editingWish.note,
+                  status: editingWish.status,
+                  details: editingWish.details,
                 }
               : undefined
           }

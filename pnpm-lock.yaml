@@ -59,6 +59,9 @@ importers:
       '@nestjs/typeorm':
         specifier: ^11.0.0
         version: 11.0.0(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.6)(reflect-metadata@0.2.2)(rxjs@7.8.2)(typeorm@0.3.26(pg@8.16.3)(reflect-metadata@0.2.2)(ts-node@10.9.2(@types/node@24.3.0)(typescript@5.9.2)))
+      '@repo/schemas':
+        specifier: workspace:*
+        version: link:../../packages/schemas
       class-transformer:
         specifier: ^0.5.1
         version: 0.5.1
@@ -162,6 +165,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@repo/schemas':
+        specifier: workspace:*
+        version: link:../../packages/schemas
       '@repo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -293,6 +299,18 @@ importers:
       prettier-plugin-tailwindcss:
         specifier: ^0.5.14
         version: 0.5.14(prettier@3.6.2)
+
+  packages/schemas:
+    devDependencies:
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      '@types/node':
+        specifier: ^22.10.7
+        version: 22.17.2
+      typescript:
+        specifier: 5.5.4
+        version: 5.5.4
 
   packages/typescript-config: {}
 

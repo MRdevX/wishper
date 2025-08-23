@@ -6,7 +6,7 @@ import { Input } from '../input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../card';
 import { X } from 'lucide-react';
 
-interface WishFormData {
+interface IWishFormData {
   title: string;
   note?: string;
   status: 'ACTIVE' | 'ACHIEVED' | 'ARCHIVED';
@@ -18,11 +18,11 @@ interface WishFormData {
   };
 }
 
-interface WishFormProps {
-  onSubmit: (data: WishFormData) => void;
+interface IWishFormProps {
+  onSubmit: (data: IWishFormData) => void;
   onCancel: () => void;
   loading?: boolean;
-  initialData?: Partial<WishFormData>;
+  initialData?: Partial<IWishFormData>;
   mode?: 'create' | 'edit';
 }
 
@@ -32,8 +32,8 @@ export function WishForm({
   loading = false,
   initialData,
   mode = 'create',
-}: WishFormProps) {
-  const [formData, setFormData] = useState<WishFormData>({
+}: IWishFormProps) {
+  const [formData, setFormData] = useState<IWishFormData>({
     title: '',
     note: '',
     status: 'ACTIVE',
@@ -57,7 +57,7 @@ export function WishForm({
     onSubmit(formData);
   };
 
-  const handleChange = (field: keyof WishFormData, value: any) => {
+  const handleChange = (field: keyof IWishFormData, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
