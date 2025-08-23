@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import { AdminPage } from '@/components/admin/admin-page';
 import { WishForm } from '@repo/ui';
 import { Badge } from '@repo/ui/components/badge';
@@ -99,17 +100,22 @@ const columns: ColumnDef<Wish>[] = [
 ];
 
 export default function WishesPage() {
+  const apiMethods = useMemo(
+    () => ({
+      get: () => apiClient.getWishes(),
+      create: (data: any) => apiClient.createWish(data),
+      update: (id: string, data: any) => apiClient.updateWish(id, data),
+      delete: (id: string) => apiClient.deleteWish(id),
+    }),
+    []
+  );
+
   return (
     <AdminPage
       title='Wishes'
       description='Manage wish items'
       columns={columns}
-      apiMethods={{
-        get: apiClient.getWishes,
-        create: apiClient.createWish,
-        update: apiClient.updateWish,
-        delete: apiClient.deleteWish,
-      }}
+      apiMethods={apiMethods}
       searchKey='title'
       searchPlaceholder='Search wishes...'
       FormComponent={WishForm}

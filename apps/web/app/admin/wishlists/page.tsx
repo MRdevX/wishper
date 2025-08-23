@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import { AdminPage } from '@/components/admin/admin-page';
 import { WishlistForm } from '@repo/ui';
 import { Gift } from 'lucide-react';
@@ -54,17 +55,22 @@ const columns: ColumnDef<Wishlist>[] = [
 ];
 
 export default function WishlistsPage() {
+  const apiMethods = useMemo(
+    () => ({
+      get: () => apiClient.getWishlists(),
+      create: (data: any) => apiClient.createWishlist(data),
+      update: (id: string, data: any) => apiClient.updateWishlist(id, data),
+      delete: (id: string) => apiClient.deleteWishlist(id),
+    }),
+    []
+  );
+
   return (
     <AdminPage
       title='Wishlists'
       description='Manage wishlists'
       columns={columns}
-      apiMethods={{
-        get: apiClient.getWishlists,
-        create: apiClient.createWishlist,
-        update: apiClient.updateWishlist,
-        delete: apiClient.deleteWishlist,
-      }}
+      apiMethods={apiMethods}
       searchKey='name'
       searchPlaceholder='Search wishlists...'
       FormComponent={WishlistForm}

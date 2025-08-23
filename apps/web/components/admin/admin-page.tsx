@@ -42,8 +42,10 @@ export function AdminPage<T extends { id: string }>({
   const { showToast } = useToast();
 
   useEffect(() => {
-    actions.fetchItems();
-  }, [actions]);
+    if (apiMethods && apiMethods.get) {
+      actions.fetchItems();
+    }
+  }, []);
 
   const handleDelete = async (item: T) => {
     const shouldDelete = onDeleteConfirm

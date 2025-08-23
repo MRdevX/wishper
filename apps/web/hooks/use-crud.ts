@@ -1,5 +1,4 @@
-import { useState, useCallback } from 'react';
-import { apiClient } from '@/lib/api';
+import { useState, useCallback, useRef, useEffect } from 'react';
 
 interface CrudState<T> {
   items: T[];
@@ -35,10 +34,24 @@ export function useCrud<T extends { id: string }>(apiMethods: {
     editingItem: null,
   });
 
+  const apiMethodsRef = useRef(apiMethods);
+  apiMethodsRef.current = apiMethods;
+
   const fetchItems = useCallback(async () => {
     try {
       setState(prev => ({ ...prev, loading: true, error: null }));
-      const response = await apiMethods.get();
+
+      if (!apiMethodsRef.current || !apiMethodsRef.current.get) {
+        setState(prev => ({
+          ...prev,
+          error: 'API methods not initialized',
+          loading: false,
+        }));
+        return;
+      }
+
+      const response = await apiMethodsRef.current.get();
+
       if (response.success && response.data) {
         setState(prev => ({
           ...prev,
@@ -59,74 +72,65 @@ export function useCrud<T extends { id: string }>(apiMethods: {
         loading: false,
       }));
     }
-  }, [apiMethods]);
+  }, []);
 
-  const createItem = useCallback(
-    async (data: any) => {
-      try {
-        setState(prev => ({ ...prev, formLoading: true }));
-        const response = await apiMethods.create(data);
-        if (response.success && response.data) {
-          setState(prev => ({
-            ...prev,
-            items: [...prev.items, response.data as T],
-            formLoading: false,
-            showForm: false,
-            editingItem: null,
-          }));
-        } else {
-          throw new Error(response.error || 'Failed to create item');
-        }
-      } catch (error) {
-        setState(prev => ({ ...prev, formLoading: false }));
-        throw error;
+  const createItem = useCallback(async (data: any) => {
+    try {
+      setState(prev => ({ ...prev, formLoading: true }));
+      const response = await apiMethodsRef.current.create(data);
+      if (response.success && response.data) {
+        setState(prev => ({
+          ...prev,
+          items: [...prev.items, response.data as T],
+          formLoading: false,
+          showForm: false,
+          editingItem: null,
+        }));
+      } else {
+        throw new Error(response.error || 'Failed to create item');
       }
-    },
-    [apiMethods]
-  );
+    } catch (error) {
+      setState(prev => ({ ...prev, formLoading: false }));
+      throw error;
+    }
+  }, []);
 
-  const updateItem = useCallback(
-    async (id: string, data: any) => {
-      try {
-        setState(prev => ({ ...prev, formLoading: true }));
-        const response = await apiMethods.update(id, data);
-        if (response.success && response.data) {
-          setState(prev => ({
-            ...prev,
-            items: prev.items.map(item => (item.id === id ? (response.data as T) : item)),
-            formLoading: false,
-            showForm: false,
-            editingItem: null,
-          }));
-        } else {
-          throw new Error(response.error || 'Failed to update item');
-        }
-      } catch (error) {
-        setState(prev => ({ ...prev, formLoading: false }));
-        throw error;
+  const updateItem = useCallback(async (id: string, data: any) => {
+    try {
+      setState(prev => ({ ...prev, formLoading: true }));
+      const response = await apiMethodsRef.current.update(id, data);
+      if (response.success && response.data) {
+        setState(prev => ({
+          ...prev,
+          items: prev.items.map(item => (item.id === id ? (response.data as T) : item)),
+          formLoading: false,
+          showForm: false,
+          editingItem: null,
+        }));
+      } else {
+        throw new Error(response.error || 'Failed to update item');
       }
-    },
-    [apiMethods]
-  );
+    } catch (error) {
+      setState(prev => ({ ...prev, formLoading: false }));
+      throw error;
+    }
+  }, []);
 
-  const deleteItem = useCallback(
-    async (id: string) => {
-      try {
-        const response = await apiMethods.delete(id);
-        if (response.success) {
-          setState(prev => ({
-            ...prev,
-            items: prev.items.filter(item => item.id !== id),
-          }));
-        } else {
-          throw new Error(response.error || 'Failed to delete item');
-        }
-      } catch (error) {
-        throw error;
+  const deleteItem = useCallback(async (id: string) => {
+    try {
+      const response = await apiMethodsRef.current.delete(id);
+      if (response.success) {
+        setState(prev => ({
+          ...prev,
+          items: prev.items.filter(item => item.id !== id),
+        }));
+      } else {
+        throw new Error(response.error || 'Failed to delete item');
       }
-    },
-    [apiMethods]
-  );
+    } catch (error) {
+      throw error;
+    }
+  }, []);
 
   const showCreateForm = useCallback(() => {
     setState(prev => ({

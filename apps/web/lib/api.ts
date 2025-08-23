@@ -15,7 +15,6 @@ import {
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
 
-// Re-export types for convenience
 export type {
   IApiResponse as ApiResponse,
   IUser as User,
@@ -30,7 +29,6 @@ export type {
   IUpdateWishlistDto as UpdateWishlistDto,
 };
 
-// Re-export enums for convenience
 export { WishStatus } from '@repo/schemas';
 
 class ApiClient {
@@ -70,7 +68,6 @@ class ApiClient {
     }
   }
 
-  // Users
   async getUsers() {
     return this.request('/users');
   }
@@ -99,7 +96,6 @@ class ApiClient {
     });
   }
 
-  // Wishes
   async getWishes() {
     return this.request('/wishes');
   }
@@ -129,7 +125,6 @@ class ApiClient {
     });
   }
 
-  // Wishlists
   async getWishlists() {
     return this.request('/wishlists');
   }

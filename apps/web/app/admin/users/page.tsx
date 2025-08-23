@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import { AdminPage } from '@/components/admin/admin-page';
 import { UserForm } from '@repo/ui';
 import { apiClient, User } from '@/lib/api';
@@ -31,17 +32,22 @@ const columns: ColumnDef<User>[] = [
 ];
 
 export default function UsersPage() {
+  const apiMethods = useMemo(
+    () => ({
+      get: () => apiClient.getUsers(),
+      create: (data: any) => apiClient.createUser(data),
+      update: (id: string, data: any) => apiClient.updateUser(id, data),
+      delete: (id: string) => apiClient.deleteUser(id),
+    }),
+    []
+  );
+
   return (
     <AdminPage
       title='Users'
       description='Manage user accounts'
       columns={columns}
-      apiMethods={{
-        get: apiClient.getUsers,
-        create: apiClient.createUser,
-        update: apiClient.updateUser,
-        delete: apiClient.deleteUser,
-      }}
+      apiMethods={apiMethods}
       searchKey='email'
       searchPlaceholder='Search users by email...'
       FormComponent={UserForm}
