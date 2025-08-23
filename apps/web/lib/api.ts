@@ -74,15 +74,9 @@ class ApiClient {
       ...options,
     };
 
-    console.log('Making API request to:', url);
-    console.log('Request config:', config);
-
     try {
       const response = await fetch(url, config);
       const data = await response.json();
-
-      console.log('API response status:', response.status);
-      console.log('API response data:', data);
 
       if (!response.ok) {
         return {
@@ -96,7 +90,6 @@ class ApiClient {
         data: data,
       };
     } catch (error) {
-      console.error('API request error:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'An unknown error occurred',

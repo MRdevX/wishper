@@ -92,9 +92,7 @@ export function useAuth(): [AuthState, AuthActions] {
     try {
       setState(prev => ({ ...prev, isLoading: true, error: null }));
 
-      console.log('Making login API call...');
       const response = await apiClient.login(credentials);
-      console.log('Login API response:', response);
 
       if (response.success && response.data) {
         setState({
@@ -113,7 +111,6 @@ export function useAuth(): [AuthState, AuthActions] {
         return false;
       }
     } catch (error) {
-      console.error('Login error:', error);
       setState(prev => ({
         ...prev,
         isLoading: false,
@@ -127,9 +124,7 @@ export function useAuth(): [AuthState, AuthActions] {
     try {
       setState(prev => ({ ...prev, isLoading: true, error: null }));
 
-      console.log('Making register API call...');
       const response = await apiClient.register(userData);
-      console.log('Register API response:', response);
 
       if (response.success && response.data) {
         setState({
@@ -148,7 +143,6 @@ export function useAuth(): [AuthState, AuthActions] {
         return false;
       }
     } catch (error) {
-      console.error('Registration error:', error);
       setState(prev => ({
         ...prev,
         isLoading: false,

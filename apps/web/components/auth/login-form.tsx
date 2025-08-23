@@ -1,17 +1,11 @@
 'use client';
 
-import { useState } from 'react';
-import { Button } from '@repo/ui/components/button';
-import { Input } from '@repo/ui/components/input';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@repo/ui/components/card';
 import { useAuthContext } from '../auth-provider';
 import { LoginDto } from '../../lib/api';
+import { useForm } from '../../hooks/use-form';
+import { AuthCard, AuthLinkButton } from '@repo/ui/components/auth-card';
+import { FormField, FormLabel, FormInput, FormErrorMessage } from '@repo/ui/components/form';
+import { Button } from '@repo/ui/components/button';
 
 interface ILoginFormProps {
   onSuccess?: () => void;
@@ -19,83 +13,72 @@ interface ILoginFormProps {
 }
 
 export function LoginForm({ onSuccess, onSwitchToRegister }: ILoginFormProps) {
-  const { login, isLoading, error, clearError } = useAuthContext();
-  const [formData, setFormData] = useState<LoginDto>({
-    email: '',
-    password: '',
+  const { login } = useAuthContext();
+
+  const form = useForm<LoginDto>({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    onSubmit: async values => {
+      return await login(values);
+    },
+    onSuccess,
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    clearError();
-
-    console.log('Attempting login with:', formData);
-
-    const success = await login(formData);
-    console.log('Login result:', success);
-
-    if (success && onSuccess) {
-      onSuccess();
-    }
-  };
-
-  const handleInputChange = (field: keyof LoginDto) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({ ...prev, [field]: e.target.value }));
-  };
+  const footer = onSwitchToRegister && (
+    <AuthLinkButton onClick={onSwitchToRegister}>
+      Don&apos;t have an account? Sign up
+    </AuthLinkButton>
+  );
 
   return (
-    <Card className='mx-auto w-full max-w-md'>
-      <CardHeader className='space-y-1'>
-        <CardTitle className='text-center text-2xl font-bold'>Welcome back</CardTitle>
-        <CardDescription className='text-center'>
-          Enter your credentials to access your account
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className='space-y-4'>
-          <div className='space-y-2'>
-            <label htmlFor='email' className='text-sm font-medium'>
-              Email
-            </label>
-            <Input
-              id='email'
-              type='email'
-              placeholder='Enter your email'
-              value={formData.email}
-              onChange={handleInputChange('email')}
-              required
-              disabled={isLoading}
-            />
-          </div>
-          <div className='space-y-2'>
-            <label htmlFor='password' className='text-sm font-medium'>
-              Password
-            </label>
-            <Input
-              id='password'
-              type='password'
-              placeholder='Enter your password'
-              value={formData.password}
-              onChange={handleInputChange('password')}
-              required
-              disabled={isLoading}
-            />
-          </div>
-          {error && <div className='rounded-md bg-red-50 p-3 text-sm text-red-600'>{error}</div>}
-          <Button type='submit' className='w-full' disabled={isLoading}>
-            {isLoading ? 'Signing in...' : 'Sign in'}
-          </Button>
-        </form>
-        <div className='mt-4 text-center'>
-          <button
-            type='button'
-            onClick={onSwitchToRegister}
-            className='text-sm text-blue-600 underline hover:text-blue-800'
-          >
-            Don&apos;t have an account? Sign up
-          </button>
-        </div>
-      </CardContent>
-    </Card>
+    <AuthCard
+      title='Welcome back'
+      description='Enter your credentials to access your account'
+      footer={footer}
+    >
+      <form onSubmit={form.handleSubmit} className='space-y-4'>
+        <FormField>
+          <FormLabel htmlFor='email' required>
+            Email
+          </FormLabel>
+          <FormInput
+            id='email'
+            type='email'
+            placeholder='Enter your email'
+            value={form.values.email}
+            onChange={form.handleInputChange('email')}
+            error={form.errors.email}
+            required
+            disabled={form.isLoading}
+          />
+          <FormErrorMessage>{form.errors.email}</FormErrorMessage>
+        </FormField>
+
+        <FormField>
+          <FormLabel htmlFor='password' required>
+            Password
+          </FormLabel>
+          <FormInput
+            id='password'
+            type='password'
+            placeholder='Enter your password'
+            value={form.values.password}
+            onChange={form.handleInputChange('password')}
+            error={form.errors.password}
+            required
+            disabled={form.isLoading}
+          />
+          <FormErrorMessage>{form.errors.password}</FormErrorMessage>
+        </FormField>
+
+        <FormErrorMessage>{form.submitError}</FormErrorMessage>
+
+        <Button type='submit' className='w-full' disabled={form.isLoading}>
+          {form.isLoading ? 'Signing in...' : 'Sign in'}
+        </Button>
+      </form>
+    </AuthCard>
   );
 }
