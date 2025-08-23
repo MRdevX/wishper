@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import dbConfig from '@root/app/config/db.config';
 import appConfig from '@root/app/config/app.config';
+import authConfig from '@root/app/config/auth.config';
 import { HealthModule } from './health/health.module';
 
 @Global()
@@ -12,7 +13,7 @@ import { HealthModule } from './health/health.module';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
-      load: [appConfig, dbConfig],
+      load: [appConfig, dbConfig, authConfig],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
