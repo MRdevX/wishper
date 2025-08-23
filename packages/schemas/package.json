@@ -1,6 +1,6 @@
 {
   "name": "@repo/schemas",
-  "version": "0.0.0",
+  "version": "1.0.2",
   "private": true,
   "license": "MIT",
   "main": "./dist/index.js",
@@ -8,9 +8,6 @@
   "files": [
     "./dist/**"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
   "exports": {
     ".": {
       "import": "./dist/index.js",

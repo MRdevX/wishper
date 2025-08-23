@@ -17,9 +17,11 @@
     "format:fix": "turbo format:fix",
     "start": "turbo start",
     "clean": "turbo clean",
-    "clean:all": "turbo clean && rm -rf node_modules && rm -rf apps/*/node_modules && rm -rf packages/*/node_modules"
+    "clean:all": "turbo clean && rm -rf node_modules && rm -rf apps/*/node_modules && rm -rf packages/*/node_modules",
+    "version-packages": "turbo run build lint test && changeset version"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.29.6",
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
