@@ -1,11 +1,5 @@
 import { Button } from '@repo/ui/components/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@repo/ui/components/card';
+import { Card, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/card';
 import { Badge } from '@repo/ui/components/badge';
 import { Heart, Gift, Users, Sparkles, ArrowRight, Star } from 'lucide-react';
 

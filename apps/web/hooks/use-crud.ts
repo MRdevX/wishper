@@ -18,7 +18,6 @@ interface CrudActions<T> {
   showCreateForm: () => void;
   showEditForm: (item: T) => void;
   hideForm: () => void;
-  setItems: (items: T[]) => void;
 }
 
 export function useCrud<T extends { id: string }>(apiMethods: {
@@ -54,7 +53,6 @@ export function useCrud<T extends { id: string }>(apiMethods: {
         }));
       }
     } catch (error) {
-      console.error('Error fetching items:', error);
       setState(prev => ({
         ...prev,
         error: 'Failed to fetch items',
@@ -80,7 +78,6 @@ export function useCrud<T extends { id: string }>(apiMethods: {
           throw new Error(response.error || 'Failed to create item');
         }
       } catch (error) {
-        console.error('Error creating item:', error);
         setState(prev => ({ ...prev, formLoading: false }));
         throw error;
       }
@@ -105,7 +102,6 @@ export function useCrud<T extends { id: string }>(apiMethods: {
           throw new Error(response.error || 'Failed to update item');
         }
       } catch (error) {
-        console.error('Error updating item:', error);
         setState(prev => ({ ...prev, formLoading: false }));
         throw error;
       }
@@ -126,7 +122,6 @@ export function useCrud<T extends { id: string }>(apiMethods: {
           throw new Error(response.error || 'Failed to delete item');
         }
       } catch (error) {
-        console.error('Error deleting item:', error);
         throw error;
       }
     },
@@ -157,10 +152,6 @@ export function useCrud<T extends { id: string }>(apiMethods: {
     }));
   }, []);
 
-  const setItems = useCallback((items: T[]) => {
-    setState(prev => ({ ...prev, items }));
-  }, []);
-
   const actions: CrudActions<T> = {
     fetchItems,
     createItem,
@@ -169,7 +160,6 @@ export function useCrud<T extends { id: string }>(apiMethods: {
     showCreateForm,
     showEditForm,
     hideForm,
-    setItems,
   };
 
   return [state, actions];

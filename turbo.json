@@ -26,18 +26,6 @@
       "outputs": [],
       "cache": false
     },
-    "check-types": {
-      "dependsOn": ["^check-types"],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "tsconfig.json",
-        "tsconfig.*.json",
-        "src/**/*.ts",
-        "src/**/*.tsx"
-      ],
-      "outputs": [],
-      "cache": true
-    },
     "typecheck": {
       "dependsOn": ["^typecheck"],
       "inputs": [
@@ -57,17 +45,6 @@
       "cache": true
     },
     "test:watch": {
-      "cache": false,
-      "persistent": true,
-      "dependsOn": ["^build"]
-    },
-    "test:cov": {
-      "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", "src/**/*", "test/**/*", "jest.config.*", "jest.*.json"],
-      "outputs": ["coverage/**"],
-      "cache": true
-    },
-    "test:debug": {
       "cache": false,
       "persistent": true,
       "dependsOn": ["^build"]
@@ -97,19 +74,6 @@
       "cache": false,
       "persistent": true,
       "dependsOn": ["^build"]
-    },
-    "start:debug": {
-      "cache": false,
-      "persistent": true,
-      "dependsOn": ["^build"]
-    },
-    "start:prod": {
-      "cache": false,
-      "persistent": true,
-      "dependsOn": ["^build"]
-    },
-    "generate:component": {
-      "cache": false
     },
     "clean": {
       "cache": false
