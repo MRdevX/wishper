@@ -1,3 +1,4 @@
+'use client';
 import { Button } from '../button';
 import { Eye, Edit, Trash2, ExternalLink } from 'lucide-react';
 

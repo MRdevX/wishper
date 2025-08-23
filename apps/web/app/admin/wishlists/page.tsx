@@ -52,7 +52,7 @@ export default function WishlistsPage() {
     try {
       const response = await apiClient.deleteWishlist(wishlistId);
       if (response.success) {
-        setWishlists(wishlists.filter(wishlist => wishlist.id !== wishlistId));
+        setWishlists(prev => prev.filter(wishlist => wishlist.id !== wishlistId));
         showToast('Wishlist deleted successfully', 'success');
       } else {
         showToast(response.error || 'Failed to delete wishlist', 'error');
@@ -73,14 +73,14 @@ export default function WishlistsPage() {
     setShowWishlistForm(true);
   };
 
-  const handleSaveWishlist = async (wishlistData: any) => {
+  const handleSaveWishlist = async (wishlistData: Pick<Wishlist, 'name'>) => {
     try {
       setFormLoading(true);
       if (editingWishlist) {
         const response = await apiClient.updateWishlist(editingWishlist.id, wishlistData);
         if (response.success && response.data) {
-          setWishlists(
-            wishlists.map(wishlist =>
+          setWishlists(prev =>
+            prev.map(wishlist =>
               wishlist.id === editingWishlist.id ? (response.data as Wishlist) : wishlist
             )
           );
@@ -93,7 +93,7 @@ export default function WishlistsPage() {
       } else {
         const response = await apiClient.createWishlist(wishlistData);
         if (response.success && response.data) {
-          setWishlists([...wishlists, response.data as Wishlist]);
+          setWishlists(prev => [...prev, response.data as Wishlist]);
           setShowWishlistForm(false);
           showToast('Wishlist created successfully', 'success');
         } else {
@@ -128,8 +128,8 @@ export default function WishlistsPage() {
         const owner = row.original.owner;
         return (
           <div className='text-sm'>
-            <div className='font-medium text-gray-900'>{owner.name || 'No name'}</div>
-            <div className='text-gray-500'>{owner.email}</div>
+            <div className='font-medium text-gray-900'>{owner?.name || 'No name'}</div>
+            <div className='text-gray-500'>{owner?.email || '—'}</div>
           </div>
         );
       },
