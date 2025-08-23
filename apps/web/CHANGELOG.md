@@ -1,5 +1,17 @@
 # web
 
+## 3.0.0
+
+### Major Changes
+
+- 67ccff3: bump the packages and apps
+
+### Patch Changes
+
+- Updated dependencies [67ccff3]
+  - @repo/schemas@2.0.0
+  - @repo/ui@2.0.0
+
 ## 2.0.0
 
 ### Major Changes
