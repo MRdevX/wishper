@@ -18,7 +18,8 @@ export function ErrorState({ title, description, error, onRetry }: IErrorStatePr
           {description && <p className='mt-2 text-gray-600'>{description}</p>}
         </div>
       </div>
-      <Card className='border-gray-200'>
+      <Card className='border border-gray-200'>
+        {' '}
         <CardContent className='p-6'>
           <div className='text-center'>
             <AlertCircle className='mx-auto mb-2 h-8 w-8 text-red-500' />

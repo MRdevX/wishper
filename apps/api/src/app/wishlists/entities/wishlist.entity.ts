@@ -1,11 +1,11 @@
 import { Entity, Column, ManyToOne, OneToMany } from 'typeorm';
-import { IWishlist as WishlistSchema } from '@repo/schemas';
+import { IWishlist } from '@repo/schemas';
 import { User } from '../../users/entities/user.entity';
 import { Wish } from '../../wishes/entities/wish.entity';
 import { BaseModel } from '../../core/base/base.entity';
 
 @Entity()
-export class Wishlist extends BaseModel implements WishlistSchema {
+export class Wishlist extends BaseModel implements IWishlist {
   @ManyToOne(() => User, u => u.wishlists, { onDelete: 'CASCADE' })
   owner: User;
 
