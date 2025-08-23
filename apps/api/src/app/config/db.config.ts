@@ -14,5 +14,5 @@ export default registerAs(
     entities,
     synchronize: process.env.NODE_ENV === 'development',
     logging: process.env.NODE_ENV === 'development',
-  }),
+  })
 );

@@ -7,15 +7,34 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "lint:fix": "turbo lint:fix",
+    "check-types": "turbo check-types",
+    "typecheck": "turbo typecheck",
+    "test": "turbo test",
+    "test:watch": "turbo test:watch",
+    "test:cov": "turbo test:cov",
+    "test:debug": "turbo test:debug",
+    "test:e2e": "turbo test:e2e",
+    "format": "turbo format",
+    "format:check": "turbo format:check",
+    "format:fix": "turbo format:fix",
+    "start": "turbo start",
+    "start:debug": "turbo start:debug",
+    "start:prod": "turbo start:prod",
+    "generate:component": "turbo generate:component",
+    "clean": "turbo clean",
+    "clean:all": "turbo clean && rm -rf node_modules && rm -rf apps/*/node_modules && rm -rf packages/*/node_modules",
+    "clean:cache": "turbo clean"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
+    "@repo/prettier-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@tailwindcss/postcss": "^4.1.12",
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.6",
     "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.5.14",
     "tailwindcss": "^4.1.12",
     "turbo": "^2.5.6",
     "typescript": "5.9.2"
@@ -29,7 +48,8 @@
       "@nestjs/core",
       "@tailwindcss/oxide",
       "core-js-pure",
-      "sharp"
+      "sharp",
+      "unrs-resolver"
     ]
   }
 }

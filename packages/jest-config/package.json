@@ -37,6 +37,10 @@
     "typescript": "^5.8.2"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "clean": "rm -rf dist .turbo",
+    "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,md,json}\"",
+    "format:fix": "prettier --write \"**/*.{ts,tsx,md,json}\""
   }
 }

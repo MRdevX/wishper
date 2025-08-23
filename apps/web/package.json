@@ -9,10 +9,17 @@
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "check-types": "tsc --noEmit",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,md}\"",
+    "format:fix": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "clean": "rm -rf .next .turbo"
   },
   "dependencies": {
+    "@repo/schemas": "workspace:*",
     "@repo/ui": "workspace:*",
+    "@tanstack/react-table": "^8.21.3",
     "lucide-react": "^0.475.0",
     "next": "^15.4.5",
     "next-themes": "^0.4.6",
@@ -20,11 +27,11 @@
     "react-dom": "^19.1.1"
   },
   "devDependencies": {
+    "@repo/eslint-config": "workspace:^",
+    "@repo/typescript-config": "workspace:*",
     "@types/node": "^20.19.9",
     "@types/react": "^19.1.9",
     "@types/react-dom": "^19.1.7",
-    "@repo/eslint-config": "workspace:^",
-    "@repo/typescript-config": "workspace:*",
     "typescript": "^5.9.2"
   }
 }
