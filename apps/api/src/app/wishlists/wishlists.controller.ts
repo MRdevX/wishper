@@ -22,7 +22,7 @@ export class WishlistsController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createWishlistDto: CreateWishlistDto, @Query('ownerId') ownerId: string) {
-    const wishlist = await this.wishlistsService.createWishlist(createWishlistDto, ownerId);
+    const wishlist = await this.wishlistsService.create(createWishlistDto, ownerId);
     return ApiResponseDto.success(wishlist, 'Wishlist created successfully');
   }
 
@@ -38,7 +38,7 @@ export class WishlistsController {
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    const wishlist = await this.wishlistsService.findByIdWithWishes(id);
+    const wishlist = await this.wishlistsService.findWithWishes(id);
     if (!wishlist) {
       return ApiResponseDto.error('Wishlist not found');
     }

@@ -3,7 +3,7 @@ import { TokensService } from './tokens/tokens.service';
 import { TokenPair, UserWithoutPassword, AuthResponse } from './interfaces/auth.interfaces';
 import { TokenService } from './services/token.service';
 import { PasswordService } from './services/password.service';
-import { UserRepository } from './repositories/user.repository';
+import { UsersService } from '../users/users.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
@@ -13,7 +13,7 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly userRepository: UserRepository,
+    private readonly usersService: UsersService,
     private readonly tokensService: TokensService,
     private readonly tokenService: TokenService,
     private readonly passwordService: PasswordService
@@ -22,18 +22,14 @@ export class AuthService {
   async register(registerDto: RegisterDto): Promise<AuthResponse> {
     const { email, password, name } = registerDto;
 
-    const existingUser = await this.userRepository.findByEmail(email);
+    const existingUser = await this.usersService.findByEmail(email);
     if (existingUser) {
       throw new ConflictException('User with this email already exists');
     }
 
     const hashedPassword = await this.passwordService.hash(password);
 
-    const savedUser = await this.userRepository.create({
-      email,
-      password: hashedPassword,
-      name,
-    });
+    const savedUser = await this.usersService.createWithPassword(email, hashedPassword, name);
 
     const tokens = this.tokensService.generateTokenPair(savedUser.id, savedUser.email);
 
@@ -50,7 +46,7 @@ export class AuthService {
   async login(loginDto: LoginDto): Promise<AuthResponse> {
     const { email, password } = loginDto;
 
-    const user = await this.userRepository.findByEmailWithPassword(email);
+    const user = await this.usersService.findByEmailWithPassword(email);
 
     if (!user || !user.password) {
       throw new UnauthorizedException('Invalid credentials');
@@ -101,7 +97,7 @@ export class AuthService {
   async forgotPassword(forgotPasswordDto: ForgotPasswordDto): Promise<{ message: string }> {
     const { email } = forgotPasswordDto;
 
-    const user = await this.userRepository.findByEmail(email);
+    const user = await this.usersService.findByEmail(email);
     if (!user) {
       return { message: 'If a user with this email exists, a password reset link has been sent' };
     }
@@ -123,7 +119,7 @@ export class AuthService {
 
     const hashedPassword = await this.passwordService.hash(password);
 
-    await this.userRepository.updatePassword(resetTokenEntity.userId, hashedPassword);
+    await this.usersService.updatePassword(resetTokenEntity.userId, hashedPassword);
 
     await this.tokenService.deletePasswordResetToken(resetTokenEntity.userId);
 
@@ -131,7 +127,7 @@ export class AuthService {
   }
 
   async validateUser(email: string, password: string): Promise<UserWithoutPassword | null> {
-    const user = await this.userRepository.findByEmailWithPassword(email);
+    const user = await this.usersService.findByEmailWithPassword(email);
 
     if (user && user.password && (await this.passwordService.compare(password, user.password))) {
       const { password: unusedPassword, ...result } = user;
