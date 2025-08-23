@@ -1,10 +1,15 @@
 {
   "name": "@repo/prettier-config",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "module",
   "private": true,
   "exports": {
     ".": "./index.js"
+  },
+  "scripts": {
+    "build": "echo 'No build required for prettier config'",
+    "lint": "echo 'No lint required for prettier config'",
+    "test": "echo 'No tests for prettier config'"
   },
   "devDependencies": {
     "prettier": "^3.6.2",

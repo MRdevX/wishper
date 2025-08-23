@@ -1,6 +1,6 @@
 {
   "name": "@repo/jest-config",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "license": "MIT",
   "main": "./dist/index.js",
@@ -35,6 +35,9 @@
   },
   "scripts": {
     "build": "tsc",
+    "lint": "echo 'No lint for jest config'",
+    "test": "echo 'No tests for jest config'",
+    "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist .turbo",
     "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,md,json}\"",

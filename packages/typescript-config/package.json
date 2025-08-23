@@ -1,9 +1,12 @@
 {
   "name": "@repo/typescript-config",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "license": "MIT",
   "scripts": {
+    "build": "echo 'No build required for typescript config'",
+    "lint": "echo 'No lint required for typescript config'",
+    "test": "echo 'No tests for typescript config'",
     "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,md,json}\"",
     "format:fix": "prettier --write \"**/*.{ts,tsx,md,json}\""

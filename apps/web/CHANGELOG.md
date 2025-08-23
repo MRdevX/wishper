@@ -1,5 +1,36 @@
 # web
 
+## 3.0.0
+
+### Major Changes
+
+- 67ccff3: bump the packages and apps
+
+### Patch Changes
+
+- Updated dependencies [67ccff3]
+  - @repo/schemas@2.0.0
+  - @repo/ui@2.0.0
+
+## 2.0.0
+
+### Major Changes
+
+- e61c4ff: bump the api and web versions
+
+### Patch Changes
+
+- d1c23e4: feat: add new Button component with variants
+  - Added new Button component with primary, secondary, and outline variants
+  - Improved accessibility with proper ARIA attributes
+  - Added support for loading states and disabled states
+
+  BREAKING CHANGE: The Button component API has been updated to use a more consistent prop structure.
+
+- Updated dependencies [d1c23e4]
+  - @repo/ui@1.3.0
+  - @repo/schemas@1.0.3
+
 ## 1.0.2
 
 ### Patch Changes

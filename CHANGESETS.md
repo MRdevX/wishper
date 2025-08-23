@@ -46,9 +46,16 @@ The changesets configuration is in `.changeset/config.json`:
 - `access: "restricted"` - Packages are kept private (not published)
 - `baseBranch: "main"` - Uses main branch as the base
 
-## Available Packages
+## Available Packages and Apps
 
-The following packages are configured for version management:
+The following are configured for version management:
+
+### Apps
+
+- `api` - NestJS API backend
+- `web` - Next.js web application
+
+### Packages
 
 - `@repo/ui` - React UI components
 - `@repo/schemas` - TypeScript schemas and types
@@ -59,10 +66,26 @@ The following packages are configured for version management:
 
 ## Workflow
 
-1. Make changes to packages
+### Coordinated Release (Recommended)
+
+1. Make changes to apps and/or packages
+2. Add a changeset: `pnpm changeset`
+3. Commit and push changes
+4. When ready to version: `pnpm version-all`
+
+### Package-Only Release
+
+1. Make changes to packages only
 2. Add a changeset: `pnpm changeset`
 3. Commit and push changes
 4. When ready to version: `pnpm version-packages`
+
+### App-Only Release
+
+1. Make changes to apps only
+2. Add a changeset: `pnpm changeset`
+3. Commit and push changes
+4. When ready to version: `pnpm version-apps`
 
 ## Changelog Generation
 
@@ -109,11 +132,13 @@ Generated changelogs include:
 
 ## Benefits
 
-- **Version Management**: Keep track of semantic versions across all packages
-- **Changelog Generation**: Automatically generate detailed changelogs for each package
-- **Dependency Updates**: Automatically update internal dependencies when packages change
+- **Unified Version Management**: Keep track of semantic versions across all apps and packages
+- **Automatic Changelog Generation**: Generate detailed changelogs for each app and package
+- **Dependency Coordination**: Automatically update internal dependencies when packages change
+- **Release Flexibility**: Choose between coordinated releases or independent app releases
 - **Git Integration**: Automatic commits and git tags for version changes
-- **Build Validation**: Ensures all packages build and test before versioning
+- **Build Validation**: Ensures all apps and packages build and test before versioning
+- **Deployment Tracking**: Track which versions of apps are deployed together
 
 ## Future Publishing
 
