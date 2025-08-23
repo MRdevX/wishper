@@ -22,13 +22,10 @@ async function bootstrap() {
       transformOptions: {
         enableImplicitConversion: true,
       },
-    }),
+    })
   );
 
   await app.listen(appConfig.port, appConfig.host);
-  // console.log(
-  //   `🚀 API running on http://${appConfig.host}:${appConfig.port}/api`,
-  // );
 }
 
 bootstrap();

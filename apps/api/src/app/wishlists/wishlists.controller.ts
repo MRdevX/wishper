@@ -21,14 +21,8 @@ export class WishlistsController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(
-    @Body() createWishlistDto: CreateWishlistDto,
-    @Query('ownerId') ownerId: string,
-  ) {
-    const wishlist = await this.wishlistsService.createWishlist(
-      createWishlistDto,
-      ownerId,
-    );
+  async create(@Body() createWishlistDto: CreateWishlistDto, @Query('ownerId') ownerId: string) {
+    const wishlist = await this.wishlistsService.createWishlist(createWishlistDto, ownerId);
     return ApiResponseDto.success(wishlist, 'Wishlist created successfully');
   }
 
@@ -52,10 +46,7 @@ export class WishlistsController {
   }
 
   @Patch(':id')
-  async update(
-    @Param('id') id: string,
-    @Body() updateWishlistDto: UpdateWishlistDto,
-  ) {
+  async update(@Param('id') id: string, @Body() updateWishlistDto: UpdateWishlistDto) {
     const wishlist = await this.wishlistsService.update(id, updateWishlistDto);
     return ApiResponseDto.success(wishlist, 'Wishlist updated successfully');
   }

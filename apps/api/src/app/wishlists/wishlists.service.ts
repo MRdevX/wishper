@@ -10,7 +10,7 @@ import { BaseRepository } from '../core/base/base.repositorty';
 export class WishlistsService extends BaseRepository<Wishlist> {
   constructor(
     @InjectRepository(Wishlist)
-    private readonly wishlistRepository: Repository<Wishlist>,
+    private readonly wishlistRepository: Repository<Wishlist>
   ) {
     super(wishlistRepository);
   }
@@ -29,20 +29,14 @@ export class WishlistsService extends BaseRepository<Wishlist> {
     });
   }
 
-  async createWishlist(
-    createWishlistDto: CreateWishlistDto,
-    ownerId: string,
-  ): Promise<Wishlist> {
+  async createWishlist(createWishlistDto: CreateWishlistDto, ownerId: string): Promise<Wishlist> {
     return super.create({
       ...createWishlistDto,
       owner: { id: ownerId } as any,
     });
   }
 
-  async update(
-    id: string,
-    updateWishlistDto: UpdateWishlistDto,
-  ): Promise<Wishlist> {
+  async update(id: string, updateWishlistDto: UpdateWishlistDto): Promise<Wishlist> {
     const wishlist = await this.findById(id);
     if (!wishlist) {
       throw new NotFoundException(`Wishlist with ID ${id} not found`);

@@ -1,10 +1,10 @@
-import js from "@eslint/js";
-import eslintConfigPrettier from "eslint-config-prettier";
-import tseslint from "typescript-eslint";
-import pluginReactHooks from "eslint-plugin-react-hooks";
-import pluginReact from "eslint-plugin-react";
-import globals from "globals";
-import { config as baseConfig } from "./base.js";
+import js from '@eslint/js';
+import eslintConfigPrettier from 'eslint-config-prettier';
+import tseslint from 'typescript-eslint';
+import pluginReactHooks from 'eslint-plugin-react-hooks';
+import pluginReact from 'eslint-plugin-react';
+import globals from 'globals';
+import { config as baseConfig } from './base.js';
 
 /**
  * A custom ESLint configuration for libraries that use React.
@@ -27,17 +27,17 @@ export const config = [
   },
   {
     plugins: {
-      "react-hooks": pluginReactHooks,
+      'react-hooks': pluginReactHooks,
     },
-    settings: { react: { version: "detect" } },
+    settings: { react: { version: 'detect' } },
     rules: {
       ...pluginReactHooks.configs.recommended.rules,
 
-      "react/react-in-jsx-scope": "off",
-      "react/prop-types": "off",
-      "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/no-unused-vars": "warn",
-      "@typescript-eslint/ban-ts-comment": "off",
+      'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/ban-ts-comment': 'off',
     },
   },
 ];

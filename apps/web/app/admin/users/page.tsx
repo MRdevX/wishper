@@ -2,14 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { Plus } from 'lucide-react';
-import { 
-  PageHeader, 
-  LoadingState, 
-  ErrorState, 
-  DataTableWrapper, 
+import {
+  PageHeader,
+  LoadingState,
+  ErrorState,
+  DataTableWrapper,
   TableActions,
   UserForm,
-  useToast
+  useToast,
 } from '@repo/ui';
 import { apiClient } from '@/lib/api';
 import { ColumnDef } from '@tanstack/react-table';
@@ -61,7 +61,7 @@ export default function UsersPage() {
     try {
       const response = await apiClient.deleteUser(userId);
       if (response.success) {
-        setUsers(users.filter((user) => user.id !== userId));
+        setUsers(users.filter(user => user.id !== userId));
         showToast('User deleted successfully', 'success');
       } else {
         showToast(response.error || 'Failed to delete user', 'error');
@@ -88,7 +88,9 @@ export default function UsersPage() {
       if (editingUser) {
         const response = await apiClient.updateUser(editingUser.id, userData);
         if (response.success && response.data) {
-          setUsers(users.map(user => user.id === editingUser.id ? response.data as User : user));
+          setUsers(
+            users.map(user => (user.id === editingUser.id ? (response.data as User) : user))
+          );
           setShowUserForm(false);
           setEditingUser(null);
           showToast('User updated successfully', 'success');
@@ -119,22 +121,23 @@ export default function UsersPage() {
       header: 'Name',
       cell: ({ row }) => {
         const user = row.original;
-        const name = user.firstName && user.lastName 
-          ? `${user.firstName} ${user.lastName}` 
-          : user.name || 'No name provided';
-        return <div className="font-medium text-gray-900">{name}</div>;
+        const name =
+          user.firstName && user.lastName
+            ? `${user.firstName} ${user.lastName}`
+            : user.name || 'No name provided';
+        return <div className='font-medium text-gray-900'>{name}</div>;
       },
     },
     {
       accessorKey: 'email',
       header: 'Email',
-      cell: ({ row }) => <span className="text-gray-700">{row.original.email}</span>,
+      cell: ({ row }) => <span className='text-gray-700'>{row.original.email}</span>,
     },
     {
       accessorKey: 'createdAt',
       header: 'Created',
       cell: ({ row }) => (
-        <div className="text-sm text-gray-500">
+        <div className='text-sm text-gray-500'>
           {new Date(row.original.createdAt).toLocaleDateString()}
         </div>
       ),
@@ -153,19 +156,14 @@ export default function UsersPage() {
   ];
 
   if (loading) {
-    return (
-      <LoadingState 
-        title="Users" 
-        description="Manage user accounts" 
-      />
-    );
+    return <LoadingState title='Users' description='Manage user accounts' />;
   }
 
   if (error) {
     return (
-      <ErrorState 
-        title="Users" 
-        description="Manage user accounts" 
+      <ErrorState
+        title='Users'
+        description='Manage user accounts'
         error={error}
         onRetry={fetchUsers}
       />
@@ -173,10 +171,10 @@ export default function UsersPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       <PageHeader
-        title="Users"
-        description="Manage user accounts"
+        title='Users'
+        description='Manage user accounts'
         action={{
           label: 'Add User',
           icon: Plus,
@@ -185,12 +183,12 @@ export default function UsersPage() {
       />
 
       <DataTableWrapper
-        title="All Users"
-        description="A list of all users in your application"
+        title='All Users'
+        description='A list of all users in your application'
         columns={columns}
         data={users}
-        searchKey="email"
-        searchPlaceholder="Search users by email..."
+        searchKey='email'
+        searchPlaceholder='Search users by email...'
       />
 
       {showUserForm && (
@@ -201,10 +199,14 @@ export default function UsersPage() {
             setEditingUser(null);
           }}
           loading={formLoading}
-          initialData={editingUser ? {
-            email: editingUser.email,
-            name: editingUser.name || editingUser.firstName || editingUser.lastName || '',
-          } : undefined}
+          initialData={
+            editingUser
+              ? {
+                  email: editingUser.email,
+                  name: editingUser.name || editingUser.firstName || editingUser.lastName || '',
+                }
+              : undefined
+          }
           mode={editingUser ? 'edit' : 'create'}
         />
       )}

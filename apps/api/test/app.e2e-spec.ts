@@ -19,7 +19,7 @@ describe('AppController (e2e)', () => {
     return request(app.getHttpServer())
       .get('/health')
       .expect(200)
-      .expect((res) => {
+      .expect(res => {
         expect(res.body).toHaveProperty('status', 'ok');
         expect(res.body).toHaveProperty('timestamp');
       });

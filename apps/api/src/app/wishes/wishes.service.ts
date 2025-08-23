@@ -10,7 +10,7 @@ import { BaseRepository } from '../core/base/base.repositorty';
 export class WishesService extends BaseRepository<Wish> {
   constructor(
     @InjectRepository(Wish)
-    private readonly wishRepository: Repository<Wish>,
+    private readonly wishRepository: Repository<Wish>
   ) {
     super(wishRepository);
   }
@@ -36,10 +36,7 @@ export class WishesService extends BaseRepository<Wish> {
     });
   }
 
-  async createWish(
-    createWishDto: CreateWishDto,
-    ownerId: string,
-  ): Promise<Wish> {
+  async createWish(createWishDto: CreateWishDto, ownerId: string): Promise<Wish> {
     const wishData: any = {
       ...createWishDto,
       owner: { id: ownerId } as any,

@@ -28,13 +28,25 @@
     },
     "check-types": {
       "dependsOn": ["^check-types"],
-      "inputs": ["$TURBO_DEFAULT$", "tsconfig.json", "tsconfig.*.json", "src/**/*.ts", "src/**/*.tsx"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "tsconfig.json",
+        "tsconfig.*.json",
+        "src/**/*.ts",
+        "src/**/*.tsx"
+      ],
       "outputs": [],
       "cache": true
     },
     "typecheck": {
       "dependsOn": ["^typecheck"],
-      "inputs": ["$TURBO_DEFAULT$", "tsconfig.json", "tsconfig.*.json", "src/**/*.ts", "src/**/*.tsx"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "tsconfig.json",
+        "tsconfig.*.json",
+        "src/**/*.ts",
+        "src/**/*.tsx"
+      ],
       "outputs": [],
       "cache": true
     },
@@ -67,6 +79,16 @@
       "cache": true
     },
     "format": {
+      "inputs": ["$TURBO_DEFAULT$", ".prettierrc*", "prettier.config.*"],
+      "outputs": [],
+      "cache": false
+    },
+    "format:check": {
+      "inputs": ["$TURBO_DEFAULT$", ".prettierrc*", "prettier.config.*"],
+      "outputs": [],
+      "cache": true
+    },
+    "format:fix": {
       "inputs": ["$TURBO_DEFAULT$", ".prettierrc*", "prettier.config.*"],
       "outputs": [],
       "cache": false

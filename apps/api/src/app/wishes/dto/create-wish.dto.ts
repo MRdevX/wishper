@@ -1,10 +1,4 @@
-import {
-  IsString,
-  IsOptional,
-  IsEnum,
-  Length,
-  IsObject,
-} from 'class-validator';
+import { IsString, IsOptional, IsEnum, Length, IsObject } from 'class-validator';
 import { WishStatus } from '../entities/wish.entity';
 
 export class CreateWishDto {

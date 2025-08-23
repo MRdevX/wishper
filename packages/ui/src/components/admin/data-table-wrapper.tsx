@@ -20,9 +20,9 @@ export function DataTableWrapper<TData, TValue>({
   searchPlaceholder,
 }: DataTableWrapperProps<TData, TValue>) {
   return (
-    <Card className="border-gray-200">
-      <CardHeader className="pb-4">
-        <CardTitle className="text-lg">{title}</CardTitle>
+    <Card className='border-gray-200'>
+      <CardHeader className='pb-4'>
+        <CardTitle className='text-lg'>{title}</CardTitle>
         {description && <CardDescription>{description}</CardDescription>}
       </CardHeader>
       <CardContent>

@@ -6,21 +6,20 @@
   "scripts": {
     "dev": "pnpm build --watch",
     "build": "tsc -b -v",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\""
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,md}\"",
+    "format:fix": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": [
-    "./dist/**"
-  ],
+  "files": ["./dist/**"],
   "publishConfig": {
     "access": "public"
   },
   "typesVersions": {
     "*": {
-      "*": [
-        "src/*"
-      ]
+      "*": ["src/*"]
     }
   },
   "exports": {

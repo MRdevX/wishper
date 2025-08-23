@@ -11,10 +11,10 @@ export enum WishStatus {
 
 @Entity()
 export class Wish extends BaseModel {
-  @ManyToOne(() => User, (u) => u.wishes, { onDelete: 'CASCADE' })
+  @ManyToOne(() => User, u => u.wishes, { onDelete: 'CASCADE' })
   owner: User;
 
-  @ManyToOne(() => Wishlist, (wl) => wl.wishes, {
+  @ManyToOne(() => Wishlist, wl => wl.wishes, {
     onDelete: 'SET NULL',
     nullable: true,
   })

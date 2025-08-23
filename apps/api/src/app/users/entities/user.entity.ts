@@ -12,9 +12,9 @@ export class User extends BaseModel {
   @Column({ length: 120, nullable: true })
   name?: string;
 
-  @OneToMany(() => Wish, (w) => w.owner)
+  @OneToMany(() => Wish, w => w.owner)
   wishes: Wish[];
 
-  @OneToMany(() => Wishlist, (wl) => wl.owner)
+  @OneToMany(() => Wishlist, wl => wl.owner)
   wishlists: Wishlist[];
 }

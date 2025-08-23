@@ -12,14 +12,7 @@ import {
   ColumnFiltersState,
 } from '@tanstack/react-table';
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '../table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../table';
 import { Input } from '../input';
 import { Button } from '../button';
 import { Search } from 'lucide-react';
@@ -38,9 +31,7 @@ export function DataTable<TData, TValue>({
   searchPlaceholder = 'Search...',
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
-  );
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
 
   const table = useReactTable({
     data,
@@ -57,42 +48,32 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="space-y-4">
+    <div className='space-y-4'>
       {searchKey && (
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+        <div className='relative'>
+          <Search className='absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transform text-gray-400' />
           <Input
             placeholder={searchPlaceholder}
-            value={
-              (table.getColumn(searchKey)?.getFilterValue() as string) ?? ''
-            }
-            onChange={(event) =>
-              table.getColumn(searchKey)?.setFilterValue(event.target.value)
-            }
-            className="pl-10 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+            value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ''}
+            onChange={event => table.getColumn(searchKey)?.setFilterValue(event.target.value)}
+            className='border-gray-200 pl-10 focus:border-blue-500 focus:ring-blue-500'
           />
         </div>
       )}
-      <div className="rounded-lg border border-gray-200 bg-white">
+      <div className='rounded-lg border border-gray-200 bg-white'>
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow
-                key={headerGroup.id}
-                className="border-gray-200 hover:bg-gray-50"
-              >
-                {headerGroup.headers.map((header) => {
+            {table.getHeaderGroups().map(headerGroup => (
+              <TableRow key={headerGroup.id} className='border-gray-200 hover:bg-gray-50'>
+                {headerGroup.headers.map(header => {
                   return (
-                    <TableHead
-                      key={header.id}
-                      className="bg-gray-50 text-gray-700 font-medium"
-                    >
+                    <TableHead key={header.id} className='bg-gray-50 font-medium text-gray-700'>
                       {header.isPlaceholder ? null : (
                         <div>
                           {
                             flexRender(
                               header.column.columnDef.header,
-                              header.getContext(),
+                              header.getContext()
                             ) as React.ReactNode
                           }
                         </div>
@@ -105,30 +86,22 @@ export function DataTable<TData, TValue>({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+              table.getRowModel().rows.map(row => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
-                  className="border-gray-200 hover:bg-gray-50"
+                  className='border-gray-200 hover:bg-gray-50'
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="py-3">
-                      {
-                        flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
-                        ) as React.ReactNode
-                      }
+                  {row.getVisibleCells().map(cell => (
+                    <TableCell key={cell.id} className='py-3'>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext()) as React.ReactNode}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center text-gray-500"
-                >
+                <TableCell colSpan={columns.length} className='h-24 text-center text-gray-500'>
                   No results found.
                 </TableCell>
               </TableRow>
@@ -151,12 +124,12 @@ interface SortableHeaderProps {
 export function SortableHeader({ children, column }: SortableHeaderProps) {
   return (
     <Button
-      variant="ghost"
+      variant='ghost'
       onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-      className="h-8 flex items-center gap-1 hover:bg-gray-100"
+      className='flex h-8 items-center gap-1 hover:bg-gray-100'
     >
       {children}
-      <span className="ml-2 text-xs">↕️</span>
+      <span className='ml-2 text-xs'>↕️</span>
     </Button>
   );
 }

@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
 
 export interface ApiResponse<T = unknown> {
   success: boolean;
@@ -19,7 +19,7 @@ class ApiClient {
 
     const config: RequestInit = {
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         ...options.headers,
       },
       ...options,
@@ -29,7 +29,9 @@ class ApiClient {
       const response = await fetch(url, config);
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
+        const errorData = await response
+          .json()
+          .catch(() => ({ message: `HTTP error! status: ${response.status}` }));
         return {
           success: false,
           error: errorData.message || `HTTP error! status: ${response.status}`,
@@ -39,16 +41,16 @@ class ApiClient {
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error("API request failed:", error);
+      console.error('API request failed:', error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : "An unknown error occurred",
+        error: error instanceof Error ? error.message : 'An unknown error occurred',
       };
     }
   }
 
   async getUsers() {
-    return this.request("/users");
+    return this.request('/users');
   }
 
   async getUser(id: string) {
@@ -56,27 +58,27 @@ class ApiClient {
   }
 
   async createUser(userData: Record<string, unknown>) {
-    return this.request("/users", {
-      method: "POST",
+    return this.request('/users', {
+      method: 'POST',
       body: JSON.stringify(userData),
     });
   }
 
   async updateUser(id: string, userData: Record<string, unknown>) {
     return this.request(`/users/${id}`, {
-      method: "PATCH",
+      method: 'PATCH',
       body: JSON.stringify(userData),
     });
   }
 
   async deleteUser(id: string) {
     return this.request(`/users/${id}`, {
-      method: "DELETE",
+      method: 'DELETE',
     });
   }
 
   async getWishes() {
-    return this.request("/wishes");
+    return this.request('/wishes');
   }
 
   async getWish(id: string) {
@@ -84,28 +86,28 @@ class ApiClient {
   }
 
   async createWish(wishData: Record<string, unknown>, ownerId?: string) {
-    const url = ownerId ? `/wishes?ownerId=${ownerId}` : "/wishes";
+    const url = ownerId ? `/wishes?ownerId=${ownerId}` : '/wishes';
     return this.request(url, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(wishData),
     });
   }
 
   async updateWish(id: string, wishData: Record<string, unknown>) {
     return this.request(`/wishes/${id}`, {
-      method: "PATCH",
+      method: 'PATCH',
       body: JSON.stringify(wishData),
     });
   }
 
   async deleteWish(id: string) {
     return this.request(`/wishes/${id}`, {
-      method: "DELETE",
+      method: 'DELETE',
     });
   }
 
   async getWishlists() {
-    return this.request("/wishlists");
+    return this.request('/wishlists');
   }
 
   async getWishlist(id: string) {
@@ -113,23 +115,23 @@ class ApiClient {
   }
 
   async createWishlist(wishlistData: Record<string, unknown>, ownerId?: string) {
-    const url = ownerId ? `/wishlists?ownerId=${ownerId}` : "/wishlists";
+    const url = ownerId ? `/wishlists?ownerId=${ownerId}` : '/wishlists';
     return this.request(url, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(wishlistData),
     });
   }
 
   async updateWishlist(id: string, wishlistData: Record<string, unknown>) {
     return this.request(`/wishlists/${id}`, {
-      method: "PATCH",
+      method: 'PATCH',
       body: JSON.stringify(wishlistData),
     });
   }
 
   async deleteWishlist(id: string) {
     return this.request(`/wishlists/${id}`, {
-      method: "DELETE",
+      method: 'DELETE',
     });
   }
 }

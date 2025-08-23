@@ -10,7 +10,7 @@ import { BaseRepository } from '../core/base/base.repositorty';
 export class UsersService extends BaseRepository<User> {
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    private readonly userRepository: Repository<User>
   ) {
     super(userRepository);
   }

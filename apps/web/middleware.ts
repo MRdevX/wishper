@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-const ADMIN_PREFIX = "/admin";
+const ADMIN_PREFIX = '/admin';
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
@@ -13,5 +13,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ['/admin/:path*'],
 };

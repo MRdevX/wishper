@@ -14,10 +14,7 @@ export abstract class BaseRepository<T extends BaseModel> {
     return this.repository.findOne({ where: { id } as any });
   }
 
-  async findByIdWithRelations(
-    id: string,
-    relations: string[] = [],
-  ): Promise<T | null> {
+  async findByIdWithRelations(id: string, relations: string[] = []): Promise<T | null> {
     return this.repository.findOne({
       where: { id } as any,
       relations,

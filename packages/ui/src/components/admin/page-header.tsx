@@ -19,7 +19,7 @@ export function PageHeader({ title, description, action }: PageHeaderProps) {
     const Icon = action.icon;
     const buttonContent = (
       <>
-        {Icon && <Icon className="w-4 h-4 mr-2" />}
+        {Icon && <Icon className='mr-2 h-4 w-4' />}
         {action.label}
       </>
     );
@@ -27,28 +27,23 @@ export function PageHeader({ title, description, action }: PageHeaderProps) {
     if (action.href) {
       return (
         <a href={action.href}>
-          <Button className="bg-blue-600 hover:bg-blue-700">
-            {buttonContent}
-          </Button>
+          <Button className='bg-blue-600 hover:bg-blue-700'>{buttonContent}</Button>
         </a>
       );
     }
 
     return (
-      <Button 
-        className="bg-blue-600 hover:bg-blue-700"
-        onClick={action.onClick}
-      >
+      <Button className='bg-blue-600 hover:bg-blue-700' onClick={action.onClick}>
         {buttonContent}
       </Button>
     );
   };
 
   return (
-    <div className="flex justify-between items-center">
+    <div className='flex items-center justify-between'>
       <div>
-        <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">{title}</h1>
-        {description && <p className="text-gray-600 mt-2">{description}</p>}
+        <h1 className='text-2xl font-bold text-gray-900 lg:text-3xl'>{title}</h1>
+        {description && <p className='mt-2 text-gray-600'>{description}</p>}
       </div>
       <ActionButton />
     </div>

@@ -21,19 +21,13 @@ export class WishesController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(
-    @Body() createWishDto: CreateWishDto,
-    @Query('ownerId') ownerId: string,
-  ) {
+  async create(@Body() createWishDto: CreateWishDto, @Query('ownerId') ownerId: string) {
     const wish = await this.wishesService.createWish(createWishDto, ownerId);
     return ApiResponseDto.success(wish, 'Wish created successfully');
   }
 
   @Get()
-  async findAll(
-    @Query('ownerId') ownerId?: string,
-    @Query('wishlistId') wishlistId?: string,
-  ) {
+  async findAll(@Query('ownerId') ownerId?: string, @Query('wishlistId') wishlistId?: string) {
     if (ownerId) {
       const wishes = await this.wishesService.findByOwner(ownerId);
       return ApiResponseDto.success(wishes);

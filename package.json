@@ -16,6 +16,8 @@
     "test:debug": "turbo test:debug",
     "test:e2e": "turbo test:e2e",
     "format": "turbo format",
+    "format:check": "turbo format:check",
+    "format:fix": "turbo format:fix",
     "start": "turbo start",
     "start:debug": "turbo start:debug",
     "start:prod": "turbo start:prod",
@@ -25,11 +27,13 @@
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
+    "@repo/prettier-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@tailwindcss/postcss": "^4.1.12",
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.6",
     "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.5.14",
     "tailwindcss": "^4.1.12",
     "turbo": "^2.5.6",
     "typescript": "5.9.2"

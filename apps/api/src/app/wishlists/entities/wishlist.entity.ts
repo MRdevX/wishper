@@ -5,12 +5,12 @@ import { BaseModel } from '../../core/base/base.entity';
 
 @Entity()
 export class Wishlist extends BaseModel {
-  @ManyToOne(() => User, (u) => u.wishlists, { onDelete: 'CASCADE' })
+  @ManyToOne(() => User, u => u.wishlists, { onDelete: 'CASCADE' })
   owner: User;
 
   @Column({ length: 120 })
   name: string;
 
-  @OneToMany(() => Wish, (w) => w.wishlist)
+  @OneToMany(() => Wish, w => w.wishlist)
   wishes: Wish[];
 }

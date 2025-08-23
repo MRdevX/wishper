@@ -12,30 +12,18 @@ interface StatsCardProps {
   };
 }
 
-export function StatsCard({
-  title,
-  value,
-  description,
-  icon: Icon,
-  trend,
-}: StatsCardProps) {
+export function StatsCard({ title, value, description, icon: Icon, trend }: StatsCardProps) {
   return (
-    <Card className="border-gray-200 bg-white">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium text-gray-700">
-          {title}
-        </CardTitle>
-        <Icon className="h-4 w-4 text-gray-400" />
+    <Card className='border-gray-200 bg-white'>
+      <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+        <CardTitle className='text-sm font-medium text-gray-700'>{title}</CardTitle>
+        <Icon className='h-4 w-4 text-gray-400' />
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold text-gray-900">{value}</div>
-        {description && (
-          <p className="text-xs text-gray-500 mt-1">{description}</p>
-        )}
+        <div className='text-2xl font-bold text-gray-900'>{value}</div>
+        {description && <p className='mt-1 text-xs text-gray-500'>{description}</p>}
         {trend && (
-          <p
-            className={`text-xs mt-1 ${trend.isPositive ? 'text-green-600' : 'text-red-600'}`}
-          >
+          <p className={`mt-1 text-xs ${trend.isPositive ? 'text-green-600' : 'text-red-600'}`}>
             {trend.isPositive ? '+' : ''}
             {trend.value}
           </p>
