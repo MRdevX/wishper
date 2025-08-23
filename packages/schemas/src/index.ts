@@ -6,6 +6,7 @@ export * from './models/wishlist.model';
 export * from './dto/user-dto.model';
 export * from './dto/wish-dto.model';
 export * from './dto/wishlist-dto.model';
+export * from './dto/auth-dto.model';
 
 export * from './api.model';
 

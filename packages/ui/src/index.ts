@@ -1,38 +1,11 @@
-export { Badge, badgeVariants } from './components/badge';
-export { Button, buttonVariants } from './components/button';
-export {
-  Card,
-  CardHeader,
-  CardFooter,
-  CardTitle,
-  CardAction,
-  CardDescription,
-  CardContent,
-} from './components/card';
-export { Input } from './components/input';
-export { Separator } from './components/separator';
-export {
-  Table,
-  TableHeader,
-  TableBody,
-  TableFooter,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableCaption,
-} from './components/table';
-export { Avatar, AvatarImage, AvatarFallback } from './components/avatar';
-export {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuCheckboxItem,
-  DropdownMenuRadioItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-} from './components/dropdown-menu';
+export * from './components/avatar';
+export * from './components/badge';
+export * from './components/button';
+export * from './components/card';
+export * from './components/dropdown-menu';
+export * from './components/input';
+export * from './components/separator';
+export * from './components/table';
 
 export { AdminLayout } from './components/admin/admin-layout';
 export { DataTable, SortableHeader } from './components/admin/data-table';
