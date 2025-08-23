@@ -110,6 +110,9 @@
     },
     "generate:component": {
       "cache": false
+    },
+    "clean": {
+      "cache": false
     }
   }
 }
