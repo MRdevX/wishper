@@ -7,7 +7,7 @@ import { BaseModel } from '../../core/base/base.entity';
 @Entity()
 export class User extends BaseModel implements IUser {
   @Index({ unique: true })
-  @Column({ length: 100 })
+  @Column({ length: 100, nullable: true })
   email: string;
 
   @Column({ length: 120, nullable: true })
