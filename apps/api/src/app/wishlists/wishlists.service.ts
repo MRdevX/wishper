@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Wishlist } from './entities/wishlist.entity';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-wishlist.dto';
-import { BaseRepository } from '../core/base/base.repositorty';
+import { BaseRepository } from '../core/base/base.repository';
 
 @Injectable()
 export class WishlistsService extends BaseRepository<Wishlist> {

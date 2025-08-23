@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Wish } from './entities/wish.entity';
 import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';
-import { BaseRepository } from '../core/base/base.repositorty';
+import { BaseRepository } from '../core/base/base.repository';
 
 @Injectable()
 export class WishesService extends BaseRepository<Wish> {
