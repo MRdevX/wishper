@@ -26,9 +26,9 @@ async function bootstrap() {
   );
 
   await app.listen(appConfig.port, appConfig.host);
-  console.log(
-    `🚀 API running on http://${appConfig.host}:${appConfig.port}/api`,
-  );
+  // console.log(
+  //   `🚀 API running on http://${appConfig.host}:${appConfig.port}/api`,
+  // );
 }
 
 bootstrap();
