@@ -1,19 +1,15 @@
 FROM node:20-alpine AS base
 
-# Accept build arguments for database configuration
-ARG DATABASE_URL
+# Accept build arguments for non-sensitive database configuration
 ARG DB_HOST
 ARG DB_PORT=5432
 ARG DB_USERNAME
-ARG DB_PASSWORD
 ARG DB_DATABASE
 
-# Set database environment variables from build args
-ENV DATABASE_URL=$DATABASE_URL
+# Set non-sensitive database environment variables from build args
 ENV DB_HOST=$DB_HOST
 ENV DB_PORT=$DB_PORT
 ENV DB_USERNAME=$DB_USERNAME
-ENV DB_PASSWORD=$DB_PASSWORD
 ENV DB_DATABASE=$DB_DATABASE
 
 # Install system dependencies
@@ -38,9 +34,6 @@ COPY . .
 
 # Build stage
 FROM base AS builder
-
-# Debug environment variables (optional - remove in production)
-RUN node debug-env.js
 
 # Build schemas package first
 RUN cd packages/schemas && pnpm run build
@@ -78,7 +71,6 @@ RUN npm install -g pnpm@10.4.1 && \
 # Copy built application from builder stage
 COPY --from=builder --chown=nestjs:nodejs /app/apps/api/dist ./apps/api/dist
 COPY --from=builder --chown=nestjs:nodejs /app/packages/schemas/dist ./packages/schemas/dist
-COPY --from=builder --chown=nestjs:nodejs /app/debug-env.js ./debug-env.js
 
 # Switch to non-root user
 USER nestjs
@@ -86,5 +78,5 @@ USER nestjs
 # Expose port
 EXPOSE 3001
 
-# Start the application with debug info
-CMD ["sh", "-c", "node debug-env.js && node apps/api/dist/main"]
+# Start the application
+CMD ["node", "apps/api/dist/main"]

@@ -12,24 +12,16 @@ import { HealthModule } from './health/health.module';
     HealthModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
       load: [appConfig, dbConfig, authConfig],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
         const dbConfig = configService.get('db');
-        return {
-          type: 'postgres',
-          host: dbConfig.host,
-          port: dbConfig.port,
-          username: dbConfig.username,
-          password: dbConfig.password,
-          database: dbConfig.database,
-          entities: dbConfig.entities,
-          synchronize: dbConfig.synchronize,
-          logging: dbConfig.logging,
-        };
+        if (!dbConfig) {
+          throw new Error('Database configuration not found');
+        }
+        return dbConfig;
       },
       inject: [ConfigService],
     }),

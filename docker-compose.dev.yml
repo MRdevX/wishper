@@ -6,15 +6,17 @@ services:
       context: .
       dockerfile: Dockerfile
       target: builder
-    ports:
-      - '3001:3001'
+      args:
+        - DB_HOST=${DB_HOST}
+        - DB_PORT=${DB_PORT:-5432}
+        - DB_USERNAME=${DB_USERNAME}
+        - DB_DATABASE=${DB_DATABASE}
+    network_mode: host
     environment:
       - NODE_ENV=development
       - HOST=0.0.0.0
       - PORT=3001
       # Database Configuration
-      - DATABASE_URL=${DATABASE_URL}
-      # Fallback database parameters (used if DATABASE_URL is not available)
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT:-5432}
       - DB_USERNAME=${DB_USERNAME}

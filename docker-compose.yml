@@ -5,15 +5,18 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        - DB_HOST=${DB_HOST}
+        - DB_PORT=${DB_PORT:-5432}
+        - DB_USERNAME=${DB_USERNAME}
+        - DB_DATABASE=${DB_DATABASE}
     ports:
       - '3001:3001'
     environment:
       - NODE_ENV=production
       - HOST=0.0.0.0
       - PORT=3001
-      # Database Configuration
-      - DATABASE_URL=${DATABASE_URL}
-      # Fallback database parameters (used if DATABASE_URL is not available)
+      # Database Configuration (sensitive data passed at runtime)
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT:-5432}
       - DB_USERNAME=${DB_USERNAME}

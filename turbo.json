@@ -9,6 +9,7 @@
       "outputs": [".next/**", "!.next/cache/**", "dist/**", "build/**"],
       "cache": true
     },
+
     "dev": {
       "cache": false,
       "persistent": true,
@@ -77,6 +78,30 @@
     },
     "clean": {
       "cache": false
+    },
+    "@repo/eslint-config#build": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", "tsconfig.json", "tsconfig.*.json"],
+      "outputs": [],
+      "cache": true
+    },
+    "@repo/prettier-config#build": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", "tsconfig.json", "tsconfig.*.json"],
+      "outputs": [],
+      "cache": true
+    },
+    "@repo/typescript-config#build": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", "tsconfig.json", "tsconfig.*.json"],
+      "outputs": [],
+      "cache": true
+    },
+    "@repo/ui#build": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", "tsconfig.json", "tsconfig.*.json"],
+      "outputs": [],
+      "cache": true
     }
   }
 }
