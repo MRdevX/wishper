@@ -1,71 +1,64 @@
 FROM node:20-alpine AS base
 
-# Install dependencies only when needed
-FROM base AS deps
-RUN apk update
-RUN apk add --no-cache libc6-compat
+# Install system dependencies
+RUN apk update && apk add --no-cache libc6-compat
+
+# Install global packages
+RUN npm install -g pnpm@10.4.1 turbo@^2.5.6
+
+# Set working directory
 WORKDIR /app
 
-# Install turbo globally
-RUN npm install -g turbo@^2.5.6
+# Copy package files
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY apps/api/package.json ./apps/api/
+COPY packages/schemas/package.json ./packages/schemas/
 
-# Copy the entire monorepo
-COPY . .
-
-# Generate a partial monorepo with a pruned lockfile for the api workspace
-RUN turbo prune api --docker
-
-# Install dependencies based on the pruned lockfile
-FROM base AS installer
-RUN apk update
-RUN apk add --no-cache libc6-compat
-WORKDIR /app
-
-# Copy package.json files from the pruned output
-COPY --from=deps /app/out/json/ .
-COPY --from=deps /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
-
-# Install dependencies using pnpm
-RUN npm install -g pnpm@10.4.1
+# Install all dependencies
 RUN pnpm install --frozen-lockfile
 
-# Build the application
+# Copy source code
+COPY . .
+
+# Build stage
 FROM base AS builder
-RUN apk update
-RUN apk add --no-cache libc6-compat
-WORKDIR /app
 
-# Copy dependencies from installer stage
-COPY --from=installer /app/node_modules ./node_modules
-COPY --from=installer /app/pnpm-lock.yaml ./pnpm-lock.yaml
+# Build schemas package first
+RUN cd packages/schemas && pnpm run build
 
-# Copy source code from the pruned output
-COPY --from=deps /app/out/full/ .
-
-# Build the schemas package first, then the API app
-RUN npm install -g pnpm@10.4.1
-RUN pnpm --filter=@repo/schemas build
+# Build API app
 RUN cd apps/api && pnpm run build
 
 # Production stage
-FROM base AS runner
+FROM node:20-alpine AS runner
+
+# Install system dependencies
+RUN apk update && apk add --no-cache libc6-compat
+
+# Create non-root user
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nestjs
+
+# Set working directory
 WORKDIR /app
 
-# Create a non-root user
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nestjs
+# Copy package files for production install
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY apps/api/package.json ./apps/api/
+COPY packages/schemas/package.json ./packages/schemas/
 
-# Copy built application
+# Install only production dependencies
+RUN npm install -g pnpm@10.4.1 && \
+    pnpm install --frozen-lockfile --prod
+
+# Copy built application from builder stage
 COPY --from=builder --chown=nestjs:nodejs /app/apps/api/dist ./apps/api/dist
-COPY --from=builder --chown=nestjs:nodejs /app/apps/api/package.json ./apps/api/package.json
-
-# Copy node_modules for production dependencies only
-COPY --from=builder --chown=nestjs:nodejs /app/node_modules ./node_modules
+COPY --from=builder --chown=nestjs:nodejs /app/packages/schemas/dist ./packages/schemas/dist
 
 # Switch to non-root user
 USER nestjs
 
-# Expose the port the app runs on
+# Expose port
 EXPOSE 3001
 
 # Start the application
