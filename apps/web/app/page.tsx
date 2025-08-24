@@ -1,9 +1,31 @@
+'use client';
+
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@repo/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/card';
 import { Badge } from '@repo/ui/components/badge';
 import { Heart, Gift, Users, Sparkles, ArrowRight, Star } from 'lucide-react';
+import { useAuthContext } from '../components/auth-provider';
 
 export default function Page() {
+  const { isAuthenticated, isLoading } = useAuthContext();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoading && isAuthenticated) {
+      router.push('/dashboard');
+    }
+  }, [isAuthenticated, isLoading, router]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+        <div className="text-slate-600">Loading...</div>
+      </div>
+    );
+  }
+
   return (
     <div className='min-h-screen bg-gradient-to-br from-slate-50 to-blue-50'>
       {/* Hero Section */}
@@ -33,12 +55,13 @@ export default function Page() {
             <Button
               size='lg'
               className='bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600'
+              onClick={() => router.push('/auth')}
             >
               Get Started
               <ArrowRight className='ml-2 h-4 w-4' />
             </Button>
-            <Button variant='outline' size='lg'>
-              View Demo
+            <Button variant='outline' size='lg' onClick={() => router.push('/auth')}>
+              Sign In
             </Button>
           </div>
         </div>
@@ -114,6 +137,7 @@ export default function Page() {
             <Button
               size='lg'
               className='bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600'
+              onClick={() => router.push('/auth')}
             >
               Start Your First Wishlist
               <ArrowRight className='ml-2 h-4 w-4' />

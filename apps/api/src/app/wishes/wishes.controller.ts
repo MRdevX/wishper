@@ -22,7 +22,7 @@ export class WishesController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createWishDto: CreateWishDto, @Query('ownerId') ownerId: string) {
-    const wish = await this.wishesService.createWish(createWishDto, ownerId);
+    const wish = await this.wishesService.create(createWishDto, ownerId);
     return ApiResponseDto.success(wish, 'Wish created successfully');
   }
 
@@ -42,7 +42,7 @@ export class WishesController {
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    const wish = await this.wishesService.findByIdWithRelations(id);
+    const wish = await this.wishesService.findWithRelations(id);
     if (!wish) {
       return ApiResponseDto.error('Wish not found');
     }

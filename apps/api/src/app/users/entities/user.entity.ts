@@ -13,6 +13,9 @@ export class User extends BaseModel implements IUser {
   @Column({ length: 120, nullable: true })
   name?: string;
 
+  @Column({ length: 255, nullable: true, select: false })
+  password?: string;
+
   @OneToMany(() => Wish, w => w.owner)
   wishes: Wish[];
 

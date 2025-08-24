@@ -8,13 +8,17 @@ import {
   Delete,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiResponseDto } from '../common/dto/api-response.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
 
 @Controller('users')
+@UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -29,6 +33,15 @@ export class UsersController {
   async findAll() {
     const users = await this.usersService.findAll();
     return ApiResponseDto.success(users);
+  }
+
+  @Get('me')
+  async getCurrentUser(@CurrentUser() user: any) {
+    const currentUser = await this.usersService.findById(user.userId);
+    if (!currentUser) {
+      return ApiResponseDto.error('User not found');
+    }
+    return ApiResponseDto.success(currentUser);
   }
 
   @Get(':id')
