@@ -1,27 +1,49 @@
 version: '3.8'
 
 services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: wishper_postgres
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-wishper_db}
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USERNAME:-postgres} -d ${DB_DATABASE:-wishper_db}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
   api:
     build:
       context: .
       dockerfile: Dockerfile
       args:
-        - DB_HOST=${DB_HOST}
+        - DB_HOST=postgres
         - DB_PORT=${DB_PORT:-5432}
-        - DB_USERNAME=${DB_USERNAME}
-        - DB_DATABASE=${DB_DATABASE}
+        - DB_USERNAME=${DB_USERNAME:-postgres}
+        - DB_DATABASE=${DB_DATABASE:-wishper_db}
     ports:
       - '3001:3001'
     environment:
       - NODE_ENV=production
       - HOST=0.0.0.0
       - PORT=3001
-      # Database Configuration (sensitive data passed at runtime)
-      - DB_HOST=${DB_HOST}
+      # Database Configuration
+      - DB_HOST=postgres
       - DB_PORT=${DB_PORT:-5432}
-      - DB_USERNAME=${DB_USERNAME}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_DATABASE=${DB_DATABASE}
+      - DB_USERNAME=${DB_USERNAME:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD:-postgres}
+      - DB_DATABASE=${DB_DATABASE:-wishper_db}
+    depends_on:
+      postgres:
+        condition: service_healthy
     restart: unless-stopped
     healthcheck:
       test:
@@ -30,3 +52,6 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+
+volumes:
+  postgres_data:
