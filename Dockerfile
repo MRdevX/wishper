@@ -1,68 +1,71 @@
-# Use Node.js 20 Alpine as base image
 FROM node:20-alpine AS base
 
-# Install pnpm
-RUN npm install -g pnpm@10.4.1
-
-# Set working directory
+# Install dependencies only when needed
+FROM base AS deps
+RUN apk update
+RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Copy package files
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY apps/api/package.json ./apps/api/
-COPY packages/schemas/package.json ./packages/schemas/
+# Install turbo globally
+RUN npm install -g turbo@^2.5.6
 
-# Install dependencies
-RUN pnpm install --frozen-lockfile
-
-# Copy source code
+# Copy the entire monorepo
 COPY . .
 
-# Build stage
-FROM base AS builder
+# Generate a partial monorepo with a pruned lockfile for the api workspace
+RUN turbo prune api --docker
 
-# Build the API app
-RUN pnpm --filter=api build
-
-# Production stage
-FROM node:20-alpine AS production
-
-# Install pnpm
-RUN npm install -g pnpm@10.4.1
-
-# Create app user
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nestjs -u 1001
-
-# Set working directory
+# Install dependencies based on the pruned lockfile
+FROM base AS installer
+RUN apk update
+RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Copy package files
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY apps/api/package.json ./apps/api/
-COPY packages/schemas/package.json ./packages/schemas/
+# Copy package.json files from the pruned output
+COPY --from=deps /app/out/json/ .
+COPY --from=deps /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 
-# Install only production dependencies
-RUN pnpm install --frozen-lockfile --prod
+# Install dependencies using pnpm
+RUN npm install -g pnpm@10.4.1
+RUN pnpm install --frozen-lockfile
 
-# Copy built application from builder stage
+# Build the application
+FROM base AS builder
+RUN apk update
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+
+# Copy dependencies from installer stage
+COPY --from=installer /app/node_modules ./node_modules
+COPY --from=installer /app/pnpm-lock.yaml ./pnpm-lock.yaml
+
+# Copy source code from the pruned output
+COPY --from=deps /app/out/full/ .
+
+# Build the API app
+RUN npm install -g pnpm@10.4.1
+RUN pnpm turbo run build --filter=api
+
+# Production stage
+FROM base AS runner
+WORKDIR /app
+
+# Create a non-root user
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nestjs
+
+# Copy built application
 COPY --from=builder --chown=nestjs:nodejs /app/apps/api/dist ./apps/api/dist
-COPY --from=builder --chown=nestjs:nodejs /app/packages/schemas/dist ./packages/schemas/dist
+COPY --from=builder --chown=nestjs:nodejs /app/apps/api/package.json ./apps/api/package.json
+
+# Copy node_modules for production dependencies only
+COPY --from=builder --chown=nestjs:nodejs /app/node_modules ./node_modules
 
 # Switch to non-root user
 USER nestjs
 
-# Expose port
+# Expose the port the app runs on
 EXPOSE 3001
-
-# Set environment variables
-ENV NODE_ENV=production
-ENV PORT=3001
-ENV HOST=0.0.0.0
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:3001/api/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"
 
 # Start the application
 CMD ["node", "apps/api/dist/main"]
