@@ -23,6 +23,9 @@ COPY . .
 # Build stage
 FROM base AS builder
 
+# Debug environment variables (optional - remove in production)
+RUN node debug-env.js
+
 # Build schemas package first
 RUN cd packages/schemas && pnpm run build
 
