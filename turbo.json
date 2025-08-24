@@ -7,8 +7,7 @@
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*", "src/**/*", "tsconfig.json", "tsconfig.*.json"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**", "build/**"],
-      "cache": true,
-      "outputMode": "new-only"
+      "cache": true
     },
     "dev": {
       "cache": false,
