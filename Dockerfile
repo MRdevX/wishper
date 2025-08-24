@@ -42,9 +42,10 @@ COPY --from=installer /app/pnpm-lock.yaml ./pnpm-lock.yaml
 # Copy source code from the pruned output
 COPY --from=deps /app/out/full/ .
 
-# Build the API app
+# Build the schemas package first, then the API app
 RUN npm install -g pnpm@10.4.1
-RUN pnpm turbo run build --filter=api
+RUN pnpm --filter=@repo/schemas build
+RUN pnpm --filter=api build
 
 # Production stage
 FROM base AS runner
