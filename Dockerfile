@@ -45,7 +45,7 @@ COPY --from=deps /app/out/full/ .
 # Build the schemas package first, then the API app
 RUN npm install -g pnpm@10.4.1
 RUN pnpm --filter=@repo/schemas build
-RUN pnpm --filter=api build
+RUN cd apps/api && pnpm run build
 
 # Production stage
 FROM base AS runner
