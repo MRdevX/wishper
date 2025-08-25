@@ -72,7 +72,37 @@ Use this if you need full control over the deployment or want to run everything 
 - ✅ Complete service orchestration
 - ✅ Complex networking support
 
-## Environment Variables
+## Frontend Deployment
+
+### Environment Configuration
+
+The frontend needs to know where to send API requests. Configure the following environment variable:
+
+```bash
+# Production
+NEXT_PUBLIC_API_URL=https://api.wishper.link/api
+
+# Local development
+NEXT_PUBLIC_API_URL=http://localhost:3001/api
+```
+
+### Deployment Options
+
+1. **Vercel** (Recommended):
+   - Connect your repository
+   - Set environment variables in Vercel dashboard
+   - Automatic deployments on push
+
+2. **Netlify**:
+   - Connect your repository
+   - Set environment variables in Netlify dashboard
+   - Build command: `pnpm --filter=web build`
+
+3. **Self-hosted**:
+   - Build the app: `pnpm --filter=web build`
+   - Serve the `.next` directory with a Node.js server
+
+### Environment Variables
 
 Both deployment methods use the same environment variables:
 
@@ -87,6 +117,12 @@ Both deployment methods use the same environment variables:
 | `DB_DATABASE`            | ❌       | wishper_db   | Database name            |
 | `JWT_EXPIRES_IN`         | ❌       | 1d           | JWT expiration           |
 | `JWT_REFRESH_EXPIRES_IN` | ❌       | 7d           | Refresh token expiration |
+
+### Frontend Environment Variables
+
+| Variable              | Required | Default                      | Description      |
+| --------------------- | -------- | ---------------------------- | ---------------- |
+| `NEXT_PUBLIC_API_URL` | ❌       | https://api.wishper.link/api | API endpoint URL |
 
 ## Recommendation
 

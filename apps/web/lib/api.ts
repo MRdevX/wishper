@@ -20,7 +20,7 @@ import {
   ITokenPair,
 } from '@repo/schemas';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.wishper.link/api';
 
 export type {
   IApiResponse as ApiResponse,
