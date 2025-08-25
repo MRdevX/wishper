@@ -7,7 +7,7 @@ services:
       POSTGRES_USER: ${DB_USERNAME:-wishper_user}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - '5432:5432'
+      - '${POSTGRES_PORT:-5432}:5432'
     volumes:
       - postgres_dev_data:/var/lib/postgresql/data
     restart: unless-stopped
@@ -28,7 +28,7 @@ services:
       target: base
     container_name: wishper_api_dev
     ports:
-      - '3001:3001'
+      - '${API_PORT:-3001}:3001'
     environment:
       # Application
       NODE_ENV: development

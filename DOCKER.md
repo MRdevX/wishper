@@ -56,6 +56,13 @@ The following environment variables are automatically set by Docker Compose:
 - `HOST` - API host (0.0.0.0)
 - `PORT` - API port (3001)
 
+#### Port Configuration
+
+- `API_PORT` - External API port (default: 3001)
+- `POSTGRES_PORT` - External PostgreSQL port (default: 5432)
+
+**Note:** Change these ports if you encounter port conflicts in your deployment environment.
+
 #### Database
 
 - `DB_HOST` - PostgreSQL host (postgres)
@@ -199,6 +206,10 @@ lsof -i :5432
 
 # Stop conflicting services
 sudo systemctl stop postgresql  # If running locally
+
+# Alternative: Change ports in your .env file
+API_PORT=3002
+POSTGRES_PORT=5433
 ```
 
 #### Database Connection Issues
