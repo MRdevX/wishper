@@ -16,7 +16,7 @@ export function useForm<T extends Record<string, any>>({
   const [values, setValues] = useState<T>(initialValues);
   const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({});
   const [isLoading, setIsLoading] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | undefined>(undefined);
 
   const handleChange = useCallback(
     (field: keyof T) => (value: any) => {
@@ -43,7 +43,7 @@ export function useForm<T extends Record<string, any>>({
 
   const clearErrors = useCallback(() => {
     setErrors({});
-    setSubmitError(null);
+    setSubmitError(undefined);
   }, []);
 
   const reset = useCallback(() => {
@@ -55,7 +55,7 @@ export function useForm<T extends Record<string, any>>({
     async (e: React.FormEvent) => {
       e.preventDefault();
       setIsLoading(true);
-      setSubmitError(null);
+      setSubmitError(undefined);
 
       try {
         const success = await onSubmit(values);

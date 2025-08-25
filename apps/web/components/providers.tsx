@@ -3,11 +3,11 @@
 import { ThemeProvider } from 'next-themes';
 import { AuthProvider } from '../contexts/auth-context';
 
-interface ProvidersProps {
+interface IProvidersProps {
   children: React.ReactNode;
 }
 
-export function Providers({ children }: ProvidersProps) {
+export function Providers({ children }: IProvidersProps) {
   return (
     <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
       <AuthProvider>{children}</AuthProvider>

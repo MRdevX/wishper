@@ -1,8 +1,8 @@
 'use client';
 
-import { useAuthContext } from '../../contexts/auth-context';
-import type { RegisterDto } from '../../types';
-import { useForm } from '../../hooks/use-form';
+import { useAuthContext } from '@/contexts/auth-context';
+import type { RegisterDto } from '@/types';
+import { useForm } from '@/hooks/use-form';
 import { AuthCard, AuthLinkButton } from '@repo/ui/components/auth-card';
 import { FormFieldComponent, BaseForm } from '@repo/ui/components/common';
 

@@ -37,7 +37,7 @@ function WishlistsContent() {
       } else {
         setError(response.error || 'Failed to fetch wishlists');
       }
-    } catch (err) {
+    } catch (_err) {
       setError('Failed to fetch wishlists');
     } finally {
       setIsLoading(false);
@@ -160,74 +160,6 @@ function WishlistsContent() {
         )}
       </div>
     </DashboardLayout>
-  );
-}
-
-interface IWishlistFormProps {
-  wishlist?: Wishlist | null;
-  onSubmit: (data: { name: string; description?: string }) => Promise<void>;
-  onCancel: () => void;
-  loading: boolean;
-}
-
-function WishlistForm({ wishlist, onSubmit, onCancel, loading }: IWishlistFormProps) {
-  const [formData, setFormData] = useState({
-    name: wishlist?.name || '',
-    description: '',
-  });
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.name.trim()) return;
-
-    await onSubmit({
-      name: formData.name.trim(),
-      description: formData.description.trim() || undefined,
-    });
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className='space-y-4'>
-      <div className='space-y-2'>
-        <label htmlFor='name' className='text-sm font-medium'>
-          Name *
-        </label>
-        <input
-          id='name'
-          type='text'
-          value={formData.name}
-          onChange={e => setFormData(prev => ({ ...prev, name: e.target.value }))}
-          className='w-full rounded-md border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500'
-          placeholder='Enter wishlist name'
-          required
-          disabled={loading}
-        />
-      </div>
-
-      <div className='space-y-2'>
-        <label htmlFor='description' className='text-sm font-medium'>
-          Description
-        </label>
-        <textarea
-          id='description'
-          value={formData.description}
-          onChange={e => setFormData(prev => ({ ...prev, description: e.target.value }))}
-          className='w-full rounded-md border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500'
-          placeholder='Enter description (optional)'
-          rows={3}
-          disabled={loading}
-        />
-      </div>
-
-      <div className='flex gap-3 pt-4'>
-        <Button type='submit' disabled={loading || !formData.name.trim()}>
-          {loading ? 'Saving...' : wishlist ? 'Update' : 'Create'}
-        </Button>
-        <Button type='button' variant='outline' onClick={onCancel}>
-          Cancel
-        </Button>
-      </div>
-    </form>
   );
 }
 

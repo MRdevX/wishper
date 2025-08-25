@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import { apiClient } from '../lib/api-client';
-import type { ApiResponse, LoadingState } from '../types';
-import { ERROR_MESSAGES } from '../constants';
+import { apiClient } from '@/lib/api-client';
+import type { ApiResponse, LoadingState } from '@/types';
+import { ERROR_MESSAGES } from '@/constants';
 
 interface AdminCrudState<T> extends LoadingState {
   items: T[];

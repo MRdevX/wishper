@@ -1,8 +1,8 @@
 'use client';
 
 import { createContext, useContext, ReactNode } from 'react';
-import { useAuth } from '../hooks/use-auth';
-import type { UserWithoutPassword, LoginDto, RegisterDto } from '../types';
+import { useAuth } from '@/hooks/use-auth';
+import type { UserWithoutPassword, LoginDto, RegisterDto } from '@/types';
 
 interface AuthContextType {
   user: UserWithoutPassword | null;

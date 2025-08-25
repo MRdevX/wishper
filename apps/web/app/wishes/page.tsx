@@ -38,7 +38,7 @@ function WishesContent() {
       } else {
         setError(response.error || 'Failed to fetch wishes');
       }
-    } catch (err) {
+    } catch (_err) {
       setError('Failed to fetch wishes');
     } finally {
       setIsLoading(false);
@@ -190,127 +190,6 @@ function WishesContent() {
         )}
       </div>
     </DashboardLayout>
-  );
-}
-
-interface IWishFormProps {
-  wish?: Wish | null;
-  onSubmit: (data: {
-    title: string;
-    details?: {
-      description?: string;
-      price?: number;
-      url?: string;
-      imageUrl?: string;
-      priority?: 'low' | 'medium' | 'high';
-    };
-    status?: WishStatus;
-    wishlistId?: string;
-  }) => Promise<void>;
-  onCancel: () => void;
-  loading: boolean;
-}
-
-function WishForm({ wish, onSubmit, onCancel, loading }: IWishFormProps) {
-  const [formData, setFormData] = useState({
-    title: wish?.title || '',
-    description: wish?.details?.description || '',
-    price: wish?.details?.price || '',
-    status: wish?.status || WishStatus.ACTIVE,
-    wishlistId: wish?.wishlist?.id || '',
-  });
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.title.trim()) return;
-
-    await onSubmit({
-      title: formData.title.trim(),
-      details: {
-        description: formData.description.trim() || undefined,
-        price: formData.price ? parseFloat(formData.price.toString()) : undefined,
-      },
-      status: formData.status as WishStatus,
-      wishlistId: formData.wishlistId || undefined,
-    });
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className='space-y-4'>
-      <div className='space-y-2'>
-        <label htmlFor='title' className='text-sm font-medium'>
-          Title *
-        </label>
-        <input
-          id='title'
-          type='text'
-          value={formData.title}
-          onChange={e => setFormData(prev => ({ ...prev, title: e.target.value }))}
-          className='w-full rounded-md border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500'
-          placeholder='Enter wish title'
-          required
-          disabled={loading}
-        />
-      </div>
-
-      <div className='space-y-2'>
-        <label htmlFor='description' className='text-sm font-medium'>
-          Description
-        </label>
-        <textarea
-          id='description'
-          value={formData.description}
-          onChange={e => setFormData(prev => ({ ...prev, description: e.target.value }))}
-          className='w-full rounded-md border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500'
-          placeholder='Enter description (optional)'
-          rows={3}
-          disabled={loading}
-        />
-      </div>
-
-      <div className='space-y-2'>
-        <label htmlFor='price' className='text-sm font-medium'>
-          Price
-        </label>
-        <input
-          id='price'
-          type='number'
-          step='0.01'
-          min='0'
-          value={formData.price}
-          onChange={e => setFormData(prev => ({ ...prev, price: e.target.value }))}
-          className='w-full rounded-md border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500'
-          placeholder='Enter price (optional)'
-          disabled={loading}
-        />
-      </div>
-
-      <div className='space-y-2'>
-        <label htmlFor='status' className='text-sm font-medium'>
-          Status
-        </label>
-        <select
-          id='status'
-          value={formData.status}
-          onChange={e => setFormData(prev => ({ ...prev, status: e.target.value as WishStatus }))}
-          className='w-full rounded-md border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500'
-          disabled={loading}
-        >
-          <option value={WishStatus.ACTIVE}>Active</option>
-          <option value={WishStatus.ACHIEVED}>Achieved</option>
-          <option value={WishStatus.ARCHIVED}>Archived</option>
-        </select>
-      </div>
-
-      <div className='flex gap-3 pt-4'>
-        <Button type='submit' disabled={loading || !formData.title.trim()}>
-          {loading ? 'Saving...' : wish ? 'Update' : 'Create'}
-        </Button>
-        <Button type='button' variant='outline' onClick={onCancel}>
-          Cancel
-        </Button>
-      </div>
-    </form>
   );
 }
 

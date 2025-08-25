@@ -1,12 +1,12 @@
 import { cn } from '../../lib/utils';
 
-interface LoadingProps {
+interface ILoadingProps {
   size?: 'sm' | 'md' | 'lg';
   className?: string;
   text?: string;
 }
 
-export function Loading({ size = 'md', className, text }: LoadingProps) {
+export function Loading({ size = 'md', className, text }: ILoadingProps) {
   const sizeClasses = {
     sm: 'h-4 w-4',
     md: 'h-8 w-8',
@@ -26,12 +26,12 @@ export function Loading({ size = 'md', className, text }: LoadingProps) {
   );
 }
 
-interface LoadingSpinnerProps {
+interface ILoadingSpinnerProps {
   size?: 'sm' | 'md' | 'lg';
   className?: string;
 }
 
-export function LoadingSpinner({ size = 'md', className }: LoadingSpinnerProps) {
+export function LoadingSpinner({ size = 'md', className }: ILoadingSpinnerProps) {
   const sizeClasses = {
     sm: 'h-4 w-4',
     md: 'h-6 w-6',
@@ -49,11 +49,11 @@ export function LoadingSpinner({ size = 'md', className }: LoadingSpinnerProps) 
   );
 }
 
-interface LoadingPageProps {
+interface ILoadingPageProps {
   text?: string;
 }
 
-export function LoadingPage({ text = 'Loading...' }: LoadingPageProps) {
+export function LoadingPage({ text = 'Loading...' }: ILoadingPageProps) {
   return (
     <div className='flex min-h-screen items-center justify-center'>
       <Loading size='lg' text={text} />
@@ -61,12 +61,12 @@ export function LoadingPage({ text = 'Loading...' }: LoadingPageProps) {
   );
 }
 
-interface LoadingOverlayProps {
+interface ILoadingOverlayProps {
   text?: string;
   className?: string;
 }
 
-export function LoadingOverlay({ text = 'Loading...', className }: LoadingOverlayProps) {
+export function LoadingOverlay({ text = 'Loading...', className }: ILoadingOverlayProps) {
   return (
     <div
       className={cn(

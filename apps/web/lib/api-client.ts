@@ -1,4 +1,5 @@
-import { API_ENDPOINTS, STORAGE_KEYS, ERROR_MESSAGES } from '../constants';
+import { API_ENDPOINTS, STORAGE_KEYS, ERROR_MESSAGES } from '@/constants';
+import { env } from './env';
 import type {
   ApiResponse,
   AuthResponse,
@@ -15,7 +16,7 @@ import type {
   User,
   Wish,
   Wishlist,
-} from '../types';
+} from '@/types';
 
 class ApiClient {
   private baseUrl: string;
@@ -54,7 +55,7 @@ class ApiClient {
       let data;
       try {
         data = await response.json();
-      } catch (jsonError) {
+      } catch (_jsonError) {
         return {
           success: false,
           error: `Invalid JSON response: ${response.status} ${response.statusText}`,
@@ -284,6 +285,4 @@ class ApiClient {
   }
 }
 
-export const apiClient = new ApiClient(
-  process.env.NEXT_PUBLIC_API_URL || 'https://api.wishper.link/api'
-);
+export const apiClient = new ApiClient(env.API_URL);

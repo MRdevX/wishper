@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
-import { apiClient } from '../lib/api-client';
-import type { ApiResponse, LoadingState } from '../types';
-import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '../constants';
+import { apiClient } from '@/lib/api-client';
+import type { ApiResponse, LoadingState } from '@/types';
+import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/constants';
 
 interface UseCrudOptions<T> {
   onSuccess?: (data: T) => void;
@@ -9,7 +9,7 @@ interface UseCrudOptions<T> {
 }
 
 interface UseCrudState<T> extends LoadingState {
-  data: T | null;
+  data: T | null | undefined;
 }
 
 interface UseCrudActions<T> {
@@ -24,7 +24,7 @@ export function useCrud<T>(
   options: UseCrudOptions<T> = {}
 ): [UseCrudState<T>, UseCrudActions<T>] {
   const [state, setState] = useState<UseCrudState<T>>({
-    data: null,
+    data: undefined,
     isLoading: false,
     error: null,
   });

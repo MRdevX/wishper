@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import { apiClient } from '../lib/api-client';
-import type { UserWithoutPassword, LoginDto, RegisterDto } from '../types';
-import { ERROR_MESSAGES } from '../constants';
+import { apiClient } from '@/lib/api-client';
+import type { UserWithoutPassword, LoginDto, RegisterDto } from '@/types';
+import { ERROR_MESSAGES } from '@/constants';
 
 interface AuthState {
   user: UserWithoutPassword | null;
