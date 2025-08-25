@@ -76,12 +76,22 @@ class ApiClient {
 
     try {
       const response = await fetch(url, config);
-      const data = await response.json();
+
+      // Handle cases where response is not JSON
+      let data;
+      try {
+        data = await response.json();
+      } catch (jsonError) {
+        return {
+          success: false,
+          error: `Invalid JSON response: ${response.status} ${response.statusText}`,
+        };
+      }
 
       if (!response.ok) {
         return {
           success: false,
-          error: data.message || `HTTP error! status: ${response.status}`,
+          error: data.message || data.error || `HTTP error! status: ${response.status}`,
         };
       }
 

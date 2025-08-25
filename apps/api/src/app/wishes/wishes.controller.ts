@@ -84,7 +84,7 @@ export class WishesController {
   }
 
   @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
+  @HttpCode(HttpStatus.OK)
   async remove(@Param('id') id: string, @CurrentUser() user: any) {
     // Check if the wish belongs to the current user
     const existingWish = await this.wishesService.findById(id);
@@ -93,5 +93,6 @@ export class WishesController {
     }
 
     await this.wishesService.delete(id);
+    return ApiResponseDto.success(null, 'Wish deleted successfully');
   }
 }

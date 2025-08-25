@@ -35,6 +35,9 @@ function WishlistsContent() {
         await actions.deleteItem(id);
       } catch (error) {
         console.error('Error deleting wishlist:', error);
+        alert(
+          `Failed to delete wishlist: ${error instanceof Error ? error.message : 'Unknown error'}`
+        );
       }
     }
   };

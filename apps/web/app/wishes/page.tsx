@@ -35,6 +35,7 @@ function WishesContent() {
         await actions.deleteItem(id);
       } catch (error) {
         console.error('Error deleting wish:', error);
+        alert(`Failed to delete wish: ${error instanceof Error ? error.message : 'Unknown error'}`);
       }
     }
   };

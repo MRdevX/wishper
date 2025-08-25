@@ -76,7 +76,7 @@ export class WishlistsController {
   }
 
   @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
+  @HttpCode(HttpStatus.OK)
   async remove(@Param('id') id: string, @CurrentUser() user: any) {
     // Check if the wishlist belongs to the current user
     const existingWishlist = await this.wishlistsService.findById(id);
@@ -85,5 +85,6 @@ export class WishlistsController {
     }
 
     await this.wishlistsService.delete(id);
+    return ApiResponseDto.success(null, 'Wishlist deleted successfully');
   }
 }
