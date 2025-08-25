@@ -1,15 +1,19 @@
-export { Loading, LoadingSpinner, LoadingPage, LoadingOverlay } from './ui/loading';
-export { ErrorBoundary } from './error-boundary';
-export { Providers } from './providers';
+export { PageLayout, PageCard, EmptyState } from './layout/page-layout';
+export { DashboardLayout } from './layout/dashboard-layout';
+export { Header } from './layout/header';
+
+export { StatusBadge, PriorityBadge } from './common/status-badge';
+export { DataGrid, DataGridActions } from './common/data-grid';
 
 export { LoginForm } from './auth/login-form';
 export { RegisterForm } from './auth/register-form';
 export { ProtectedRoute } from './auth/protected-route';
 
-export { DashboardLayout } from './layout/dashboard-layout';
-export { Header } from './layout/header';
-
 export { AdminPage } from './admin/admin-page';
+
+export { Loading } from './ui/loading';
+export { ErrorBoundary } from './error-boundary';
+export { Providers } from './providers';
 
 export { AuthProvider, useAuthContext } from '../contexts/auth-context';
 

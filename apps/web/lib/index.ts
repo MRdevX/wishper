@@ -1,19 +1,30 @@
 export { apiClient } from './api-client';
+export { env } from './env';
+export { cn } from './utils';
 
 export {
-  cn,
+  DataService,
+  wishService,
+  wishlistService,
+  userService,
+  DashboardService,
+} from '../services/data-service';
+
+export { useDataFetching, useMutation } from '../hooks/use-data-fetching';
+
+export {
   formatDate,
-  formatRelativeTime,
-  truncateText,
-  getInitials,
-  isValidEmail,
-  debounce,
-  throttle,
-  generateId,
-  capitalize,
+  formatRelativeDate,
   formatCurrency,
-  isEmpty,
-} from './utils';
+  truncateText,
+  capitalizeFirst,
+  transformWishForGrid,
+  transformWishlistForGrid,
+  transformUserForGrid,
+  validateEmail,
+  validatePassword,
+  searchItems,
+} from '../utils/formatters';
 
 export type {
   AppConfig,
