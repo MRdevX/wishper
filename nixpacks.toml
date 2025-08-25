@@ -12,10 +12,9 @@ HOST = "0.0.0.0"
 PORT = "3001"
 
 # Database configuration (will be overridden by environment variables at runtime)
-DB_HOST = "postgres"
-DB_PORT = "5432"
-DB_USERNAME = "wishper_user"
-DB_DATABASE = "wishper_db"
+# Use DATABASE_URL for cloud databases (Supabase, Neon, etc.)
+# Example: postgresql://username:password@host:port/database
+DATABASE_URL = "postgresql://wishper_user:password@postgres:5432/wishper_db"
 
 # JWT configuration (will be overridden by environment variables at runtime)
 JWT_EXPIRES_IN = "1d"
