@@ -1,11 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { Header } from './header';
-import { Button } from '@repo/ui/components/button';
-import { Home, Gift, List, User, Settings, Plus, Heart, X } from 'lucide-react';
+import { Sidebar } from '@repo/ui/components/common';
+import { Home, Gift, List, User, Settings, Plus } from 'lucide-react';
 
 interface IDashboardLayoutProps {
   children: React.ReactNode;
@@ -19,99 +17,22 @@ const navigation = [
   { name: 'Settings', href: '/settings', icon: Settings },
 ];
 
+const quickActions = [
+  { name: 'New Wishlist', href: '/wishlists/new', icon: Plus },
+  { name: 'New Wish', href: '/wishes/new', icon: Plus },
+];
+
 export function DashboardLayout({ children }: IDashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const pathname = usePathname();
 
   return (
     <div className='min-h-screen bg-slate-50 lg:flex'>
-      {/* Mobile sidebar overlay */}
-      {sidebarOpen && (
-        <div className='fixed inset-0 z-40 lg:hidden' onClick={() => setSidebarOpen(false)}>
-          <div className='fixed inset-0 bg-gray-600 bg-opacity-75 transition-opacity' />
-        </div>
-      )}
-
-      {/* Sidebar */}
-      <div
-        className={`
-        fixed inset-y-0 left-0 z-50 w-64 transform bg-white shadow-lg transition-transform duration-300 ease-in-out lg:relative lg:flex-shrink-0 lg:translate-x-0
-        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-      `}
-      >
-        <div className='flex h-16 items-center justify-between border-b border-slate-200 px-6'>
-          <Link href='/dashboard' className='flex items-center space-x-2'>
-            <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-r from-pink-500 to-rose-500'>
-              <Heart className='h-4 w-4 text-white' />
-            </div>
-            <span className='text-xl font-bold text-slate-900'>Wishper</span>
-          </Link>
-          <Button
-            variant='ghost'
-            size='sm'
-            onClick={() => setSidebarOpen(false)}
-            className='lg:hidden'
-          >
-            <X className='h-4 w-4' />
-          </Button>
-        </div>
-
-        <nav className='mt-6 px-3'>
-          <div className='space-y-1'>
-            {navigation.map(item => {
-              const isActive = pathname === item.href;
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={`
-                    group flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors
-                    ${
-                      isActive
-                        ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white'
-                        : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
-                    }
-                  `}
-                  onClick={() => setSidebarOpen(false)}
-                >
-                  <item.icon
-                    className={`
-                    mr-3 h-5 w-5
-                    ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-500'}
-                  `}
-                  />
-                  {item.name}
-                </Link>
-              );
-            })}
-          </div>
-
-          {/* Quick Actions */}
-          <div className='mt-8 border-t border-slate-200 pt-6'>
-            <h3 className='px-3 text-xs font-semibold uppercase tracking-wider text-slate-500'>
-              Quick Actions
-            </h3>
-            <div className='mt-3 space-y-1'>
-              <Link
-                href='/wishlists/new'
-                className='group flex items-center rounded-md px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900'
-                onClick={() => setSidebarOpen(false)}
-              >
-                <Plus className='mr-3 h-5 w-5 text-slate-400 group-hover:text-slate-500' />
-                New Wishlist
-              </Link>
-              <Link
-                href='/wishes/new'
-                className='group flex items-center rounded-md px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900'
-                onClick={() => setSidebarOpen(false)}
-              >
-                <Plus className='mr-3 h-5 w-5 text-slate-400 group-hover:text-slate-500' />
-                New Wish
-              </Link>
-            </div>
-          </div>
-        </nav>
-      </div>
+      <Sidebar
+        navigation={navigation}
+        quickActions={quickActions}
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
 
       {/* Main content */}
       <div className='flex min-w-0 flex-1 flex-col'>

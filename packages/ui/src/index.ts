@@ -9,6 +9,7 @@ export * from './components/page-layout';
 export * from './components/separator';
 export * from './components/table';
 export * from './components/auth-card';
+export * from './components/common';
 
 export { AdminLayout } from './components/admin/admin-layout';
 export { DataTable, SortableHeader } from './components/admin/data-table';
