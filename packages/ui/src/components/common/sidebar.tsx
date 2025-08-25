@@ -11,13 +11,13 @@ import { cn } from '@repo/ui/lib/utils';
 interface NavigationItem {
   name: string;
   href: string;
-  icon: any; // LucideIcon type
+  icon: any;
 }
 
 interface QuickAction {
   name: string;
   href: string;
-  icon: any; // LucideIcon type
+  icon: any;
 }
 
 interface SidebarProps {

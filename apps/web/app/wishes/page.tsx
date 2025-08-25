@@ -11,31 +11,52 @@ import {
 } from '@repo/ui/components/card';
 import { Button } from '@repo/ui/components/button';
 import { Badge } from '@repo/ui/components/badge';
-import { useCrud } from '../../hooks/use-crud';
 import { ProtectedRoute } from '../../components/auth/protected-route';
-import { apiClient, Wish, WishStatus } from '../../lib/api';
+import { apiClient } from '../../lib/api-client';
+import type { Wish } from '../../types';
+import { WishStatus } from '../../types';
 import { Gift, Plus, Edit, Trash2, Eye, Calendar, DollarSign, Tag } from 'lucide-react';
 import Link from 'next/link';
+import { Loading } from '../../components/ui/loading';
 
 function WishesContent() {
-  const [state, actions] = useCrud<Wish>({
-    get: apiClient.getWishes.bind(apiClient),
-    create: apiClient.createWish.bind(apiClient),
-    update: apiClient.updateWish.bind(apiClient),
-    delete: apiClient.deleteWish.bind(apiClient),
-  });
+  const [wishes, setWishes] = useState<Wish[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    actions.fetchItems();
+    fetchWishes();
   }, []);
+
+  const fetchWishes = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const response = await apiClient.getWishes();
+      if (response.success && response.data) {
+        setWishes(response.data);
+      } else {
+        setError(response.error || 'Failed to fetch wishes');
+      }
+    } catch (err) {
+      setError('Failed to fetch wishes');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to delete this wish?')) {
       try {
-        await actions.deleteItem(id);
+        const response = await apiClient.deleteWish(id);
+        if (response.success) {
+          setWishes(prev => prev.filter(wish => wish.id !== id));
+        } else {
+          alert(`Failed to delete wish: ${response.error}`);
+        }
       } catch (error) {
         console.error('Error deleting wish:', error);
-        alert(`Failed to delete wish: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        alert('Failed to delete wish');
       }
     }
   };
@@ -62,24 +83,24 @@ function WishesContent() {
             <h1 className='text-3xl font-bold text-slate-900'>Wishes</h1>
             <p className='mt-2 text-slate-600'>Manage your wishes and track their status.</p>
           </div>
-          <Button onClick={actions.showCreateForm}>
+          <Button onClick={() => (window.location.href = '/wishes/new')}>
             <Plus className='mr-2 h-4 w-4' />
             New Wish
           </Button>
         </div>
 
         {/* Wishes Grid */}
-        {state.loading ? (
+        {isLoading ? (
           <div className='flex h-64 items-center justify-center'>
-            <div className='text-slate-600'>Loading wishes...</div>
+            <Loading size='lg' text='Loading wishes...' />
           </div>
-        ) : state.error ? (
+        ) : error ? (
           <Card>
             <CardContent className='flex h-32 items-center justify-center'>
-              <div className='text-red-600'>{state.error}</div>
+              <div className='text-red-600'>{error}</div>
             </CardContent>
           </Card>
-        ) : state.items.length === 0 ? (
+        ) : wishes.length === 0 ? (
           <Card>
             <CardContent className='flex h-64 flex-col items-center justify-center text-center'>
               <Gift className='mb-4 h-12 w-12 text-slate-400' />
@@ -87,7 +108,7 @@ function WishesContent() {
               <p className='mb-4 text-slate-600'>
                 Add your first wish to start building your wishlist.
               </p>
-              <Button onClick={actions.showCreateForm}>
+              <Button onClick={() => (window.location.href = '/wishes/new')}>
                 <Plus className='mr-2 h-4 w-4' />
                 Add Wish
               </Button>
@@ -95,7 +116,7 @@ function WishesContent() {
           </Card>
         ) : (
           <div className='grid gap-6 md:grid-cols-2 lg:grid-cols-3'>
-            {state.items.map(wish => (
+            {wishes.map(wish => (
               <Card key={wish.id} className='transition-shadow hover:shadow-md'>
                 <CardHeader>
                   <div className='flex items-start justify-between'>
@@ -106,9 +127,11 @@ function WishesContent() {
                       </CardDescription>
                     </div>
                     <div className='flex items-center gap-1'>
-                      <Button variant='ghost' size='sm' onClick={() => actions.showEditForm(wish)}>
-                        <Edit className='h-4 w-4' />
-                      </Button>
+                      <Link href={`/wishes/${wish.id}/edit`}>
+                        <Button variant='ghost' size='sm'>
+                          <Edit className='h-4 w-4' />
+                        </Button>
+                      </Link>
                       <Button
                         variant='ghost'
                         size='sm'
@@ -163,40 +186,6 @@ function WishesContent() {
                 </CardContent>
               </Card>
             ))}
-          </div>
-        )}
-
-        {/* Create/Edit Form Modal */}
-        {state.showForm && (
-          <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4'>
-            <Card className='w-full max-w-md'>
-              <CardHeader>
-                <CardTitle>{state.editingItem ? 'Edit Wish' : 'Add New Wish'}</CardTitle>
-                <CardDescription>
-                  {state.editingItem
-                    ? 'Update your wish information.'
-                    : 'Add a new wish to your wishlist.'}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <WishForm
-                  wish={state.editingItem}
-                  onSubmit={async data => {
-                    try {
-                      if (state.editingItem) {
-                        await actions.updateItem(state.editingItem.id, data);
-                      } else {
-                        await actions.createItem(data);
-                      }
-                    } catch (error) {
-                      console.error('Error saving wish:', error);
-                    }
-                  }}
-                  onCancel={actions.hideForm}
-                  loading={state.formLoading}
-                />
-              </CardContent>
-            </Card>
           </div>
         )}
       </div>

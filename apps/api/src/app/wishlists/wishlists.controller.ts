@@ -41,7 +41,7 @@ export class WishlistsController {
       const wishlists = await this.wishlistsService.findByOwner(ownerId);
       return ApiResponseDto.success(wishlists);
     }
-    // Default to current user's wishlists
+
     const wishlists = await this.wishlistsService.findByOwner(user.userId);
     return ApiResponseDto.success(wishlists);
   }
@@ -52,7 +52,7 @@ export class WishlistsController {
     if (!wishlist) {
       return ApiResponseDto.error('Wishlist not found');
     }
-    // Check if the wishlist belongs to the current user
+
     if (wishlist.owner?.id !== user.userId) {
       return ApiResponseDto.error('Access denied');
     }
@@ -65,7 +65,6 @@ export class WishlistsController {
     @Body() updateWishlistDto: UpdateWishlistDto,
     @CurrentUser() user: any
   ) {
-    // Check if the wishlist belongs to the current user
     const existingWishlist = await this.wishlistsService.findById(id);
     if (existingWishlist.owner?.id !== user.userId) {
       return ApiResponseDto.error('Access denied');
@@ -78,7 +77,6 @@ export class WishlistsController {
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
   async remove(@Param('id') id: string, @CurrentUser() user: any) {
-    // Check if the wishlist belongs to the current user
     const existingWishlist = await this.wishlistsService.findById(id);
     if (existingWishlist.owner?.id !== user.userId) {
       return ApiResponseDto.error('Access denied');

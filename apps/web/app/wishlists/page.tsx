@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { DashboardLayout } from '../../components/layout/dashboard-layout';
 import {
   Card,
@@ -11,33 +11,51 @@ import {
 } from '@repo/ui/components/card';
 import { Button } from '@repo/ui/components/button';
 import { Badge } from '@repo/ui/components/badge';
-import { useCrud } from '../../hooks/use-crud';
 import { ProtectedRoute } from '../../components/auth/protected-route';
-import { apiClient, Wishlist } from '../../lib/api';
+import { apiClient } from '../../lib/api-client';
+import type { Wishlist } from '../../types';
 import { List, Plus, Edit, Trash2, Eye, Calendar } from 'lucide-react';
 import Link from 'next/link';
+import { Loading } from '../../components/ui/loading';
 
 function WishlistsContent() {
-  const [state, actions] = useCrud<Wishlist>({
-    get: apiClient.getWishlists.bind(apiClient),
-    create: apiClient.createWishlist.bind(apiClient),
-    update: apiClient.updateWishlist.bind(apiClient),
-    delete: apiClient.deleteWishlist.bind(apiClient),
-  });
+  const [wishlists, setWishlists] = useState<Wishlist[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    actions.fetchItems();
+    fetchWishlists();
   }, []);
+
+  const fetchWishlists = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const response = await apiClient.getWishlists();
+      if (response.success && response.data) {
+        setWishlists(response.data);
+      } else {
+        setError(response.error || 'Failed to fetch wishlists');
+      }
+    } catch (err) {
+      setError('Failed to fetch wishlists');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to delete this wishlist?')) {
       try {
-        await actions.deleteItem(id);
+        const response = await apiClient.deleteWishlist(id);
+        if (response.success) {
+          setWishlists(prev => prev.filter(wishlist => wishlist.id !== id));
+        } else {
+          alert(`Failed to delete wishlist: ${response.error}`);
+        }
       } catch (error) {
         console.error('Error deleting wishlist:', error);
-        alert(
-          `Failed to delete wishlist: ${error instanceof Error ? error.message : 'Unknown error'}`
-        );
+        alert('Failed to delete wishlist');
       }
     }
   };
@@ -51,24 +69,24 @@ function WishlistsContent() {
             <h1 className='text-3xl font-bold text-slate-900'>Wishlists</h1>
             <p className='mt-2 text-slate-600'>Manage your wishlists and organize your wishes.</p>
           </div>
-          <Button onClick={actions.showCreateForm}>
+          <Button onClick={() => (window.location.href = '/wishlists/new')}>
             <Plus className='mr-2 h-4 w-4' />
             New Wishlist
           </Button>
         </div>
 
         {/* Wishlists Grid */}
-        {state.loading ? (
+        {isLoading ? (
           <div className='flex h-64 items-center justify-center'>
-            <div className='text-slate-600'>Loading wishlists...</div>
+            <Loading size='lg' text='Loading wishlists...' />
           </div>
-        ) : state.error ? (
+        ) : error ? (
           <Card>
             <CardContent className='flex h-32 items-center justify-center'>
-              <div className='text-red-600'>{state.error}</div>
+              <div className='text-red-600'>{error}</div>
             </CardContent>
           </Card>
-        ) : state.items.length === 0 ? (
+        ) : wishlists.length === 0 ? (
           <Card>
             <CardContent className='flex h-64 flex-col items-center justify-center text-center'>
               <List className='mb-4 h-12 w-12 text-slate-400' />
@@ -76,7 +94,7 @@ function WishlistsContent() {
               <p className='mb-4 text-slate-600'>
                 Create your first wishlist to start organizing your wishes.
               </p>
-              <Button onClick={actions.showCreateForm}>
+              <Button onClick={() => (window.location.href = '/wishlists/new')}>
                 <Plus className='mr-2 h-4 w-4' />
                 Create Wishlist
               </Button>
@@ -84,7 +102,7 @@ function WishlistsContent() {
           </Card>
         ) : (
           <div className='grid gap-6 md:grid-cols-2 lg:grid-cols-3'>
-            {state.items.map(wishlist => (
+            {wishlists.map(wishlist => (
               <Card key={wishlist.id} className='transition-shadow hover:shadow-md'>
                 <CardHeader>
                   <div className='flex items-start justify-between'>
@@ -93,13 +111,11 @@ function WishlistsContent() {
                       <CardDescription className='mt-2'>Wishlist</CardDescription>
                     </div>
                     <div className='flex items-center gap-1'>
-                      <Button
-                        variant='ghost'
-                        size='sm'
-                        onClick={() => actions.showEditForm(wishlist)}
-                      >
-                        <Edit className='h-4 w-4' />
-                      </Button>
+                      <Link href={`/wishlists/${wishlist.id}/edit`}>
+                        <Button variant='ghost' size='sm'>
+                          <Edit className='h-4 w-4' />
+                        </Button>
+                      </Link>
                       <Button
                         variant='ghost'
                         size='sm'
@@ -140,40 +156,6 @@ function WishlistsContent() {
                 </CardContent>
               </Card>
             ))}
-          </div>
-        )}
-
-        {/* Create/Edit Form Modal */}
-        {state.showForm && (
-          <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4'>
-            <Card className='w-full max-w-md'>
-              <CardHeader>
-                <CardTitle>{state.editingItem ? 'Edit Wishlist' : 'Create New Wishlist'}</CardTitle>
-                <CardDescription>
-                  {state.editingItem
-                    ? 'Update your wishlist information.'
-                    : 'Create a new wishlist to organize your wishes.'}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <WishlistForm
-                  wishlist={state.editingItem}
-                  onSubmit={async data => {
-                    try {
-                      if (state.editingItem) {
-                        await actions.updateItem(state.editingItem.id, data);
-                      } else {
-                        await actions.createItem(data);
-                      }
-                    } catch (error) {
-                      console.error('Error saving wishlist:', error);
-                    }
-                  }}
-                  onCancel={actions.hideForm}
-                  loading={state.formLoading}
-                />
-              </CardContent>
-            </Card>
           </div>
         )}
       </div>

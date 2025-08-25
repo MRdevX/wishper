@@ -11,9 +11,11 @@ import {
 } from '@repo/ui/components/card';
 import { Button } from '@repo/ui/components/button';
 import { Badge } from '@repo/ui/components/badge';
-import { useAuthContext } from '../../components/auth-provider';
+import { useAuthContext } from '../../contexts/auth-context';
 import { ProtectedRoute } from '../../components/auth/protected-route';
-import { apiClient, Wish, Wishlist, WishStatus } from '../../lib/api';
+import { apiClient } from '../../lib/api-client';
+import type { Wish, Wishlist } from '../../types';
+import { WishStatus } from '../../types';
 import { Gift, List, Heart, Plus, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 

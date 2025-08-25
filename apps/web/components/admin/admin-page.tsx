@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { Plus } from 'lucide-react';
 import { PageHeader, LoadingState, ErrorState, DataTableWrapper, useToast } from '@repo/ui';
-import { useCrud } from '@/hooks/use-crud';
+import { useAdminCrud } from '@/hooks/use-admin-crud';
 import { ColumnDef } from '@tanstack/react-table';
 
 interface IAdminPageProps<T extends { id: string }> {
@@ -38,7 +38,7 @@ export function AdminPage<T extends { id: string }>({
   FormComponent,
   onDeleteConfirm,
 }: IAdminPageProps<T>) {
-  const [state, actions] = useCrud<T>(apiMethods);
+  const [state, actions] = useAdminCrud<T>(apiMethods);
   const { showToast } = useToast();
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export function AdminPage<T extends { id: string }>({
     actions.showEditForm(item);
   };
 
-  if (state.loading) {
+  if (state.isLoading) {
     return <LoadingState title={title} description={description} />;
   }
 

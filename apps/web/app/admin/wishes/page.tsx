@@ -4,7 +4,9 @@ import { useMemo } from 'react';
 import { AdminPage } from '@/components/admin/admin-page';
 import { WishForm } from '@repo/ui';
 import { Badge } from '@repo/ui/components/badge';
-import { apiClient, Wish, WishStatus, WishDetails } from '@/lib/api';
+import { apiClient } from '../../../lib/api-client';
+import type { Wish, WishDetails } from '../../../types';
+import { WishStatus } from '../../../types';
 import { ColumnDef } from '@tanstack/react-table';
 
 const getPriorityColor = (priority: string) => {

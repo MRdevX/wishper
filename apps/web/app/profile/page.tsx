@@ -12,9 +12,10 @@ import {
 import { Button } from '@repo/ui/components/button';
 import { Input } from '@repo/ui/components/input';
 import { Avatar } from '@repo/ui/components/avatar';
-import { useAuthContext } from '../../components/auth-provider';
+import { useAuthContext } from '../../contexts/auth-context';
 import { ProtectedRoute } from '../../components/auth/protected-route';
-import { apiClient, UpdateUserDto } from '../../lib/api';
+import { apiClient } from '../../lib/api-client';
+import type { UpdateUserDto } from '../../types';
 import { User, Save, Edit, Mail, Calendar } from 'lucide-react';
 
 function ProfileContent() {

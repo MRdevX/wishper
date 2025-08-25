@@ -11,7 +11,7 @@ import {
 } from '@repo/ui/components/card';
 import { Button } from '@repo/ui/components/button';
 import { Input } from '@repo/ui/components/input';
-import { useAuthContext } from '../../components/auth-provider';
+import { useAuthContext } from '../../contexts/auth-context';
 import { ProtectedRoute } from '../../components/auth/protected-route';
 import { Settings, Bell, Shield, Palette, Eye, EyeOff } from 'lucide-react';
 

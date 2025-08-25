@@ -1,174 +1,174 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback } from 'react';
+import { apiClient } from '../lib/api-client';
+import type { ApiResponse, LoadingState } from '../types';
+import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '../constants';
 
-interface CrudState<T> {
-  items: T[];
-  loading: boolean;
-  error: string | null;
-  formLoading: boolean;
-  showForm: boolean;
-  editingItem: T | null;
+interface UseCrudOptions<T> {
+  onSuccess?: (data: T) => void;
+  onError?: (error: string) => void;
 }
 
-interface CrudActions<T> {
-  fetchItems: () => Promise<void>;
-  createItem: (data: any) => Promise<void>;
-  updateItem: (id: string, data: any) => Promise<void>;
-  deleteItem: (id: string) => Promise<void>;
-  showCreateForm: () => void;
-  showEditForm: (item: T) => void;
-  hideForm: () => void;
+interface UseCrudState<T> extends LoadingState {
+  data: T | null;
 }
 
-export function useCrud<T extends { id: string }>(apiMethods: {
-  get: () => Promise<any>;
-  create: (data: any) => Promise<any>;
-  update: (id: string, data: any) => Promise<any>;
-  delete: (id: string) => Promise<any>;
-}): [CrudState<T>, CrudActions<T>] {
-  const [state, setState] = useState<CrudState<T>>({
-    items: [],
-    loading: true,
+interface UseCrudActions<T> {
+  create: (data: Record<string, unknown>) => Promise<boolean>;
+  update: (id: string, data: Record<string, unknown>) => Promise<boolean>;
+  delete: (id: string) => Promise<boolean>;
+  reset: () => void;
+}
+
+export function useCrud<T>(
+  endpoint: string,
+  options: UseCrudOptions<T> = {}
+): [UseCrudState<T>, UseCrudActions<T>] {
+  const [state, setState] = useState<UseCrudState<T>>({
+    data: null,
+    isLoading: false,
     error: null,
-    formLoading: false,
-    showForm: false,
-    editingItem: null,
   });
 
-  // Store the API methods in a ref to avoid recreation
-  const apiMethodsRef = useRef(apiMethods);
-  // Only update the ref if the apiMethods object reference changes
-  if (apiMethodsRef.current !== apiMethods) {
-    apiMethodsRef.current = apiMethods;
-  }
+  const create = useCallback(
+    async (data: Record<string, unknown>): Promise<boolean> => {
+      try {
+        setState(prev => ({ ...prev, isLoading: true, error: null }));
 
-  const fetchItems = useCallback(async () => {
-    try {
-      setState(prev => ({ ...prev, loading: true, error: null }));
+        const response = await apiClient.request<T>(endpoint, {
+          method: 'POST',
+          body: JSON.stringify(data),
+        });
 
-      const currentApiMethods = apiMethodsRef.current;
-      if (!currentApiMethods || !currentApiMethods.get) {
+        if (response.success && response.data) {
+          setState(prev => ({
+            ...prev,
+            data: response.data,
+            isLoading: false,
+            error: null,
+          }));
+          options.onSuccess?.(response.data);
+          return true;
+        }
+
+        const errorMessage = response.error || ERROR_MESSAGES.unknown;
         setState(prev => ({
           ...prev,
-          error: 'API methods not initialized',
-          loading: false,
+          isLoading: false,
+          error: errorMessage,
         }));
-        return;
+        options.onError?.(errorMessage);
+        return false;
+      } catch (error) {
+        const errorMessage = ERROR_MESSAGES.unknown;
+        setState(prev => ({
+          ...prev,
+          isLoading: false,
+          error: errorMessage,
+        }));
+        options.onError?.(errorMessage);
+        return false;
       }
+    },
+    [endpoint, options]
+  );
 
-      const response = await currentApiMethods.get();
+  const update = useCallback(
+    async (id: string, data: Record<string, unknown>): Promise<boolean> => {
+      try {
+        setState(prev => ({ ...prev, isLoading: true, error: null }));
 
-      if (response.success) {
+        const response = await apiClient.request<T>(`${endpoint}/${id}`, {
+          method: 'PATCH',
+          body: JSON.stringify(data),
+        });
+
+        if (response.success && response.data) {
+          setState(prev => ({
+            ...prev,
+            data: response.data,
+            isLoading: false,
+            error: null,
+          }));
+          options.onSuccess?.(response.data);
+          return true;
+        }
+
+        const errorMessage = response.error || ERROR_MESSAGES.unknown;
         setState(prev => ({
           ...prev,
-          items: (response.data || []) as T[],
-          loading: false,
+          isLoading: false,
+          error: errorMessage,
         }));
-      } else {
+        options.onError?.(errorMessage);
+        return false;
+      } catch (error) {
+        const errorMessage = ERROR_MESSAGES.unknown;
         setState(prev => ({
           ...prev,
-          error: response.error || 'Failed to fetch items',
-          loading: false,
+          isLoading: false,
+          error: errorMessage,
         }));
+        options.onError?.(errorMessage);
+        return false;
       }
-    } catch (error) {
-      setState(prev => ({
-        ...prev,
-        error: 'Failed to fetch items',
-        loading: false,
-      }));
-    }
-  }, []);
+    },
+    [endpoint, options]
+  );
 
-  const createItem = useCallback(async (data: any) => {
-    try {
-      setState(prev => ({ ...prev, formLoading: true }));
-      const response = await apiMethodsRef.current.create(data);
-      if (response.success && response.data) {
+  const deleteItem = useCallback(
+    async (id: string): Promise<boolean> => {
+      try {
+        setState(prev => ({ ...prev, isLoading: true, error: null }));
+
+        const response = await apiClient.request<void>(`${endpoint}/${id}`, {
+          method: 'DELETE',
+        });
+
+        if (response.success) {
+          setState(prev => ({
+            ...prev,
+            data: null,
+            isLoading: false,
+            error: null,
+          }));
+          return true;
+        }
+
+        const errorMessage = response.error || ERROR_MESSAGES.unknown;
         setState(prev => ({
           ...prev,
-          items: [...prev.items, response.data as T],
-          formLoading: false,
-          showForm: false,
-          editingItem: null,
+          isLoading: false,
+          error: errorMessage,
         }));
-      } else {
-        throw new Error(response.error || 'Failed to create item');
-      }
-    } catch (error) {
-      setState(prev => ({ ...prev, formLoading: false }));
-      throw error;
-    }
-  }, []);
-
-  const updateItem = useCallback(async (id: string, data: any) => {
-    try {
-      setState(prev => ({ ...prev, formLoading: true }));
-      const response = await apiMethodsRef.current.update(id, data);
-      if (response.success && response.data) {
+        options.onError?.(errorMessage);
+        return false;
+      } catch (error) {
+        const errorMessage = ERROR_MESSAGES.unknown;
         setState(prev => ({
           ...prev,
-          items: prev.items.map(item => (item.id === id ? (response.data as T) : item)),
-          formLoading: false,
-          showForm: false,
-          editingItem: null,
+          isLoading: false,
+          error: errorMessage,
         }));
-      } else {
-        throw new Error(response.error || 'Failed to update item');
+        options.onError?.(errorMessage);
+        return false;
       }
-    } catch (error) {
-      setState(prev => ({ ...prev, formLoading: false }));
-      throw error;
-    }
+    },
+    [endpoint, options]
+  );
+
+  const reset = useCallback(() => {
+    setState({
+      data: null,
+      isLoading: false,
+      error: null,
+    });
   }, []);
 
-  const deleteItem = useCallback(async (id: string) => {
-    try {
-      const response = await apiMethodsRef.current.delete(id);
-      if (response.success) {
-        setState(prev => ({
-          ...prev,
-          items: prev.items.filter(item => item.id !== id),
-        }));
-      } else {
-        throw new Error(response.error || 'Failed to delete item');
-      }
-    } catch (error) {
-      throw error;
-    }
-  }, []);
-
-  const showCreateForm = useCallback(() => {
-    setState(prev => ({
-      ...prev,
-      showForm: true,
-      editingItem: null,
-    }));
-  }, []);
-
-  const showEditForm = useCallback((item: T) => {
-    setState(prev => ({
-      ...prev,
-      showForm: true,
-      editingItem: item,
-    }));
-  }, []);
-
-  const hideForm = useCallback(() => {
-    setState(prev => ({
-      ...prev,
-      showForm: false,
-      editingItem: null,
-    }));
-  }, []);
-
-  const actions: CrudActions<T> = {
-    fetchItems,
-    createItem,
-    updateItem,
-    deleteItem,
-    showCreateForm,
-    showEditForm,
-    hideForm,
+  const actions: UseCrudActions<T> = {
+    create,
+    update,
+    delete: deleteItem,
+    reset,
   };
 
   return [state, actions];

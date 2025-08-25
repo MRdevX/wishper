@@ -6,7 +6,8 @@ import { Button } from '@repo/ui/components/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/card';
 import { Badge } from '@repo/ui/components/badge';
 import { Heart, Gift, Users, Sparkles, ArrowRight, Star } from 'lucide-react';
-import { useAuthContext } from '../components/auth-provider';
+import { useAuthContext } from '../contexts/auth-context';
+import { Loading } from '../components/ui/loading';
 
 export default function Page() {
   const { isAuthenticated, isLoading } = useAuthContext();
@@ -20,8 +21,8 @@ export default function Page() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
-        <div className="text-slate-600">Loading...</div>
+      <div className='flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 to-blue-50'>
+        <Loading size='lg' text='Loading...' />
       </div>
     );
   }

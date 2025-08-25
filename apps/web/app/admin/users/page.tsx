@@ -3,7 +3,8 @@
 import { useMemo } from 'react';
 import { AdminPage } from '@/components/admin/admin-page';
 import { UserForm } from '@repo/ui';
-import { apiClient, User } from '@/lib/api';
+import { apiClient } from '../../../lib/api-client';
+import type { User } from '../../../types';
 import { ColumnDef } from '@tanstack/react-table';
 
 const columns: ColumnDef<User>[] = [

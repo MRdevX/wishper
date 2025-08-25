@@ -10,7 +10,7 @@ import {
 } from '@repo/ui/components/card';
 import { StatsCard } from '@repo/ui';
 import { Users, Gift, List, TrendingUp } from 'lucide-react';
-import { apiClient } from '@/lib/api';
+import { apiClient } from '../../lib/api-client';
 
 interface IDashboardStats {
   totalUsers: number;

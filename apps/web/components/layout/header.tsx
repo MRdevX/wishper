@@ -11,7 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@repo/ui/components/dropdown-menu';
-import { useAuthContext } from '../auth-provider';
+import { useAuthContext } from '../../contexts/auth-context';
 import { Heart, Menu, X, User, LogOut, Settings } from 'lucide-react';
 
 interface IHeaderProps {

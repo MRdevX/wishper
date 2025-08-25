@@ -4,7 +4,8 @@ import { useMemo } from 'react';
 import { AdminPage } from '@/components/admin/admin-page';
 import { WishlistForm } from '@repo/ui';
 import { Gift } from 'lucide-react';
-import { apiClient, Wishlist } from '@/lib/api';
+import { apiClient } from '../../../lib/api-client';
+import type { Wishlist } from '../../../types';
 import { ColumnDef } from '@tanstack/react-table';
 
 const columns: ColumnDef<Wishlist>[] = [
