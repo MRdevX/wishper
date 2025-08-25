@@ -20,7 +20,14 @@
     "version-packages": "turbo run build lint test && changeset version",
     "version-packages:dry-run": "changeset version --dry-run",
     "version-apps": "turbo run build lint test --filter=./apps/* && changeset version",
-    "version-all": "turbo run build lint test && changeset version"
+    "version-all": "turbo run build lint test && changeset version",
+    "docker:dev": "docker-compose -f docker-compose.dev.yml up -d",
+    "docker:dev:logs": "docker-compose -f docker-compose.dev.yml logs -f",
+    "docker:dev:down": "docker-compose -f docker-compose.dev.yml down",
+    "docker:prod": "docker-compose --env-file .env.production up -d",
+    "docker:prod:logs": "docker-compose --env-file .env.production logs -f",
+    "docker:prod:down": "docker-compose --env-file .env.production down",
+    "docker:clean": "docker-compose down -v && docker-compose -f docker-compose.dev.yml down -v"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.6",
@@ -36,7 +43,6 @@
     "turbo": "^2.5.6",
     "typescript": "5.9.2"
   },
-  "packageManager": "pnpm@10.15.0+sha512.486ebc259d3e999a4e8691ce03b5cac4a71cbeca39372a9b762cb500cfdf0873e2cb16abe3d951b1ee2cf012503f027b98b6584e4df22524e0c7450d9ec7aa7b",
   "engines": {
     "node": ">=20"
   },
@@ -48,5 +54,6 @@
       "sharp",
       "unrs-resolver"
     ]
-  }
+  },
+  "packageManager": "pnpm@10.15.0+sha512.486ebc259d3e999a4e8691ce03b5cac4a71cbeca39372a9b762cb500cfdf0873e2cb16abe3d951b1ee2cf012503f027b98b6584e4df22524e0c7450d9ec7aa7b"
 }

@@ -30,8 +30,12 @@ A personal project to build a robust full-stack wishlist application using moder
 
 - Node.js 20+
 - pnpm 8+
+- Docker Engine 20.10+ (for containerized setup)
+- Docker Compose 2.0+ (for containerized setup)
 
 ### Installation
+
+#### Option 1: Local Development
 
 ```bash
 # Install dependencies
@@ -40,6 +44,41 @@ pnpm install
 # Start development servers
 pnpm dev
 ```
+
+#### Option 2: Docker Development (Recommended)
+
+```bash
+# Setup environment (first time only)
+cp .env.example .env
+
+# Start development environment
+pnpm docker:dev
+
+# View logs
+pnpm docker:dev:logs
+
+# Stop development environment
+pnpm docker:dev:down
+```
+
+### Docker Commands
+
+```bash
+# Development
+pnpm docker:dev          # Start development
+pnpm docker:dev:logs     # View logs
+pnpm docker:dev:down     # Stop development
+
+# Production
+pnpm docker:prod         # Start production
+pnpm docker:prod:logs    # View logs
+pnpm docker:prod:down    # Stop production
+
+# Cleanup
+pnpm docker:clean        # Remove containers and volumes
+```
+
+For detailed Docker documentation, see [DOCKER.md](./DOCKER.md).
 
 ### Development
 

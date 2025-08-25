@@ -1,32 +1,21 @@
+# Use Node.js 20 Alpine as base image
 FROM node:20-alpine AS base
-
-# Accept build arguments for non-sensitive database configuration
-ARG DB_HOST
-ARG DB_PORT=5432
-ARG DB_USERNAME
-ARG DB_DATABASE
-
-# Set non-sensitive database environment variables from build args
-ENV DB_HOST=$DB_HOST
-ENV DB_PORT=$DB_PORT
-ENV DB_USERNAME=$DB_USERNAME
-ENV DB_DATABASE=$DB_DATABASE
 
 # Install system dependencies
 RUN apk update && apk add --no-cache libc6-compat
 
-# Install global packages
-RUN npm install -g pnpm@10.4.1 turbo@^2.5.6
+# Enable corepack for pnpm
+RUN corepack enable
 
 # Set working directory
 WORKDIR /app
 
-# Copy package files
+# Copy package files for better layer caching
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/api/package.json ./apps/api/
 COPY packages/schemas/package.json ./packages/schemas/
 
-# Install all dependencies
+# Install dependencies
 RUN pnpm install --frozen-lockfile
 
 # Copy source code
@@ -36,10 +25,10 @@ COPY . .
 FROM base AS builder
 
 # Build schemas package first
-RUN cd packages/schemas && pnpm run build
+RUN pnpm --filter=@repo/schemas build
 
 # Build API app
-RUN cd apps/api && pnpm run build
+RUN pnpm --filter=api build
 
 # Production stage
 FROM node:20-alpine AS runner
@@ -51,6 +40,9 @@ ENV PORT=3001
 
 # Install system dependencies
 RUN apk update && apk add --no-cache libc6-compat
+
+# Enable corepack for pnpm
+RUN corepack enable
 
 # Create non-root user
 RUN addgroup --system --gid 1001 nodejs && \
@@ -65,8 +57,7 @@ COPY apps/api/package.json ./apps/api/
 COPY packages/schemas/package.json ./packages/schemas/
 
 # Install only production dependencies
-RUN npm install -g pnpm@10.4.1 && \
-    pnpm install --frozen-lockfile --prod
+RUN pnpm install --frozen-lockfile --prod
 
 # Copy built application from builder stage
 COPY --from=builder --chown=nestjs:nodejs /app/apps/api/dist ./apps/api/dist

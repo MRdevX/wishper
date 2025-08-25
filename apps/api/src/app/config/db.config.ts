@@ -15,11 +15,7 @@ export default registerAs('db', (): DataSourceOptions => {
     entities,
     synchronize: !isProduction,
     logging: !isProduction,
-    ssl: isProduction
-      ? {
-          rejectUnauthorized: false,
-        }
-      : false,
+    ssl: false,
     extra: {
       connectionTimeoutMillis: 30000,
       query_timeout: 30000,
