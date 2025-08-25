@@ -70,6 +70,7 @@ pnpm docker:dev:logs     # View logs
 pnpm docker:dev:down     # Stop development
 
 # Production
+cp .env.production.example .env.production  # Setup production env (first time)
 pnpm docker:prod         # Start production
 pnpm docker:prod:logs    # View logs
 pnpm docker:prod:down    # Stop production
