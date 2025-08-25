@@ -3,16 +3,17 @@ services:
     image: postgres:16-alpine
     container_name: wishper_postgres
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-wishper_db}
-      POSTGRES_USER: ${POSTGRES_USER:-wishper_user}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE:-wishper_db}
+      POSTGRES_USER: ${DB_USERNAME:-wishper_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-wishper_user} -d ${POSTGRES_DB:-wishper_db}']
+      test:
+        ['CMD-SHELL', 'pg_isready -U ${DB_USERNAME:-wishper_user} -d ${DB_DATABASE:-wishper_db}']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -34,14 +35,14 @@ services:
       NODE_ENV: production
       HOST: 0.0.0.0
       PORT: 3001
-      
+
       # Database Configuration
       DB_HOST: postgres
       DB_PORT: 5432
       DB_USERNAME: ${DB_USERNAME:-wishper_user}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_DATABASE: ${DB_DATABASE:-wishper_db}
-      
+
       # JWT Configuration
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-1d}

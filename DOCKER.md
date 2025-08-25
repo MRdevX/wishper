@@ -61,8 +61,10 @@ The following environment variables are automatically set by Docker Compose:
 - `DB_HOST` - PostgreSQL host (postgres)
 - `DB_PORT` - PostgreSQL port (5432)
 - `DB_USERNAME` - Database user (wishper_user)
-- `DB_PASSWORD` - Database password (wishper_password)
+- `DB_PASSWORD` - Database password
 - `DB_DATABASE` - Database name (wishper_dev/wishper_db)
+
+**Note:** These same variables are used for both PostgreSQL initialization and application connection.
 
 #### JWT (Authentication)
 

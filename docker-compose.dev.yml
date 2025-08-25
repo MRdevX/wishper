@@ -3,9 +3,9 @@ services:
     image: postgres:16-alpine
     container_name: wishper_postgres_dev
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-wishper_dev}
-      POSTGRES_USER: ${POSTGRES_USER:-wishper_user}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE:-wishper_dev}
+      POSTGRES_USER: ${DB_USERNAME:-wishper_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - '5432:5432'
     volumes:
@@ -13,7 +13,7 @@ services:
     restart: unless-stopped
     healthcheck:
       test:
-        ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-wishper_user} -d ${POSTGRES_DB:-wishper_dev}']
+        ['CMD-SHELL', 'pg_isready -U ${DB_USERNAME:-wishper_user} -d ${DB_DATABASE:-wishper_dev}']
       interval: 10s
       timeout: 5s
       retries: 5
