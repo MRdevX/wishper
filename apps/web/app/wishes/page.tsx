@@ -19,15 +19,15 @@ import Link from 'next/link';
 
 function WishesContent() {
   const [state, actions] = useCrud<Wish>({
-    get: apiClient.getWishes,
-    create: apiClient.createWish,
-    update: apiClient.updateWish,
-    delete: apiClient.deleteWish,
+    get: apiClient.getWishes.bind(apiClient),
+    create: apiClient.createWish.bind(apiClient),
+    update: apiClient.updateWish.bind(apiClient),
+    delete: apiClient.deleteWish.bind(apiClient),
   });
 
   useEffect(() => {
     actions.fetchItems();
-  }, [actions]);
+  }, []);
 
   const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to delete this wish?')) {

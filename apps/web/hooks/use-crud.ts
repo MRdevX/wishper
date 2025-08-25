@@ -34,14 +34,19 @@ export function useCrud<T extends { id: string }>(apiMethods: {
     editingItem: null,
   });
 
+  // Store the API methods in a ref to avoid recreation
   const apiMethodsRef = useRef(apiMethods);
-  apiMethodsRef.current = apiMethods;
+  // Only update the ref if the apiMethods object reference changes
+  if (apiMethodsRef.current !== apiMethods) {
+    apiMethodsRef.current = apiMethods;
+  }
 
   const fetchItems = useCallback(async () => {
     try {
       setState(prev => ({ ...prev, loading: true, error: null }));
 
-      if (!apiMethodsRef.current || !apiMethodsRef.current.get) {
+      const currentApiMethods = apiMethodsRef.current;
+      if (!currentApiMethods || !currentApiMethods.get) {
         setState(prev => ({
           ...prev,
           error: 'API methods not initialized',
@@ -50,12 +55,12 @@ export function useCrud<T extends { id: string }>(apiMethods: {
         return;
       }
 
-      const response = await apiMethodsRef.current.get();
+      const response = await currentApiMethods.get();
 
-      if (response.success && response.data) {
+      if (response.success) {
         setState(prev => ({
           ...prev,
-          items: response.data as T[],
+          items: (response.data || []) as T[],
           loading: false,
         }));
       } else {

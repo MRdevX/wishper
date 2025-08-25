@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { DashboardLayout } from '../../components/layout/dashboard-layout';
 import {
   Card,
@@ -19,15 +19,15 @@ import Link from 'next/link';
 
 function WishlistsContent() {
   const [state, actions] = useCrud<Wishlist>({
-    get: apiClient.getWishlists,
-    create: apiClient.createWishlist,
-    update: apiClient.updateWishlist,
-    delete: apiClient.deleteWishlist,
+    get: apiClient.getWishlists.bind(apiClient),
+    create: apiClient.createWishlist.bind(apiClient),
+    update: apiClient.updateWishlist.bind(apiClient),
+    delete: apiClient.deleteWishlist.bind(apiClient),
   });
 
   useEffect(() => {
     actions.fetchItems();
-  }, [actions]);
+  }, []);
 
   const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to delete this wishlist?')) {

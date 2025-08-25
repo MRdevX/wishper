@@ -9,6 +9,7 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { Public } from './decorators/public.decorator';
 import { CurrentUser } from './decorators/current-user.decorator';
+import { ApiResponseDto } from '../common/dto/api-response.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -17,7 +18,8 @@ export class AuthController {
   @Post('register')
   @Public()
   async register(@Body() registerDto: RegisterDto) {
-    return this.authService.register(registerDto);
+    const result = await this.authService.register(registerDto);
+    return ApiResponseDto.success(result, 'User registered successfully');
   }
 
   @Post('login')
@@ -25,7 +27,8 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
   async login(@Body() loginDto: LoginDto, @Request() req) {
-    return this.authService.login(loginDto);
+    const result = await this.authService.login(loginDto);
+    return ApiResponseDto.success(result, 'Login successful');
   }
 
   @Post('logout')
@@ -39,20 +42,23 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   async refreshToken(@Body() refreshTokenDto: RefreshTokenDto) {
-    return this.authService.refreshToken(refreshTokenDto);
+    const result = await this.authService.refreshToken(refreshTokenDto);
+    return ApiResponseDto.success(result, 'Token refreshed successfully');
   }
 
   @Post('forgot-password')
   @Public()
   @HttpCode(HttpStatus.OK)
   async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
-    return this.authService.forgotPassword(forgotPasswordDto);
+    const result = await this.authService.forgotPassword(forgotPasswordDto);
+    return ApiResponseDto.success(result, 'Password reset email sent');
   }
 
   @Post('reset-password')
   @Public()
   @HttpCode(HttpStatus.OK)
   async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
-    return this.authService.resetPassword(resetPasswordDto);
+    const result = await this.authService.resetPassword(resetPasswordDto);
+    return ApiResponseDto.success(result, 'Password reset successfully');
   }
 }

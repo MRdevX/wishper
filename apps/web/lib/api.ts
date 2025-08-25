@@ -85,9 +85,12 @@ class ApiClient {
         };
       }
 
+      // The API returns { success: boolean, data: T, message?: string }
+      // We need to extract the actual data from the response
       return {
-        success: true,
-        data: data,
+        success: data.success,
+        data: data.data,
+        error: data.error,
       };
     } catch (error) {
       return {
