@@ -36,7 +36,6 @@ FROM node:20-alpine AS runner
 # Set runtime environment variables
 ENV NODE_ENV=production
 ENV HOST=0.0.0.0
-ENV PORT=3001
 
 # Install system dependencies
 RUN apk update && apk add --no-cache libc6-compat
@@ -66,7 +65,7 @@ COPY --from=builder --chown=nestjs:nodejs /app/packages/schemas/dist ./packages/
 # Switch to non-root user
 USER nestjs
 
-# Expose port
+# Expose port (will be overridden by environment variable)
 EXPOSE 3001
 
 # Start the application
