@@ -1,0 +1,27 @@
+[phases.setup]
+nixPkgs = ["nodejs_20", "pnpm"]
+
+[phases.install]
+cmds = ["pnpm install --frozen-lockfile"]
+
+[phases.build]
+cmds = [
+  "pnpm --filter=@repo/schemas build",
+  "pnpm --filter=api build"
+]
+
+[start]
+cmd = "node apps/api/dist/main.js"
+
+[variables]
+NODE_ENV = "production"
+HOST = "0.0.0.0"
+PORT = "3001"
+
+# These will be overridden by environment variables at runtime
+DB_HOST = "postgres"
+DB_PORT = "5432"
+DB_USERNAME = "wishper_user"
+DB_DATABASE = "wishper_db"
+JWT_EXPIRES_IN = "1d"
+JWT_REFRESH_EXPIRES_IN = "7d"
