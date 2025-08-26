@@ -1,4 +1,5 @@
 import { Input } from '@repo/ui/components/input';
+import { cn } from '@repo/ui/lib/utils';
 
 interface FormFieldProps {
   id: string;
@@ -26,10 +27,10 @@ export function FormField({
   className = '',
 }: FormFieldProps) {
   return (
-    <div className={`space-y-2 ${className}`}>
-      <label htmlFor={id} className='text-sm font-medium'>
+    <div className={cn('space-y-3', className)}>
+      <label htmlFor={id} className='flex items-center gap-1 text-sm font-bold text-slate-700'>
         {label}
-        {required && <span className='ml-1 text-red-500'>*</span>}
+        {required && <span className='text-lg text-red-500'>*</span>}
       </label>
       <Input
         id={id}
@@ -39,9 +40,17 @@ export function FormField({
         onChange={onChange}
         disabled={disabled}
         required={required}
-        className={error ? 'border-red-300 focus:border-red-500' : ''}
+        className={cn(
+          'h-12 border-slate-300 text-base transition-all duration-200 focus:border-blue-500 focus:ring-blue-500',
+          error && 'border-red-300 focus:border-red-500 focus:ring-red-500'
+        )}
       />
-      {error && <p className='text-sm text-red-600'>{error}</p>}
+      {error && (
+        <p className='flex items-center gap-1 text-sm font-medium text-red-600'>
+          <span className='h-1 w-1 rounded-full bg-red-500'></span>
+          {error}
+        </p>
+      )}
     </div>
   );
 }

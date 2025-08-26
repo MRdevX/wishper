@@ -13,7 +13,8 @@ import { Button } from '@repo/ui/components/button';
 import { Input } from '@repo/ui/components/input';
 import { useAuthContext } from '@/lib/auth-context';
 import { ProtectedRoute } from '@/features/auth/protected-route';
-import { Settings, Bell, Shield, Palette, Eye, EyeOff } from 'lucide-react';
+import { Settings, Bell, Shield, Palette, Eye, EyeOff, User, Calendar } from 'lucide-react';
+import { cn } from '@repo/ui/lib/utils';
 
 function SettingsContent() {
   const { user } = useAuthContext();
@@ -95,10 +96,12 @@ function SettingsContent() {
 
         <div className='grid gap-6 lg:grid-cols-2'>
           {/* Password Change */}
-          <Card>
+          <Card className='border-slate-200 shadow-sm transition-all duration-200 hover:shadow-md'>
             <CardHeader>
-              <CardTitle className='flex items-center gap-2'>
-                <Shield className='h-5 w-5' />
+              <CardTitle className='flex items-center gap-2 text-slate-900'>
+                <div className='rounded-lg bg-red-100 p-2'>
+                  <Shield className='h-5 w-5 text-red-600' />
+                </div>
                 Change Password
               </CardTitle>
               <CardDescription>Update your password to keep your account secure.</CardDescription>
@@ -106,7 +109,7 @@ function SettingsContent() {
             <CardContent>
               <form onSubmit={handlePasswordChange} className='space-y-4'>
                 <div className='space-y-2'>
-                  <label htmlFor='currentPassword' className='text-sm font-medium'>
+                  <label htmlFor='currentPassword' className='text-sm font-semibold text-slate-700'>
                     Current Password
                   </label>
                   <div className='relative'>
@@ -119,25 +122,26 @@ function SettingsContent() {
                       }
                       required
                       disabled={loading}
+                      className='border-slate-300 focus:border-red-500 focus:ring-red-500'
                     />
                     <Button
                       type='button'
                       variant='ghost'
                       size='sm'
-                      className='absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent'
+                      className='absolute right-0 top-0 h-full px-3 py-2 hover:bg-slate-100'
                       onClick={() => setShowCurrentPassword(!showCurrentPassword)}
                     >
                       {showCurrentPassword ? (
-                        <EyeOff className='h-4 w-4' />
+                        <EyeOff className='h-4 w-4 text-slate-500' />
                       ) : (
-                        <Eye className='h-4 w-4' />
+                        <Eye className='h-4 w-4 text-slate-500' />
                       )}
                     </Button>
                   </div>
                 </div>
 
                 <div className='space-y-2'>
-                  <label htmlFor='newPassword' className='text-sm font-medium'>
+                  <label htmlFor='newPassword' className='text-sm font-semibold text-slate-700'>
                     New Password
                   </label>
                   <div className='relative'>
@@ -151,25 +155,26 @@ function SettingsContent() {
                       required
                       minLength={6}
                       disabled={loading}
+                      className='border-slate-300 focus:border-red-500 focus:ring-red-500'
                     />
                     <Button
                       type='button'
                       variant='ghost'
                       size='sm'
-                      className='absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent'
+                      className='absolute right-0 top-0 h-full px-3 py-2 hover:bg-slate-100'
                       onClick={() => setShowNewPassword(!showNewPassword)}
                     >
                       {showNewPassword ? (
-                        <EyeOff className='h-4 w-4' />
+                        <EyeOff className='h-4 w-4 text-slate-500' />
                       ) : (
-                        <Eye className='h-4 w-4' />
+                        <Eye className='h-4 w-4 text-slate-500' />
                       )}
                     </Button>
                   </div>
                 </div>
 
                 <div className='space-y-2'>
-                  <label htmlFor='confirmPassword' className='text-sm font-medium'>
+                  <label htmlFor='confirmPassword' className='text-sm font-semibold text-slate-700'>
                     Confirm New Password
                   </label>
                   <div className='relative'>
@@ -182,32 +187,41 @@ function SettingsContent() {
                       }
                       required
                       disabled={loading}
+                      className='border-slate-300 focus:border-red-500 focus:ring-red-500'
                     />
                     <Button
                       type='button'
                       variant='ghost'
                       size='sm'
-                      className='absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent'
+                      className='absolute right-0 top-0 h-full px-3 py-2 hover:bg-slate-100'
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     >
                       {showConfirmPassword ? (
-                        <EyeOff className='h-4 w-4' />
+                        <EyeOff className='h-4 w-4 text-slate-500' />
                       ) : (
-                        <Eye className='h-4 w-4' />
+                        <Eye className='h-4 w-4 text-slate-500' />
                       )}
                     </Button>
                   </div>
                 </div>
 
                 {error && (
-                  <div className='rounded-md bg-red-50 p-3 text-sm text-red-600'>{error}</div>
+                  <div className='rounded-lg border border-red-200 bg-red-50 p-3 text-sm font-medium text-red-700'>
+                    {error}
+                  </div>
                 )}
 
                 {success && (
-                  <div className='rounded-md bg-green-50 p-3 text-sm text-green-600'>{success}</div>
+                  <div className='rounded-lg border border-green-200 bg-green-50 p-3 text-sm font-medium text-green-700'>
+                    {success}
+                  </div>
                 )}
 
-                <Button type='submit' disabled={loading}>
+                <Button
+                  type='submit'
+                  disabled={loading}
+                  className='w-full bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg transition-all duration-200 hover:from-red-700 hover:to-red-800 hover:shadow-xl'
+                >
                   {loading ? 'Updating...' : 'Update Password'}
                 </Button>
               </form>
@@ -215,19 +229,21 @@ function SettingsContent() {
           </Card>
 
           {/* Notification Settings */}
-          <Card>
+          <Card className='border-slate-200 shadow-sm transition-all duration-200 hover:shadow-md'>
             <CardHeader>
-              <CardTitle className='flex items-center gap-2'>
-                <Bell className='h-5 w-5' />
+              <CardTitle className='flex items-center gap-2 text-slate-900'>
+                <div className='rounded-lg bg-blue-100 p-2'>
+                  <Bell className='h-5 w-5 text-blue-600' />
+                </div>
                 Notification Settings
               </CardTitle>
               <CardDescription>Choose how you want to be notified about updates.</CardDescription>
             </CardHeader>
             <CardContent>
               <div className='space-y-4'>
-                <div className='flex items-center justify-between'>
+                <div className='flex items-center justify-between rounded-lg bg-slate-50 p-3 transition-colors hover:bg-slate-100'>
                   <div>
-                    <h4 className='font-medium'>Email Notifications</h4>
+                    <h4 className='font-semibold text-slate-900'>Email Notifications</h4>
                     <p className='text-sm text-slate-600'>Receive notifications via email</p>
                   </div>
                   <input
@@ -239,13 +255,13 @@ function SettingsContent() {
                         emailNotifications: e.target.checked,
                       }))
                     }
-                    className='h-4 w-4 rounded border-slate-300 text-pink-600 focus:ring-pink-500'
+                    className='h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-2 focus:ring-blue-500'
                   />
                 </div>
 
-                <div className='flex items-center justify-between'>
+                <div className='flex items-center justify-between rounded-lg bg-slate-50 p-3 transition-colors hover:bg-slate-100'>
                   <div>
-                    <h4 className='font-medium'>Wishlist Updates</h4>
+                    <h4 className='font-semibold text-slate-900'>Wishlist Updates</h4>
                     <p className='text-sm text-slate-600'>Notify when wishlists are updated</p>
                   </div>
                   <input
@@ -257,13 +273,13 @@ function SettingsContent() {
                         wishlistUpdates: e.target.checked,
                       }))
                     }
-                    className='h-4 w-4 rounded border-slate-300 text-pink-600 focus:ring-pink-500'
+                    className='h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-2 focus:ring-blue-500'
                   />
                 </div>
 
-                <div className='flex items-center justify-between'>
+                <div className='flex items-center justify-between rounded-lg bg-slate-50 p-3 transition-colors hover:bg-slate-100'>
                   <div>
-                    <h4 className='font-medium'>New Wishes</h4>
+                    <h4 className='font-semibold text-slate-900'>New Wishes</h4>
                     <p className='text-sm text-slate-600'>Notify when new wishes are added</p>
                   </div>
                   <input
@@ -275,14 +291,14 @@ function SettingsContent() {
                         newWishes: e.target.checked,
                       }))
                     }
-                    className='h-4 w-4 rounded border-slate-300 text-pink-600 focus:ring-pink-500'
+                    className='h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-2 focus:ring-blue-500'
                   />
                 </div>
 
                 <Button
                   onClick={handleNotificationSettingsChange}
                   disabled={loading}
-                  className='w-full'
+                  className='w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg transition-all duration-200 hover:from-blue-700 hover:to-blue-800 hover:shadow-xl'
                 >
                   {loading ? 'Saving...' : 'Save Settings'}
                 </Button>
@@ -291,10 +307,12 @@ function SettingsContent() {
           </Card>
 
           {/* Theme Settings */}
-          <Card>
+          <Card className='border-slate-200 shadow-sm transition-all duration-200 hover:shadow-md'>
             <CardHeader>
-              <CardTitle className='flex items-center gap-2'>
-                <Palette className='h-5 w-5' />
+              <CardTitle className='flex items-center gap-2 text-slate-900'>
+                <div className='rounded-lg bg-purple-100 p-2'>
+                  <Palette className='h-5 w-5 text-purple-600' />
+                </div>
                 Appearance
               </CardTitle>
               <CardDescription>Customize the appearance of your dashboard.</CardDescription>
@@ -302,12 +320,12 @@ function SettingsContent() {
             <CardContent>
               <div className='space-y-4'>
                 <div>
-                  <label htmlFor='theme' className='text-sm font-medium'>
+                  <label htmlFor='theme' className='text-sm font-semibold text-slate-700'>
                     Theme
                   </label>
                   <select
                     id='theme'
-                    className='mt-1 w-full rounded-md border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500'
+                    className='mt-2 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500'
                     defaultValue='system'
                   >
                     <option value='light'>Light</option>
@@ -320,29 +338,40 @@ function SettingsContent() {
           </Card>
 
           {/* Account Information */}
-          <Card>
+          <Card className='border-slate-200 shadow-sm transition-all duration-200 hover:shadow-md'>
             <CardHeader>
-              <CardTitle className='flex items-center gap-2'>
-                <Settings className='h-5 w-5' />
+              <CardTitle className='flex items-center gap-2 text-slate-900'>
+                <div className='rounded-lg bg-green-100 p-2'>
+                  <Settings className='h-5 w-5 text-green-600' />
+                </div>
                 Account Information
               </CardTitle>
               <CardDescription>View your account details and statistics.</CardDescription>
             </CardHeader>
             <CardContent>
               <div className='space-y-4'>
-                <div>
-                  <label className='text-sm font-medium text-slate-600'>Email</label>
-                  <p className='text-slate-900'>{user?.email}</p>
+                <div className='flex items-center gap-3 rounded-lg bg-slate-50 p-3'>
+                  <User className='h-5 w-5 text-slate-500' />
+                  <div>
+                    <label className='text-sm font-semibold text-slate-600'>Email</label>
+                    <p className='font-medium text-slate-900'>{user?.email}</p>
+                  </div>
                 </div>
-                <div>
-                  <label className='text-sm font-medium text-slate-600'>Name</label>
-                  <p className='text-slate-900'>{user?.name || 'Not set'}</p>
+                <div className='flex items-center gap-3 rounded-lg bg-slate-50 p-3'>
+                  <User className='h-5 w-5 text-slate-500' />
+                  <div>
+                    <label className='text-sm font-semibold text-slate-600'>Name</label>
+                    <p className='font-medium text-slate-900'>{user?.name || 'Not set'}</p>
+                  </div>
                 </div>
-                <div>
-                  <label className='text-sm font-medium text-slate-600'>Member Since</label>
-                  <p className='text-slate-900'>
-                    {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}
-                  </p>
+                <div className='flex items-center gap-3 rounded-lg bg-slate-50 p-3'>
+                  <Calendar className='h-5 w-5 text-slate-500' />
+                  <div>
+                    <label className='text-sm font-semibold text-slate-600'>Member Since</label>
+                    <p className='font-medium text-slate-900'>
+                      {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}
+                    </p>
+                  </div>
                 </div>
               </div>
             </CardContent>
