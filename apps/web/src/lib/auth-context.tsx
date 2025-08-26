@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, ReactNode } from 'react';
-import { useAuth } from '@/hooks/use-auth';
+import { useAuth } from '@/hooks/useAuth';
 import type { IUser, ILoginDto, IRegisterDto } from '@repo/schemas';
 
 interface IAuthContextType {

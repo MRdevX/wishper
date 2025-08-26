@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { Plus } from 'lucide-react';
 import { PageHeader, LoadingState, ErrorState, DataTableWrapper, useToast } from '@repo/ui';
-import { useAdminCrud } from '@/hooks/use-admin-crud';
+import { useAdminCrud } from '@/hooks/useAdminCrud';
 import { ColumnDef } from '@tanstack/react-table';
 
 interface IAdminPageProps<T extends { id: string }> {

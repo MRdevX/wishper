@@ -6,7 +6,7 @@ import { DataGrid, DataGridActions } from '@/components/common/data-grid';
 import { StatusBadge } from '@/components/common/status-badge';
 import { EmptyState } from '@/components/layout/page-layout';
 import { ProtectedRoute } from '@/features/auth/protected-route';
-import { useDataFetching } from '@/hooks/use-data-fetching';
+import { useDataFetching } from '@/hooks/useDataFetching';
 import { wishService } from '@/lib/data-service';
 import { transformWishForGrid } from '@/lib/formatters';
 import { Button } from '@repo/ui/components/button';

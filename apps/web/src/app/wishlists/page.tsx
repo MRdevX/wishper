@@ -5,7 +5,7 @@ import { PageLayout } from '@/components/layout/page-layout';
 import { DataGrid, DataGridActions } from '@/components/common/data-grid';
 import { EmptyState } from '@/components/layout/page-layout';
 import { ProtectedRoute } from '@/features/auth/protected-route';
-import { useDataFetching } from '@/hooks/use-data-fetching';
+import { useDataFetching } from '@/hooks/useDataFetching';
 import { wishlistService } from '@/lib/data-service';
 import { transformWishlistForGrid } from '@/lib/formatters';
 import { Button } from '@repo/ui/components/button';

@@ -2,7 +2,7 @@
 
 import { useAuthContext } from '@/lib/auth-context';
 import type { IRegisterDto } from '@repo/schemas';
-import { useForm } from '@/hooks/use-form';
+import { useForm } from '@/hooks/useForm';
 import { AuthCard, AuthLinkButton } from '@repo/ui/components/auth-card';
 import { FormFieldComponent, BaseForm } from '@repo/ui/components/common';
 

@@ -4,7 +4,7 @@ import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { PageLayout } from '@/components/layout/page-layout';
 import { PageCard } from '@/components/layout/page-layout';
 import { ProtectedRoute } from '@/features/auth/protected-route';
-import { useDataFetching } from '@/hooks/use-data-fetching';
+import { useDataFetching } from '@/hooks/useDataFetching';
 import { DashboardService } from '@/lib/data-service';
 import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/components/card';
 import { Button } from '@repo/ui/components/button';
