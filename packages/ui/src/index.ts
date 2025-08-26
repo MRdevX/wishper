@@ -5,9 +5,12 @@ export * from './components/card';
 export * from './components/dropdown-menu';
 export * from './components/form';
 export * from './components/input';
+export * from './components/label';
 export * from './components/page-layout';
+export * from './components/select';
 export * from './components/separator';
 export * from './components/table';
+export * from './components/textarea';
 export * from './components/auth-card';
 export * from './components/common';
 

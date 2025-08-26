@@ -22,7 +22,7 @@ const getStatusConfig = (status: WishStatus) => {
         className: 'bg-green-100 text-green-800 border-green-200',
         icon: '🎉',
       };
-    case WishStatus.PENDING:
+    case WishStatus.ACTIVE:
       return {
         variant: 'secondary' as const,
         className: 'bg-orange-100 text-orange-800 border-orange-200',

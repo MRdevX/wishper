@@ -26,9 +26,11 @@ export function WishesLayout({
         title='Wishes'
         description='Manage your wishes and track their status.'
         actions={
-          <Button onClick={() => (window.location.href = '/wishes/new')}>
-            <Plus className='mr-2 h-4 w-4' />
-            New Wish
+          <Button asChild>
+            <a href='/wishes/new'>
+              <Plus className='mr-2 h-4 w-4' />
+              New Wish
+            </a>
           </Button>
         }
       >
