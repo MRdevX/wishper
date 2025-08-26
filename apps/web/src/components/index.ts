@@ -20,6 +20,7 @@ export * from './dashboard';
 export * from './profile';
 export * from './wishes';
 export * from './wishlists';
+export * from './admin';
 
 export {
   Button,
