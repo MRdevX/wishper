@@ -17,10 +17,9 @@ export { ErrorBoundary } from './error-boundary';
 export { Providers } from './providers';
 
 export * from './dashboard';
-
 export * from './profile';
-
 export * from './wishes';
+export * from './wishlists';
 
 export {
   Button,
