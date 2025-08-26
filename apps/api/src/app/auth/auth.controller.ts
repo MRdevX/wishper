@@ -27,7 +27,9 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
   async login(@Body() loginDto: LoginDto, @Request() req) {
-    const result = await this.authService.login(loginDto);
+    // The LocalAuthGuard has already validated the user
+    // We just need to generate tokens and return the response
+    const result = await this.authService.loginWithUser(req.user);
     return ApiResponseDto.success(result, 'Login successful');
   }
 

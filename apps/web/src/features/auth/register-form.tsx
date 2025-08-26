@@ -11,6 +11,32 @@ interface IRegisterFormProps {
   onSwitchToLogin?: () => void;
 }
 
+const validateRegisterForm = (
+  values: IRegisterDto
+): Partial<Record<keyof IRegisterDto, string>> => {
+  const errors: Partial<Record<keyof IRegisterDto, string>> = {};
+
+  if (!values.name?.trim()) {
+    errors.name = 'Name is required';
+  } else if (values.name.trim().length < 2) {
+    errors.name = 'Name must be at least 2 characters long';
+  }
+
+  if (!values.email) {
+    errors.email = 'Email is required';
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
+    errors.email = 'Please enter a valid email address';
+  }
+
+  if (!values.password) {
+    errors.password = 'Password is required';
+  } else if (values.password.length < 6) {
+    errors.password = 'Password must be at least 6 characters long';
+  }
+
+  return errors;
+};
+
 export function RegisterForm({ onSuccess, onSwitchToLogin }: IRegisterFormProps) {
   const { register } = useAuthContext();
 
@@ -24,6 +50,7 @@ export function RegisterForm({ onSuccess, onSwitchToLogin }: IRegisterFormProps)
       return await register(values);
     },
     onSuccess,
+    validate: validateRegisterForm,
   });
 
   const footer = onSwitchToLogin && (
@@ -50,6 +77,7 @@ export function RegisterForm({ onSuccess, onSwitchToLogin }: IRegisterFormProps)
           value={form.values.name}
           onChange={form.handleInputChange('name')}
           error={form.errors.name}
+          required
           disabled={form.isLoading}
         />
 

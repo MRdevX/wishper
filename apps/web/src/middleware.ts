@@ -31,24 +31,26 @@ export async function middleware(request: NextRequest) {
     route => pathname === route || pathname.startsWith(route)
   );
 
+  // Check for access token in cookies (for SSR) or headers (for API calls)
   const accessToken =
     request.cookies.get('accessToken')?.value ||
     request.headers.get('authorization')?.replace('Bearer ', '');
 
+  // Redirect to auth page if accessing protected routes without token
   if (isProtectedRoute && !accessToken) {
     const authUrl = new URL(ROUTES.auth, request.url);
     authUrl.searchParams.set('redirect', pathname);
     return NextResponse.redirect(authUrl);
   }
 
-  if (isAdminRoute) {
-    if (!accessToken) {
-      const authUrl = new URL(ROUTES.auth, request.url);
-      authUrl.searchParams.set('redirect', pathname);
-      return NextResponse.redirect(authUrl);
-    }
+  // Redirect to auth page if accessing admin routes without token
+  if (isAdminRoute && !accessToken) {
+    const authUrl = new URL(ROUTES.auth, request.url);
+    authUrl.searchParams.set('redirect', pathname);
+    return NextResponse.redirect(authUrl);
   }
 
+  // Redirect to dashboard if accessing auth page with valid token
   if (isPublicRoute && pathname === ROUTES.auth && accessToken) {
     return NextResponse.redirect(new URL(ROUTES.dashboard, request.url));
   }

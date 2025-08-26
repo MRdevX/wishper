@@ -98,17 +98,26 @@ export function useAuth(): [AuthState, AuthActions] {
         return true;
       }
 
+      // Handle specific error cases
+      let errorMessage = response.error || ERROR_MESSAGES.unknown;
+
+      if (response.error?.includes('Invalid credentials')) {
+        errorMessage = 'Invalid email or password. Please try again.';
+      } else if (response.error?.includes('User with this email already exists')) {
+        errorMessage = 'An account with this email already exists.';
+      }
+
       setState(prev => ({
         ...prev,
         isLoading: false,
-        error: response.error || ERROR_MESSAGES.unknown,
+        error: errorMessage,
       }));
       return false;
     } catch (error) {
       setState(prev => ({
         ...prev,
         isLoading: false,
-        error: ERROR_MESSAGES.unknown,
+        error: ERROR_MESSAGES.network,
       }));
       return false;
     }
@@ -130,17 +139,26 @@ export function useAuth(): [AuthState, AuthActions] {
         return true;
       }
 
+      // Handle specific error cases
+      let errorMessage = response.error || ERROR_MESSAGES.unknown;
+
+      if (response.error?.includes('User with this email already exists')) {
+        errorMessage = 'An account with this email already exists. Please try logging in instead.';
+      } else if (response.error?.includes('validation')) {
+        errorMessage = 'Please check your input and try again.';
+      }
+
       setState(prev => ({
         ...prev,
         isLoading: false,
-        error: response.error || ERROR_MESSAGES.unknown,
+        error: errorMessage,
       }));
       return false;
     } catch (error) {
       setState(prev => ({
         ...prev,
         isLoading: false,
-        error: ERROR_MESSAGES.unknown,
+        error: ERROR_MESSAGES.network,
       }));
       return false;
     }

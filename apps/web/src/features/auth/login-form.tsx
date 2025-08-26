@@ -11,6 +11,24 @@ interface ILoginFormProps {
   onSwitchToRegister?: () => void;
 }
 
+const validateLoginForm = (values: ILoginDto): Partial<Record<keyof ILoginDto, string>> => {
+  const errors: Partial<Record<keyof ILoginDto, string>> = {};
+
+  if (!values.email) {
+    errors.email = 'Email is required';
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
+    errors.email = 'Please enter a valid email address';
+  }
+
+  if (!values.password) {
+    errors.password = 'Password is required';
+  } else if (values.password.length < 6) {
+    errors.password = 'Password must be at least 6 characters long';
+  }
+
+  return errors;
+};
+
 export function LoginForm({ onSuccess, onSwitchToRegister }: ILoginFormProps) {
   const { login } = useAuthContext();
 
@@ -23,6 +41,7 @@ export function LoginForm({ onSuccess, onSwitchToRegister }: ILoginFormProps) {
       return await login(values);
     },
     onSuccess,
+    validate: validateLoginForm,
   });
 
   const footer = onSwitchToRegister && (

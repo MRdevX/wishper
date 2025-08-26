@@ -5,6 +5,7 @@ interface UseFormOptions<T> {
   onSubmit: (values: T) => Promise<boolean>;
   onError?: (error: string) => void;
   onSuccess?: () => void;
+  validate?: (values: T) => Partial<Record<keyof T, string>>;
 }
 
 export function useForm<T extends Record<string, any>>({
@@ -12,11 +13,17 @@ export function useForm<T extends Record<string, any>>({
   onSubmit,
   onError,
   onSuccess,
+  validate,
 }: UseFormOptions<T>) {
   const [values, setValues] = useState<T>(initialValues);
   const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [submitError, setSubmitError] = useState<string | undefined>(undefined);
+
+  const validateForm = useCallback(() => {
+    if (!validate) return {};
+    return validate(values);
+  }, [validate, values]);
 
   const handleChange = useCallback(
     (field: keyof T) => (value: any) => {
@@ -57,6 +64,14 @@ export function useForm<T extends Record<string, any>>({
       setIsLoading(true);
       setSubmitError(undefined);
 
+      // Validate form before submission
+      const validationErrors = validateForm();
+      if (Object.keys(validationErrors).length > 0) {
+        setErrors(validationErrors);
+        setIsLoading(false);
+        return;
+      }
+
       try {
         const success = await onSubmit(values);
         if (success) {
@@ -70,7 +85,7 @@ export function useForm<T extends Record<string, any>>({
         setIsLoading(false);
       }
     },
-    [values, onSubmit, onSuccess, onError]
+    [values, onSubmit, onSuccess, onError, validateForm]
   );
 
   return {

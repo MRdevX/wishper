@@ -57,6 +57,10 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
+    return this.loginWithUser(user);
+  }
+
+  async loginWithUser(user: any): Promise<AuthResponse> {
     const tokens = this.tokensService.generateTokenPair(user.id, user.email);
 
     await this.tokenService.createRefreshToken(user.id, tokens.refreshToken);
