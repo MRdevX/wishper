@@ -16,11 +16,11 @@ export { Loading } from './ui/loading';
 export { ErrorBoundary } from './error-boundary';
 export { Providers } from './providers';
 
-// Dashboard components
 export * from './dashboard';
 
-// Profile components
 export * from './profile';
+
+export * from './wishes';
 
 export {
   Button,
