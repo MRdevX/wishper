@@ -1,8 +1,9 @@
 import { Button } from '@repo/ui/components/button';
 import { Badge } from '@repo/ui/components/badge';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, DollarSign } from 'lucide-react';
 import { WishStatus } from '@repo/schemas';
 import Link from 'next/link';
+import { cn } from '@repo/ui/lib/utils';
 
 interface WishItemProps {
   id: string;
@@ -13,22 +14,62 @@ interface WishItemProps {
   href: string;
 }
 
+const getStatusConfig = (status: WishStatus) => {
+  switch (status) {
+    case WishStatus.ACHIEVED:
+      return {
+        variant: 'default' as const,
+        className: 'bg-green-100 text-green-800 border-green-200',
+        icon: '🎉',
+      };
+    case WishStatus.PENDING:
+      return {
+        variant: 'secondary' as const,
+        className: 'bg-orange-100 text-orange-800 border-orange-200',
+        icon: '⏳',
+      };
+    default:
+      return {
+        variant: 'outline' as const,
+        className: 'bg-slate-100 text-slate-800 border-slate-200',
+        icon: '📝',
+      };
+  }
+};
+
 export function WishItem({ id, title, status, description, price, href }: WishItemProps) {
+  const statusConfig = getStatusConfig(status);
+
   return (
     <div
       key={id}
-      className='flex items-center justify-between rounded-lg border border-slate-200 p-4'
+      className='group flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-all duration-200 hover:border-slate-300 hover:shadow-md'
     >
-      <div className='flex-1'>
-        <div className='flex items-center gap-3'>
-          <h4 className='font-medium'>{title}</h4>
-          <Badge variant={status === WishStatus.ACHIEVED ? 'default' : 'secondary'}>{status}</Badge>
+      <div className='min-w-0 flex-1'>
+        <div className='mb-2 flex items-center gap-3'>
+          <h4 className='truncate font-semibold text-slate-900'>{title}</h4>
+          <Badge
+            variant={statusConfig.variant}
+            className={cn('text-xs font-medium', statusConfig.className)}
+          >
+            <span className='mr-1'>{statusConfig.icon}</span>
+            {status}
+          </Badge>
         </div>
-        {description && <p className='mt-1 text-sm text-slate-600'>{description}</p>}
-        {price && <p className='mt-1 text-sm text-slate-500'>${price}</p>}
+        {description && <p className='mb-2 line-clamp-2 text-sm text-slate-600'>{description}</p>}
+        {price && (
+          <div className='flex items-center gap-1 text-sm font-medium text-slate-700'>
+            <DollarSign className='h-4 w-4 text-green-600' />
+            <span>{price.toFixed(2)}</span>
+          </div>
+        )}
       </div>
       <Link href={href}>
-        <Button size='sm' variant='ghost'>
+        <Button
+          size='sm'
+          variant='ghost'
+          className='opacity-0 transition-opacity duration-200 hover:bg-slate-100 group-hover:opacity-100'
+        >
           <ArrowRight className='h-4 w-4' />
         </Button>
       </Link>
