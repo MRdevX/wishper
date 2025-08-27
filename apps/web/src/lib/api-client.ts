@@ -63,7 +63,6 @@ class ApiClient {
       }
 
       if (!response.ok) {
-        // Handle validation errors
         if (response.status === 400 && data.message) {
           return {
             success: false,
@@ -71,7 +70,6 @@ class ApiClient {
           };
         }
 
-        // Handle unauthorized errors
         if (response.status === 401) {
           this.clearTokens();
           return {
@@ -80,7 +78,6 @@ class ApiClient {
           };
         }
 
-        // Handle other errors
         return {
           success: false,
           error: data.message || data.error || `HTTP error! status: ${response.status}`,
@@ -270,7 +267,7 @@ class ApiClient {
     this.accessToken = token;
     if (typeof window !== 'undefined') {
       localStorage.setItem(STORAGE_KEYS.accessToken, token);
-      // Also set in cookies for middleware compatibility
+
       document.cookie = `accessToken=${token}; path=/; max-age=900; SameSite=Lax`;
     }
   }
@@ -282,7 +279,7 @@ class ApiClient {
   private setRefreshToken(token: string): void {
     if (typeof window !== 'undefined') {
       localStorage.setItem(STORAGE_KEYS.refreshToken, token);
-      // Also set in cookies for middleware compatibility
+
       document.cookie = `refreshToken=${token}; path=/; max-age=604800; SameSite=Lax`;
     }
   }
@@ -299,7 +296,7 @@ class ApiClient {
     if (typeof window !== 'undefined') {
       localStorage.removeItem(STORAGE_KEYS.accessToken);
       localStorage.removeItem(STORAGE_KEYS.refreshToken);
-      // Also clear cookies
+
       document.cookie = 'accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
       document.cookie = 'refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
     }

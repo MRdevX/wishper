@@ -24,23 +24,11 @@ function ProfileContent() {
     }
   };
 
-  const handlePasswordChange = () => {
-    // TODO: Implement password change functionality
-    console.log('Password change clicked');
-  };
-
   if (!user) {
     return null;
   }
 
-  return (
-    <ProfileLayout
-      user={user}
-      onProfileUpdate={handleProfileUpdate}
-      onPasswordChange={handlePasswordChange}
-      loading={loading}
-    />
-  );
+  return <ProfileLayout user={user} onProfileUpdate={handleProfileUpdate} loading={loading} />;
 }
 
 export default function ProfilePage() {

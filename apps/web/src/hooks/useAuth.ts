@@ -98,7 +98,6 @@ export function useAuth(): [AuthState, AuthActions] {
         return true;
       }
 
-      // Handle specific error cases
       let errorMessage = response.error || ERROR_MESSAGES.unknown;
 
       if (response.error?.includes('Invalid credentials')) {
@@ -139,7 +138,6 @@ export function useAuth(): [AuthState, AuthActions] {
         return true;
       }
 
-      // Handle specific error cases
       let errorMessage = response.error || ERROR_MESSAGES.unknown;
 
       if (response.error?.includes('User with this email already exists')) {

@@ -19,7 +19,6 @@ function AuthContent() {
     router.push(redirectTo);
   };
 
-  // Redirect if already authenticated
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
       const redirectTo = searchParams.get('redirect') || '/dashboard';
@@ -27,7 +26,6 @@ function AuthContent() {
     }
   }, [isAuthenticated, isLoading, router, searchParams]);
 
-  // Show loading state while checking authentication
   if (isLoading) {
     return (
       <div className='flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 to-blue-50 p-4'>

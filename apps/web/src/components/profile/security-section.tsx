@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Card,
   CardContent,
@@ -6,7 +7,9 @@ import {
   CardTitle,
 } from '@repo/ui/components/card';
 import { SecurityItem } from '../common/security-item';
+import { PasswordForm } from '../common/password-form';
 import { Lock, Shield, Key } from 'lucide-react';
+import { useSettings } from '@/hooks/useSettings';
 
 interface SecuritySectionProps {
   onPasswordChange?: () => void;
@@ -14,6 +17,26 @@ interface SecuritySectionProps {
 }
 
 export function SecuritySection({ onPasswordChange, className = '' }: SecuritySectionProps) {
+  const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const { changePassword, loading } = useSettings();
+
+  const handlePasswordChange = async (data: {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+  }) => {
+    const result = await changePassword(data);
+    if (result.success) {
+      setShowPasswordForm(false);
+      onPasswordChange?.();
+    }
+    return result;
+  };
+
+  if (showPasswordForm) {
+    return <PasswordForm onSubmit={handlePasswordChange} loading={loading} className={className} />;
+  }
+
   return (
     <Card
       className={`border-slate-200 shadow-sm transition-all duration-200 hover:shadow-md ${className}`}
@@ -35,7 +58,7 @@ export function SecuritySection({ onPasswordChange, className = '' }: SecuritySe
             title='Password Security'
             description='Update your password to keep your account secure and protected.'
             actionLabel='Change Password'
-            onAction={onPasswordChange || (() => {})}
+            onAction={() => setShowPasswordForm(true)}
             icon={Key}
           />
 

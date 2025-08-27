@@ -2,6 +2,7 @@ import { DashboardLayout } from '../layout/dashboard-layout';
 import { ProfileCard } from '../common/profile-card';
 import { ProfileForm } from './profile-form';
 import { SecuritySection } from './security-section';
+import { AccountInfo } from '../common/account-info';
 import { User, Settings } from 'lucide-react';
 import type { IUpdateUserDto } from '@repo/schemas';
 
@@ -28,8 +29,6 @@ export function ProfileLayout({
     : user.email
       ? user.email.charAt(0).toUpperCase()
       : 'U';
-
-  const memberSince = user.createdAt ? new Date(user.createdAt).toLocaleDateString() : undefined;
 
   const initialFormData: IUpdateUserDto = {
     name: user.name || '',
@@ -61,7 +60,9 @@ export function ProfileLayout({
               name={user.name || 'User'}
               email={user.email || ''}
               avatarInitial={avatarInitial}
-              memberSince={memberSince}
+              memberSince={
+                user.createdAt ? new Date(user.createdAt).toLocaleDateString() : undefined
+              }
               icon={User}
             />
           </div>
@@ -74,6 +75,7 @@ export function ProfileLayout({
               loading={loading}
             />
             <SecuritySection onPasswordChange={onPasswordChange} />
+            <AccountInfo user={user} />
           </div>
         </div>
       </div>

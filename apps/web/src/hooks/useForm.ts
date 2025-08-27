@@ -64,7 +64,6 @@ export function useForm<T extends Record<string, any>>({
       setIsLoading(true);
       setSubmitError(undefined);
 
-      // Validate form before submission
       const validationErrors = validateForm();
       if (Object.keys(validationErrors).length > 0) {
         setErrors(validationErrors);
