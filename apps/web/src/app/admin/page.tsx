@@ -1,46 +1,15 @@
 'use client';
 
-import { Users, Gift, List, TrendingUp } from 'lucide-react';
 import {
   AdminDashboardLayout,
   AdminQuickActions,
   AdminRecentActivity,
+  AdminStatsSection,
   useAdminStats,
 } from '@/components/admin';
 
 export default function AdminDashboard() {
   const { stats, loading } = useAdminStats();
-
-  const statsConfig = [
-    {
-      title: 'Total Users',
-      value: stats.totalUsers,
-      description: '+0% from last month',
-      icon: Users,
-      loading,
-    },
-    {
-      title: 'Total Wishes',
-      value: stats.totalWishes,
-      description: '+0% from last month',
-      icon: Gift,
-      loading,
-    },
-    {
-      title: 'Total Wishlists',
-      value: stats.totalWishlists,
-      description: '+0% from last month',
-      icon: List,
-      loading,
-    },
-    {
-      title: 'Active Users',
-      value: stats.activeUsers,
-      description: '+0% from last month',
-      icon: TrendingUp,
-      loading,
-    },
-  ];
 
   const quickActions = [
     {
@@ -61,7 +30,9 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <AdminDashboardLayout stats={statsConfig}>
+    <AdminDashboardLayout>
+      <AdminStatsSection stats={stats} loading={loading} />
+
       <div className='grid grid-cols-1 gap-6 lg:grid-cols-2'>
         <AdminRecentActivity />
         <AdminQuickActions actions={quickActions} />

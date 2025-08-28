@@ -5,6 +5,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@repo/ui/components/card';
+import { EmptyState } from '../common/empty-state';
+import { Activity } from 'lucide-react';
 
 interface ActivityItem {
   id: string;
@@ -14,30 +16,20 @@ interface ActivityItem {
 }
 
 interface AdminRecentActivityProps {
-  title?: string;
-  description?: string;
   activities?: ActivityItem[];
-  emptyMessage?: string;
-  className?: string;
 }
 
-export function AdminRecentActivity({
-  title = 'Recent Activity',
-  description = 'Latest actions in your application',
-  activities = [],
-  emptyMessage = 'No recent activity',
-  className = '',
-}: AdminRecentActivityProps) {
+export function AdminRecentActivity({ activities = [] }: AdminRecentActivityProps) {
   return (
-    <Card className={`border-gray-200 ${className}`}>
-      <CardHeader className='pb-4'>
-        <CardTitle className='text-lg'>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
+    <Card>
+      <CardHeader>
+        <CardTitle>Recent Activity</CardTitle>
+        <CardDescription>Latest actions in your application</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className='space-y-4'>
-          {activities.length > 0 ? (
-            activities.map(activity => (
+        {activities.length > 0 ? (
+          <div className='space-y-4'>
+            {activities.map(activity => (
               <div key={activity.id} className='flex items-center space-x-3'>
                 <div className='h-2 w-2 rounded-full bg-gray-300'></div>
                 <div className='flex-1'>
@@ -48,17 +40,17 @@ export function AdminRecentActivity({
                   )}
                 </div>
               </div>
-            ))
-          ) : (
-            <div className='flex items-center space-x-3'>
-              <div className='h-2 w-2 rounded-full bg-gray-300'></div>
-              <div className='flex-1'>
-                <p className='text-sm font-medium text-gray-900'>{emptyMessage}</p>
-                <p className='text-xs text-gray-500'>Get started by creating some data</p>
-              </div>
-            </div>
-          )}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <EmptyState
+            icon={Activity}
+            title='No Activity'
+            description='No recent activity to display'
+            actionText='View All'
+            actionHref='/admin'
+          />
+        )}
       </CardContent>
     </Card>
   );

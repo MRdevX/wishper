@@ -25,7 +25,6 @@ interface IAdminPageProps<T extends { id: string }> {
     initialData?: any;
     mode: 'create' | 'edit';
   }>;
-  onDeleteConfirm?: (item: T) => boolean;
 }
 
 export function AdminPage<T extends { id: string }>({
@@ -36,7 +35,6 @@ export function AdminPage<T extends { id: string }>({
   searchKey,
   searchPlaceholder,
   FormComponent,
-  onDeleteConfirm,
 }: IAdminPageProps<T>) {
   const [state, actions] = useCrud<T>(apiMethods);
   const { showToast } = useToast();
@@ -46,10 +44,7 @@ export function AdminPage<T extends { id: string }>({
   }, [actions]);
 
   const handleDelete = async (item: T) => {
-    const shouldDelete = onDeleteConfirm
-      ? onDeleteConfirm(item)
-      : confirm(`Are you sure you want to delete this ${title.toLowerCase()}?`);
-    if (!shouldDelete) return;
+    if (!confirm(`Are you sure you want to delete this ${title.toLowerCase()}?`)) return;
 
     try {
       await actions.delete(item.id);
@@ -72,14 +67,6 @@ export function AdminPage<T extends { id: string }>({
       showToast(`Failed to save ${title.toLowerCase()}`, 'error');
       throw _error;
     }
-  };
-
-  const handleAdd = () => {
-    actions.showCreateForm();
-  };
-
-  const handleEdit = (item: T) => {
-    actions.showEditForm(item);
   };
 
   if (state.isLoading) {
@@ -105,7 +92,7 @@ export function AdminPage<T extends { id: string }>({
       cell: ({ row }: { row: any }) => (
         <div className='flex space-x-2'>
           <button
-            onClick={() => handleEdit(row.original)}
+            onClick={() => actions.showEditForm(row.original)}
             className='text-blue-600 hover:text-blue-800'
           >
             Edit
@@ -129,7 +116,7 @@ export function AdminPage<T extends { id: string }>({
         action={{
           label: `Add ${title}`,
           icon: Plus,
-          onClick: handleAdd,
+          onClick: actions.showCreateForm,
         }}
       />
 

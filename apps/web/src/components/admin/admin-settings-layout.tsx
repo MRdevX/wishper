@@ -19,45 +19,38 @@ interface SystemAction {
 }
 
 interface AdminSettingsLayoutProps {
-  title?: string;
-  description?: string;
   children: React.ReactNode;
   systemActions?: SystemAction[];
 }
 
-export function AdminSettingsLayout({
-  title = 'Settings',
-  description = 'Manage your application settings',
-  children,
-  systemActions,
-}: AdminSettingsLayoutProps) {
+export function AdminSettingsLayout({ children, systemActions }: AdminSettingsLayoutProps) {
   return (
     <AdminLayout>
       <div className='space-y-6'>
         <div>
-          <h1 className='text-2xl font-bold text-gray-900 lg:text-3xl'>{title}</h1>
-          <p className='mt-2 text-gray-600'>{description}</p>
+          <h1 className='text-2xl font-bold text-gray-900 lg:text-3xl'>Settings</h1>
+          <p className='mt-2 text-gray-600'>Manage your application settings</p>
         </div>
 
         {children}
 
         {systemActions && systemActions.length > 0 && (
-          <Card className='border-gray-200'>
-            <CardHeader className='pb-4'>
+          <Card>
+            <CardHeader>
               <div className='flex items-center space-x-2'>
                 <Settings className='h-5 w-5 text-gray-600' />
-                <CardTitle className='text-lg'>System Actions</CardTitle>
+                <CardTitle>System Actions</CardTitle>
               </div>
               <CardDescription>Important system operations</CardDescription>
             </CardHeader>
-            <CardContent className='space-y-4'>
+            <CardContent>
               <div className='flex flex-wrap gap-4'>
                 {systemActions.map((action, index) => (
                   <Button
                     key={index}
                     variant={action.variant || 'outline'}
                     onClick={action.onClick}
-                    className={action.className || 'border-gray-300 hover:bg-gray-50'}
+                    className={action.className}
                   >
                     {action.label}
                   </Button>
