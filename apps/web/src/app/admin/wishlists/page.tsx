@@ -1,12 +1,13 @@
 'use client';
 
 import { useMemo } from 'react';
+import { ColumnDef } from '@tanstack/react-table';
+import { Badge } from '@repo/ui/components/badge';
 import { AdminPage } from '@/features/admin/admin-page';
-import { WishlistForm } from '@repo/ui';
+import { WishlistForm } from '@repo/ui/components/admin/wishlist-form';
 import { Gift } from 'lucide-react';
 import { apiClient } from '@/lib/api-client';
 import type { IWishlist } from '@repo/schemas';
-import { ColumnDef } from '@tanstack/react-table';
 
 const columns: ColumnDef<IWishlist>[] = [
   {

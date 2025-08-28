@@ -3,7 +3,7 @@
 import { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { Badge } from '@repo/ui/components/badge';
-import { AdminPage } from '@repo/ui/components/admin';
+import { AdminPage } from '@/features/admin/admin-page';
 import { WishForm } from '@repo/ui/components/admin/wish-form';
 import { apiClient } from '@/lib/api-client';
 import type { IWish } from '@repo/schemas';

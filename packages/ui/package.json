@@ -6,6 +6,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./lib/utils": "./src/lib/utils.ts",
+    "./components/admin": "./src/components/admin/index.ts",
     "./postcss.config": "./postcss.config.mjs",
     "./styles/globals.css": "./src/styles/globals.css"
   },
