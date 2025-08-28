@@ -1,17 +1,17 @@
-import { DeepPartial } from 'typeorm';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { BaseRepository } from './base.repository';
 import { BaseModel } from './base.entity';
+import { IWhereClause, IFindOptions } from './interfaces/base.interface';
 
 @Injectable()
 export abstract class BaseService<T extends BaseModel> {
   constructor(protected readonly repository: BaseRepository<T>) {}
 
-  async create(data: DeepPartial<T>): Promise<T> {
+  async create(data: Partial<T>): Promise<T> {
     return this.repository.create(data);
   }
 
-  async findAll(options?: any): Promise<T[]> {
+  async findAll(options?: IFindOptions): Promise<T[]> {
     return this.repository.findAll(options);
   }
 
@@ -31,11 +31,11 @@ export abstract class BaseService<T extends BaseModel> {
     return entity;
   }
 
-  async findMany(where: any): Promise<T[]> {
+  async findMany(where: IWhereClause): Promise<T[]> {
     return this.repository.findMany(where);
   }
 
-  async update(id: string, data: DeepPartial<T>): Promise<T> {
+  async update(id: string, data: Partial<T>): Promise<T> {
     const entity = await this.repository.findById(id);
     if (!entity) {
       throw new NotFoundException(`Entity with ID ${id} not found`);

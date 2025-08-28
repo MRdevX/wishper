@@ -2,10 +2,10 @@ import { Entity, Column, OneToMany, Index, BeforeInsert, BeforeUpdate } from 'ty
 import { IUser } from '@repo/schemas';
 import { Wish } from '../../wishes/entities/wish.entity';
 import { Wishlist } from '../../wishlists/entities/wishlist.entity';
-import { BaseModel } from '../../core/base/base.entity';
+import { TypeOrmBaseModel } from '../../core/base/typeorm/typeorm.base.entity';
 
 @Entity()
-export class User extends BaseModel implements IUser {
+export class User extends TypeOrmBaseModel implements IUser {
   @Index({ unique: true })
   @Column({ length: 100, nullable: true })
   email: string;

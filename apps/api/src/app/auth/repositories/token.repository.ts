@@ -1,11 +1,11 @@
 import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BaseRepository } from '../../core/base/base.repository';
+import { TypeOrmBaseRepository } from '../../core/base/typeorm/typeorm.base.repository';
 import { Token, TokenType } from '../entities/token.entity';
 
 @Injectable()
-export class TokenRepository extends BaseRepository<Token> {
+export class TokenRepository extends TypeOrmBaseRepository<Token> {
   constructor(
     @InjectRepository(Token)
     private readonly tokenRepository: Repository<Token>

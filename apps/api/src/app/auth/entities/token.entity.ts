@@ -1,5 +1,5 @@
 import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
-import { BaseModel } from '../../core/base/base.entity';
+import { TypeOrmBaseModel } from '../../core/base/typeorm/typeorm.base.entity';
 import { User } from '../../users/entities/user.entity';
 
 export enum TokenType {
@@ -9,7 +9,7 @@ export enum TokenType {
 
 @Entity()
 @Index(['userId', 'type'])
-export class Token extends BaseModel {
+export class Token extends TypeOrmBaseModel {
   @Column({ length: 255 })
   token: string;
 

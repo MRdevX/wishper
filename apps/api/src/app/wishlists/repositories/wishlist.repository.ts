@@ -1,11 +1,11 @@
+import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { BaseRepository } from '../../core/base/base.repository';
+import { TypeOrmBaseRepository } from '../../core/base/typeorm/typeorm.base.repository';
 import { Wishlist } from '../entities/wishlist.entity';
 
 @Injectable()
-export class WishlistRepository extends BaseRepository<Wishlist> {
+export class WishlistRepository extends TypeOrmBaseRepository<Wishlist> {
   constructor(
     @InjectRepository(Wishlist)
     private readonly wishlistRepo: Repository<Wishlist>

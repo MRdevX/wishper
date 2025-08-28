@@ -2,10 +2,10 @@ import { Entity, Column, ManyToOne } from 'typeorm';
 import { IWish, WishStatus } from '@repo/schemas';
 import { User } from '../../users/entities/user.entity';
 import { Wishlist } from '../../wishlists/entities/wishlist.entity';
-import { BaseModel } from '../../core/base/base.entity';
+import { TypeOrmBaseModel } from '../../core/base/typeorm/typeorm.base.entity';
 
 @Entity()
-export class Wish extends BaseModel implements IWish {
+export class Wish extends TypeOrmBaseModel implements IWish {
   @ManyToOne(() => User, u => u.wishes, { onDelete: 'CASCADE' })
   owner: User;
 

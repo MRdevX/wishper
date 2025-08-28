@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { BaseService } from './base.service';
-import { BaseRepository, PaginationOptions, PaginatedResult } from './base.repository';
+import { BaseRepository } from './base.repository';
 import { BaseModel } from './base.entity';
+import { IPaginationOptions, IPaginatedResult } from './interfaces/base.interface';
 
 export interface AuditLog extends BaseModel {
   entityType: string;
@@ -73,8 +74,8 @@ export abstract class BaseAuditService<T extends BaseModel> extends BaseService<
 
   async getAuditHistory(
     entityId: string,
-    options: PaginationOptions<AuditLog> = {}
-  ): Promise<PaginatedResult<AuditLog>> {
+    options: IPaginationOptions = {}
+  ): Promise<IPaginatedResult<AuditLog>> {
     return this.auditRepository.findWithPagination(
       { entityType: this.getEntityType(), entityId },
       options

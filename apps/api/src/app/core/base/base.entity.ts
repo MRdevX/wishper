@@ -1,21 +1,8 @@
-import {
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  DeleteDateColumn,
-  BaseEntity,
-} from 'typeorm';
+import { IBaseEntity } from './interfaces/base.interface';
 
-export abstract class BaseModel extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
+export abstract class BaseModel implements IBaseEntity {
   id: string;
-
-  @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
-
-  @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
-
-  @DeleteDateColumn({ type: 'timestamp', nullable: true })
   deletedAt?: Date;
 }
