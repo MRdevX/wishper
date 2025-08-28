@@ -1,13 +1,23 @@
-import { apiClient } from '../lib/api-client';
+import { apiClient } from './api-client';
 import type { IWish, IWishlist, IUser } from '@repo/schemas';
 
 export class DataService<T> {
+  private getFn: () => Promise<any>;
+  private createFn: (data: any) => Promise<any>;
+  private updateFn: (id: string, data: any) => Promise<any>;
+  private deleteFn: (id: string) => Promise<any>;
+
   constructor(
-    private getFn: () => Promise<any>,
-    private createFn: (data: any) => Promise<any>,
-    private updateFn: (id: string, data: any) => Promise<any>,
-    private deleteFn: (id: string) => Promise<any>
-  ) {}
+    getFn: () => Promise<any>,
+    createFn: (data: any) => Promise<any>,
+    updateFn: (id: string, data: any) => Promise<any>,
+    deleteFn: (id: string) => Promise<any>
+  ) {
+    this.getFn = getFn;
+    this.createFn = createFn;
+    this.updateFn = updateFn;
+    this.deleteFn = deleteFn;
+  }
 
   async getAll() {
     try {
