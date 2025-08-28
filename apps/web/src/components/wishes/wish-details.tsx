@@ -9,7 +9,7 @@ import {
 } from '@repo/ui/components/card';
 import { Badge } from '@repo/ui/components/badge';
 import { StatusBadge } from '../common/status-badge';
-import { formatCurrency, formatDate } from '@/lib/formatters';
+import { formatCurrency, formatDate } from '@/lib/utils';
 import type { IWish } from '@repo/schemas';
 
 interface IWishDetailsProps {

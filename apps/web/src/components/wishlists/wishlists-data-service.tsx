@@ -1,6 +1,6 @@
 import { useDataFetching } from '@/hooks/useDataFetching';
-import { wishlistService } from '@/lib/data-service';
-import { transformWishlistForGrid } from '@/lib/formatters';
+import { WishlistService } from '@/lib/services/wishlist.service';
+import { transformWishlistForGrid } from '@/lib/utils';
 import type { IWishlist } from '@repo/schemas';
 
 interface UseWishlistsDataProps {
@@ -8,8 +8,12 @@ interface UseWishlistsDataProps {
 }
 
 export function useWishlistsData({ onDelete }: UseWishlistsDataProps = {}) {
-  const { data: wishlists, loading, refetch } = useDataFetching({
-    fetchFn: wishlistService.getAll,
+  const {
+    data: wishlists,
+    loading,
+    refetch,
+  } = useDataFetching({
+    fetchFn: WishlistService.getAll,
   });
 
   const handleDelete = async (id: string) => {
@@ -17,7 +21,7 @@ export function useWishlistsData({ onDelete }: UseWishlistsDataProps = {}) {
       await onDelete(id);
     } else {
       if (confirm('Are you sure you want to delete this wishlist?')) {
-        const response = await wishlistService.delete(id);
+        const response = await WishlistService.delete(id);
         if (response.success) {
           refetch();
         } else {
@@ -27,14 +31,15 @@ export function useWishlistsData({ onDelete }: UseWishlistsDataProps = {}) {
     }
   };
 
-  const gridItems = wishlists?.map(wishlist => ({
-    ...transformWishlistForGrid(wishlist),
-    actions: [
-      { label: 'View', href: `/wishlists/${wishlist.id}` },
-      { label: 'Edit', href: `/wishlists/${wishlist.id}/edit` },
-      { label: 'Delete', onClick: () => handleDelete(wishlist.id) },
-    ],
-  })) || [];
+  const gridItems =
+    wishlists?.map(wishlist => ({
+      ...transformWishlistForGrid(wishlist),
+      actions: [
+        { label: 'View', href: `/wishlists/${wishlist.id}` },
+        { label: 'Edit', href: `/wishlists/${wishlist.id}/edit` },
+        { label: 'Delete', onClick: () => handleDelete(wishlist.id) },
+      ],
+    })) || [];
 
   return {
     items: wishlists,

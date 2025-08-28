@@ -4,7 +4,7 @@ import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { PageLayout } from '@/components/layout/page-layout';
 import { ProtectedRoute } from '@/features/auth/protected-route';
 import { useDataFetching } from '@/hooks/useDataFetching';
-import { DashboardService } from '@/lib/data-service';
+import { DashboardService } from '@/lib/services/dashboard.service';
 import { useAuthContext } from '@/lib/auth-context';
 import {
   LoadingState,

@@ -1,7 +1,7 @@
 'use client';
 
 import { useDataFetching } from '@/hooks/useDataFetching';
-import { DashboardService } from '@/lib/data-service';
+import { DashboardService } from '@/lib/services/dashboard.service';
 
 interface AdminStats {
   totalUsers: number;

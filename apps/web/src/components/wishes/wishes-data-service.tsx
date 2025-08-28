@@ -1,6 +1,6 @@
 import { useDataFetching } from '@/hooks/useDataFetching';
-import { wishService } from '@/lib/data-service';
-import { transformWishForGrid } from '@/lib/formatters';
+import { WishService } from '@/lib/services/wish.service';
+import { transformWishForGrid } from '@/lib/utils';
 import { StatusBadge } from '../common/status-badge';
 import type { IWish } from '@repo/schemas';
 
@@ -14,7 +14,7 @@ export function useWishesData({ onDelete }: UseWishesDataProps = {}) {
     loading,
     refetch,
   } = useDataFetching({
-    fetchFn: wishService.getAll,
+    fetchFn: WishService.getAll,
   });
 
   const handleDelete = async (id: string) => {
@@ -22,7 +22,7 @@ export function useWishesData({ onDelete }: UseWishesDataProps = {}) {
       await onDelete(id);
     } else {
       if (confirm('Are you sure you want to delete this wish?')) {
-        const response = await wishService.delete(id);
+        const response = await WishService.delete(id);
         if (response.success) {
           refetch();
         } else {
