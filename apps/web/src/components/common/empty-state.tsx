@@ -1,21 +1,14 @@
 import { LucideIcon, Plus } from 'lucide-react';
 import Link from 'next/link';
 
-interface EmptyStateProps {
+interface IEmptyStateProps {
   icon: LucideIcon;
-  title: string;
   description: string;
   actionText: string;
   actionHref: string;
 }
 
-export function EmptyState({
-  icon: Icon,
-  title,
-  description,
-  actionText,
-  actionHref,
-}: EmptyStateProps) {
+export function EmptyState({ icon: Icon, description, actionText, actionHref }: IEmptyStateProps) {
   return (
     <div className='py-8 text-center'>
       <div className='mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100'>

@@ -42,7 +42,6 @@ export function RecentWishesSection({ recentWishes }: RecentWishesSectionProps) 
       ) : (
         <EmptyState
           icon={Gift}
-          title='No Wishes'
           description='No wishes yet. Add your first wish!'
           actionText='Add Wish'
           actionHref='/wishes/new'

@@ -35,7 +35,6 @@ export function RecentActivitySection({ recentWishlists }: RecentActivitySection
       ) : (
         <EmptyState
           icon={List}
-          title='No Wishlists'
           description='No wishlists yet. Create your first one!'
           actionText='Create Wishlist'
           actionHref='/wishlists/new'

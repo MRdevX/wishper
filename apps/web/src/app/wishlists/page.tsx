@@ -8,7 +8,7 @@ function WishlistsContent() {
 
   const emptyState = <WishlistsEmptyState />;
 
-  return <WishlistsLayout loading={loading} gridItems={gridItems} emptyState={emptyState} />;
+  return <WishlistsLayout gridItems={gridItems} emptyState={emptyState} />;
 }
 
 export default function WishlistsPage() {

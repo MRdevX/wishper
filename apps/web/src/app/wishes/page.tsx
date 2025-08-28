@@ -8,7 +8,7 @@ function WishesContent() {
 
   const emptyState = <WishesEmptyState />;
 
-  return <WishesLayout loading={loading} gridItems={gridItems} emptyState={emptyState} />;
+  return <WishesLayout gridItems={gridItems} emptyState={emptyState} />;
 }
 
 export default function WishesPage() {

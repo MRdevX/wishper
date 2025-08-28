@@ -45,7 +45,6 @@ export function AdminRecentActivity({ activities = [] }: AdminRecentActivityProp
         ) : (
           <EmptyState
             icon={Activity}
-            title='No Activity'
             description='No recent activity to display'
             actionText='View All'
             actionHref='/admin'

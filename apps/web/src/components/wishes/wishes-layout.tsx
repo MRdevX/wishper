@@ -1,41 +1,19 @@
-import { DashboardLayout } from '../layout/dashboard-layout';
-import { PageLayout } from '../layout/page-layout';
-import { DataGrid } from '../common/data-grid';
-import { Button } from '@repo/ui/components/button';
-import { Plus } from 'lucide-react';
-import type { IWish } from '@repo/schemas';
+import { EntityLayout } from '../common/entity-layout';
 
-interface WishesLayoutProps {
-  wishes?: IWish[];
-  loading?: boolean;
-  onDelete?: (id: string) => Promise<void>;
-  emptyState?: React.ReactNode;
+interface IWishesLayoutProps {
   gridItems: any[];
+  emptyState?: React.ReactNode;
 }
 
-export function WishesLayout({
-  wishes,
-  loading,
-  onDelete,
-  emptyState,
-  gridItems,
-}: WishesLayoutProps) {
+export function WishesLayout({ gridItems, emptyState }: IWishesLayoutProps) {
   return (
-    <DashboardLayout>
-      <PageLayout
-        title='Wishes'
-        description='Manage your wishes and track their status.'
-        actions={
-          <Button asChild>
-            <a href='/wishes/new'>
-              <Plus className='mr-2 h-4 w-4' />
-              New Wish
-            </a>
-          </Button>
-        }
-      >
-        <DataGrid items={gridItems} emptyState={emptyState} />
-      </PageLayout>
-    </DashboardLayout>
+    <EntityLayout
+      title='Wishes'
+      description='Manage your wishes and track their status.'
+      newItemHref='/wishes/new'
+      newItemText='New Wish'
+      gridItems={gridItems}
+      emptyState={emptyState}
+    />
   );
 }
