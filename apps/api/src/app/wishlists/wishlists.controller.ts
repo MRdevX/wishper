@@ -10,11 +10,11 @@ import {
   HttpStatus,
   Query,
   UseGuards,
+  ForbiddenException,
 } from '@nestjs/common';
 import { WishlistsService } from './wishlists.service';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-wishlist.dto';
-import { ApiResponseDto } from '../common/dto/api-response.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 
@@ -31,32 +31,24 @@ export class WishlistsController {
     @Query('ownerId') ownerId?: string
   ) {
     const userId = ownerId || user.userId;
-    const wishlist = await this.wishlistsService.create(createWishlistDto, userId);
-    return ApiResponseDto.success(wishlist, 'Wishlist created successfully');
+    return this.wishlistsService.create(createWishlistDto, userId);
   }
 
   @Get()
   async findAll(@CurrentUser() user: any, @Query('ownerId') ownerId?: string) {
     if (ownerId) {
-      const wishlists = await this.wishlistsService.findByOwner(ownerId);
-      return ApiResponseDto.success(wishlists);
+      return this.wishlistsService.findByOwner(ownerId);
     }
-
-    const wishlists = await this.wishlistsService.findByOwner(user.userId);
-    return ApiResponseDto.success(wishlists);
+    return this.wishlistsService.findByOwner(user.userId);
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string, @CurrentUser() user: any) {
     const wishlist = await this.wishlistsService.findWithWishes(id);
-    if (!wishlist) {
-      return ApiResponseDto.error('Wishlist not found');
-    }
-
     if (wishlist.owner?.id !== user.userId) {
-      return ApiResponseDto.error('Access denied');
+      throw new ForbiddenException('Access denied');
     }
-    return ApiResponseDto.success(wishlist);
+    return wishlist;
   }
 
   @Patch(':id')
@@ -67,11 +59,9 @@ export class WishlistsController {
   ) {
     const existingWishlist = await this.wishlistsService.findById(id);
     if (existingWishlist.owner?.id !== user.userId) {
-      return ApiResponseDto.error('Access denied');
+      throw new ForbiddenException('Access denied');
     }
-
-    const wishlist = await this.wishlistsService.update(id, updateWishlistDto);
-    return ApiResponseDto.success(wishlist, 'Wishlist updated successfully');
+    return this.wishlistsService.update(id, updateWishlistDto);
   }
 
   @Delete(':id')
@@ -79,10 +69,8 @@ export class WishlistsController {
   async remove(@Param('id') id: string, @CurrentUser() user: any) {
     const existingWishlist = await this.wishlistsService.findById(id);
     if (existingWishlist.owner?.id !== user.userId) {
-      return ApiResponseDto.error('Access denied');
+      throw new ForbiddenException('Access denied');
     }
-
     await this.wishlistsService.delete(id);
-    return ApiResponseDto.success(null, 'Wishlist deleted successfully');
   }
 }

@@ -4,7 +4,6 @@ import { Wish } from './entities/wish.entity';
 import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';
 import { WishRepository } from './repositories/wish.repository';
-import { BaseService } from '../core/base/base.service';
 
 @Injectable()
 export class WishesService {
