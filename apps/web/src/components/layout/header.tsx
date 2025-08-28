@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@repo/ui/components/dropdown-menu';
 import { useAuthContext } from '@/lib/auth-context';
-import { Heart, Menu, X, User, LogOut, Settings } from 'lucide-react';
+import { Menu, X, User, LogOut, Settings, Bell, Search } from 'lucide-react';
 
 interface IHeaderProps {
   onMenuToggle?: () => void;
@@ -43,47 +43,37 @@ export function Header({ onMenuToggle, isMenuOpen }: IHeaderProps) {
     <header className='sticky top-0 z-30 border-b border-slate-200 bg-white'>
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
         <div className='flex h-16 items-center justify-between'>
-          {/* Logo and Mobile Menu Button */}
-          <div className='flex items-center'>
+          {/* Mobile Menu Button */}
+          <div className='flex items-center lg:hidden'>
             <button
               onClick={onMenuToggle}
-              className='rounded-md p-2 text-slate-600 hover:bg-slate-100 hover:text-slate-900 lg:hidden'
+              className='rounded-md p-2 text-slate-600 hover:bg-slate-100 hover:text-slate-900'
             >
               {isMenuOpen ? <X className='h-5 w-5' /> : <Menu className='h-5 w-5' />}
             </button>
-
-            <Link href='/dashboard' className='ml-2 flex items-center space-x-2 lg:ml-0'>
-              <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-r from-pink-500 to-rose-500'>
-                <Heart className='h-4 w-4 text-white' />
-              </div>
-              <span className='text-xl font-bold text-slate-900'>Wishper</span>
-            </Link>
           </div>
 
-          {/* Desktop Navigation */}
-          <nav className='hidden items-center space-x-8 lg:flex'>
-            <Link
-              href='/dashboard'
-              className='rounded-md px-3 py-2 text-sm font-medium text-slate-600 hover:text-slate-900'
-            >
-              Dashboard
-            </Link>
-            <Link
-              href='/wishlists'
-              className='rounded-md px-3 py-2 text-sm font-medium text-slate-600 hover:text-slate-900'
-            >
-              Wishlists
-            </Link>
-            <Link
-              href='/wishes'
-              className='rounded-md px-3 py-2 text-sm font-medium text-slate-600 hover:text-slate-900'
-            >
-              Wishes
-            </Link>
-          </nav>
+          {/* Center: Search Bar (Desktop) */}
+          <div className='hidden max-w-md flex-1 lg:block'>
+            <div className='relative'>
+              <Search className='absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400' />
+              <input
+                type='text'
+                placeholder='Search wishes, wishlists...'
+                className='w-full rounded-lg border border-slate-200 bg-slate-50 py-2 pl-10 pr-4 text-sm placeholder-slate-500 focus:border-pink-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-pink-500'
+              />
+            </div>
+          </div>
 
-          {/* User Menu */}
-          <div className='flex items-center space-x-4'>
+          {/* Right: User Actions */}
+          <div className='flex items-center space-x-3'>
+            {/* Notifications */}
+            <Button variant='ghost' size='sm' className='relative'>
+              <Bell className='h-4 w-4' />
+              <span className='absolute -right-1 -top-1 h-2 w-2 rounded-full bg-rose-500'></span>
+            </Button>
+
+            {/* User Menu */}
             {user ? (
               <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
                 <DropdownMenuTrigger asChild>

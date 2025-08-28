@@ -26,7 +26,7 @@ export function DashboardLayout({ children }: IDashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className='min-h-screen bg-slate-50 lg:flex'>
+    <div className='min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 lg:flex'>
       <Sidebar
         navigation={navigation}
         quickActions={quickActions}
@@ -37,7 +37,7 @@ export function DashboardLayout({ children }: IDashboardLayoutProps) {
       {/* Main content */}
       <div className='flex min-w-0 flex-1 flex-col'>
         <Header onMenuToggle={() => setSidebarOpen(!sidebarOpen)} isMenuOpen={sidebarOpen} />
-        <main className='flex-1 py-6'>
+        <main className='flex-1 py-8'>
           <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>{children}</div>
         </main>
       </div>
