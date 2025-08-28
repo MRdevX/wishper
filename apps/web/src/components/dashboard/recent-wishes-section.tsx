@@ -1,8 +1,8 @@
 import { PageCard } from '../layout/page-layout';
 import { WishItem } from './wish-item';
+import { EmptyState } from '../common/empty-state';
 import { WishStatus } from '@repo/schemas';
-import { Gift, Plus } from 'lucide-react';
-import Link from 'next/link';
+import { Gift } from 'lucide-react';
 
 interface Wish {
   id: string;
@@ -40,18 +40,13 @@ export function RecentWishesSection({ recentWishes }: RecentWishesSectionProps) 
           ))}
         </div>
       ) : (
-        <div className='py-8 text-center'>
-          <div className='mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100'>
-            <Gift className='h-6 w-6 text-slate-400' />
-          </div>
-          <p className='mb-4 text-sm text-slate-600'>No wishes yet. Add your first wish!</p>
-          <Link href='/wishes/new'>
-            <button className='inline-flex items-center gap-2 rounded-lg bg-pink-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-pink-700'>
-              <Plus className='h-4 w-4' />
-              Add Wish
-            </button>
-          </Link>
-        </div>
+        <EmptyState
+          icon={Gift}
+          title='No Wishes'
+          description='No wishes yet. Add your first wish!'
+          actionText='Add Wish'
+          actionHref='/wishes/new'
+        />
       )}
     </PageCard>
   );

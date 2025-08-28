@@ -14,7 +14,7 @@ export function QuickActionsSection() {
           href='/wishlists/new'
           icon={List}
           variant='default'
-          className='w-full justify-start bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg transition-all duration-200 hover:from-blue-700 hover:to-blue-800 hover:shadow-xl'
+          className='w-full justify-start bg-blue-600 text-white hover:bg-blue-700'
         >
           Create New Wishlist
         </ActionButton>
@@ -22,7 +22,7 @@ export function QuickActionsSection() {
           href='/wishes/new'
           icon={Gift}
           variant='default'
-          className='w-full justify-start bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-lg transition-all duration-200 hover:from-purple-700 hover:to-purple-800 hover:shadow-xl'
+          className='w-full justify-start bg-purple-600 text-white hover:bg-purple-700'
         >
           Add New Wish
         </ActionButton>

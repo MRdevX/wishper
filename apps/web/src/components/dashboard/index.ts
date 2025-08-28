@@ -4,3 +4,4 @@ export { RecentActivitySection } from './recent-activity-section';
 export { RecentWishesSection } from './recent-wishes-section';
 export { LoadingState } from './loading-state';
 export { WishItem } from './wish-item';
+export { EmptyState } from '../common/empty-state';

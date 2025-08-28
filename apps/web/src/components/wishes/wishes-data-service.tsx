@@ -1,4 +1,4 @@
-import { useDataService } from '@/hooks/useDataService';
+import { useDataFetching } from '@/hooks/useDataFetching';
 import { wishService } from '@/lib/data-service';
 import { transformWishForGrid } from '@/lib/formatters';
 import { StatusBadge } from '../common/status-badge';
@@ -9,14 +9,45 @@ interface UseWishesDataProps {
 }
 
 export function useWishesData({ onDelete }: UseWishesDataProps = {}) {
-  return useDataService<IWish>({
+  const {
+    data: wishes,
+    loading,
+    refetch,
+  } = useDataFetching({
     fetchFn: wishService.getAll,
-    transformFn: transformWishForGrid,
-    deleteFn: wishService.delete,
-    onDelete,
-    statusComponent: wish => <StatusBadge status={wish.status} />,
-    viewPath: id => `/wishes/${id}`,
-    editPath: id => `/wishes/${id}/edit`,
-    itemName: 'wish',
   });
+
+  const handleDelete = async (id: string) => {
+    if (onDelete) {
+      await onDelete(id);
+    } else {
+      if (confirm('Are you sure you want to delete this wish?')) {
+        const response = await wishService.delete(id);
+        if (response.success) {
+          refetch();
+        } else {
+          alert(`Failed to delete wish: ${response.error}`);
+        }
+      }
+    }
+  };
+
+  const gridItems =
+    wishes?.map(wish => ({
+      ...transformWishForGrid(wish),
+      status: <StatusBadge status={wish.status} />,
+      actions: [
+        { label: 'View', href: `/wishes/${wish.id}` },
+        { label: 'Edit', href: `/wishes/${wish.id}/edit` },
+        { label: 'Delete', onClick: () => handleDelete(wish.id) },
+      ],
+    })) || [];
+
+  return {
+    items: wishes,
+    gridItems,
+    loading,
+    refetch,
+    handleDelete,
+  };
 }

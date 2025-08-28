@@ -14,31 +14,16 @@ interface WishItemProps {
   href: string;
 }
 
-const getStatusConfig = (status: WishStatus) => {
-  switch (status) {
-    case WishStatus.ACHIEVED:
-      return {
-        variant: 'default' as const,
-        className: 'bg-green-100 text-green-800 border-green-200',
-        icon: '🎉',
-      };
-    case WishStatus.ACTIVE:
-      return {
-        variant: 'secondary' as const,
-        className: 'bg-orange-100 text-orange-800 border-orange-200',
-        icon: '⏳',
-      };
-    default:
-      return {
-        variant: 'outline' as const,
-        className: 'bg-slate-100 text-slate-800 border-slate-200',
-        icon: '📝',
-      };
-  }
-};
-
 export function WishItem({ id, title, status, description, price, href }: WishItemProps) {
-  const statusConfig = getStatusConfig(status);
+  const statusStyles = {
+    [WishStatus.ACHIEVED]: 'bg-green-100 text-green-800 border-green-200',
+    [WishStatus.ACTIVE]: 'bg-orange-100 text-orange-800 border-orange-200',
+  }[status] || 'bg-slate-100 text-slate-800 border-slate-200';
+
+  const statusIcons = {
+    [WishStatus.ACHIEVED]: '🎉',
+    [WishStatus.ACTIVE]: '⏳',
+  }[status] || '📝';
 
   return (
     <div
@@ -48,11 +33,8 @@ export function WishItem({ id, title, status, description, price, href }: WishIt
       <div className='min-w-0 flex-1'>
         <div className='mb-2 flex items-center gap-3'>
           <h4 className='truncate font-semibold text-slate-900'>{title}</h4>
-          <Badge
-            variant={statusConfig.variant}
-            className={cn('text-xs font-medium', statusConfig.className)}
-          >
-            <span className='mr-1'>{statusConfig.icon}</span>
+          <Badge variant='outline' className={cn('text-xs font-medium', statusStyles)}>
+            <span className='mr-1'>{statusIcons}</span>
             {status}
           </Badge>
         </div>

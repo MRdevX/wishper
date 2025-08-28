@@ -1,4 +1,4 @@
-import { useDataService } from '@/hooks/useDataService';
+import { useDataFetching } from '@/hooks/useDataFetching';
 import { wishlistService } from '@/lib/data-service';
 import { transformWishlistForGrid } from '@/lib/formatters';
 import type { IWishlist } from '@repo/schemas';
@@ -8,13 +8,39 @@ interface UseWishlistsDataProps {
 }
 
 export function useWishlistsData({ onDelete }: UseWishlistsDataProps = {}) {
-  return useDataService<IWishlist>({
+  const { data: wishlists, loading, refetch } = useDataFetching({
     fetchFn: wishlistService.getAll,
-    transformFn: transformWishlistForGrid,
-    deleteFn: wishlistService.delete,
-    onDelete,
-    viewPath: id => `/wishlists/${id}`,
-    editPath: id => `/wishlists/${id}/edit`,
-    itemName: 'wishlist',
   });
+
+  const handleDelete = async (id: string) => {
+    if (onDelete) {
+      await onDelete(id);
+    } else {
+      if (confirm('Are you sure you want to delete this wishlist?')) {
+        const response = await wishlistService.delete(id);
+        if (response.success) {
+          refetch();
+        } else {
+          alert(`Failed to delete wishlist: ${response.error}`);
+        }
+      }
+    }
+  };
+
+  const gridItems = wishlists?.map(wishlist => ({
+    ...transformWishlistForGrid(wishlist),
+    actions: [
+      { label: 'View', href: `/wishlists/${wishlist.id}` },
+      { label: 'Edit', href: `/wishlists/${wishlist.id}/edit` },
+      { label: 'Delete', onClick: () => handleDelete(wishlist.id) },
+    ],
+  })) || [];
+
+  return {
+    items: wishlists,
+    gridItems,
+    loading,
+    refetch,
+    handleDelete,
+  };
 }
