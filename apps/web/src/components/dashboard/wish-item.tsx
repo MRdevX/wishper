@@ -1,6 +1,6 @@
 import { Button } from '@repo/ui/components/button';
 import { Badge } from '@repo/ui/components/badge';
-import { ArrowRight, DollarSign } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { WishStatus } from '@repo/schemas';
 import Link from 'next/link';
 import { cn } from '@repo/ui/lib/utils';
@@ -9,21 +9,21 @@ interface WishItemProps {
   id: string;
   title: string;
   status: WishStatus;
-  description?: string;
-  price?: number;
   href: string;
 }
 
-export function WishItem({ id, title, status, description, price, href }: WishItemProps) {
-  const statusStyles = {
-    [WishStatus.ACHIEVED]: 'bg-green-100 text-green-800 border-green-200',
-    [WishStatus.ACTIVE]: 'bg-orange-100 text-orange-800 border-orange-200',
-  }[status] || 'bg-slate-100 text-slate-800 border-slate-200';
+export function WishItem({ id, title, status, href }: WishItemProps) {
+  const statusStyles =
+    {
+      [WishStatus.ACHIEVED]: 'bg-green-100 text-green-800 border-green-200',
+      [WishStatus.ACTIVE]: 'bg-orange-100 text-orange-800 border-orange-200',
+    }[status] || 'bg-slate-100 text-slate-800 border-slate-200';
 
-  const statusIcons = {
-    [WishStatus.ACHIEVED]: '🎉',
-    [WishStatus.ACTIVE]: '⏳',
-  }[status] || '📝';
+  const statusIcons =
+    {
+      [WishStatus.ACHIEVED]: '🎉',
+      [WishStatus.ACTIVE]: '⏳',
+    }[status] || '📝';
 
   return (
     <div
@@ -38,13 +38,6 @@ export function WishItem({ id, title, status, description, price, href }: WishIt
             {status}
           </Badge>
         </div>
-        {description && <p className='mb-2 line-clamp-2 text-sm text-slate-600'>{description}</p>}
-        {price && (
-          <div className='flex items-center gap-1 text-sm font-medium text-slate-700'>
-            <DollarSign className='h-4 w-4 text-green-600' />
-            <span>{price.toFixed(2)}</span>
-          </div>
-        )}
       </div>
       <Link href={href}>
         <Button

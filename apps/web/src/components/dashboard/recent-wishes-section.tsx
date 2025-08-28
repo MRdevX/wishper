@@ -8,10 +8,6 @@ interface Wish {
   id: string;
   title: string;
   status: WishStatus;
-  details?: {
-    description?: string;
-    price?: number;
-  };
 }
 
 interface RecentWishesSectionProps {
@@ -33,8 +29,6 @@ export function RecentWishesSection({ recentWishes }: RecentWishesSectionProps) 
               id={wish.id}
               title={wish.title}
               status={wish.status}
-              description={wish.details?.description}
-              price={wish.details?.price}
               href={`/wishes/${wish.id}`}
             />
           ))}

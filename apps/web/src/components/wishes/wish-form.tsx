@@ -19,13 +19,6 @@ interface WishFormData {
   title: string;
   note?: string;
   status: WishStatus;
-  details: {
-    price?: number;
-    url?: string;
-    imageUrl?: string;
-    priority?: 'low' | 'medium' | 'high';
-    description?: string;
-  };
   wishlistId?: string;
 }
 
@@ -48,13 +41,6 @@ export function WishForm({
     title: '',
     note: '',
     status: WishStatus.ACTIVE,
-    details: {
-      price: undefined,
-      url: '',
-      imageUrl: '',
-      priority: 'medium',
-      description: '',
-    },
     wishlistId: '',
     ...initialData,
   });
@@ -72,13 +58,6 @@ export function WishForm({
 
   const handleChange = (field: keyof WishFormData, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-  };
-
-  const handleDetailChange = (field: string, value: any) => {
-    setFormData(prev => ({
-      ...prev,
-      details: { ...prev.details, [field]: value },
-    }));
   };
 
   return (
@@ -127,73 +106,6 @@ export function WishForm({
             <SelectItem value={WishStatus.ARCHIVED}>Archived</SelectItem>
           </SelectContent>
         </Select>
-      </div>
-
-      <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
-        <div className='space-y-2'>
-          <Label htmlFor='price'>Price</Label>
-          <Input
-            id='price'
-            type='number'
-            step='0.01'
-            min='0'
-            value={formData.details.price || ''}
-            onChange={e =>
-              handleDetailChange('price', e.target.value ? parseFloat(e.target.value) : undefined)
-            }
-            placeholder='0.00'
-          />
-        </div>
-
-        <div className='space-y-2'>
-          <Label htmlFor='priority'>Priority</Label>
-          <Select
-            value={formData.details.priority || 'medium'}
-            onValueChange={value => handleDetailChange('priority', value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder='Select priority' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='low'>Low</SelectItem>
-              <SelectItem value='medium'>Medium</SelectItem>
-              <SelectItem value='high'>High</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-
-      <div className='space-y-2'>
-        <Label htmlFor='url'>URL</Label>
-        <Input
-          id='url'
-          type='url'
-          value={formData.details.url || ''}
-          onChange={e => handleDetailChange('url', e.target.value)}
-          placeholder='https://example.com'
-        />
-      </div>
-
-      <div className='space-y-2'>
-        <Label htmlFor='imageUrl'>Image URL</Label>
-        <Input
-          id='imageUrl'
-          type='url'
-          value={formData.details.imageUrl || ''}
-          onChange={e => handleDetailChange('imageUrl', e.target.value)}
-          placeholder='https://example.com/image.jpg'
-        />
-      </div>
-
-      <div className='space-y-2'>
-        <Label htmlFor='description'>Description</Label>
-        <Textarea
-          id='description'
-          value={formData.details.description || ''}
-          onChange={e => handleDetailChange('description', e.target.value)}
-          placeholder='Detailed description of the wish'
-          rows={3}
-        />
       </div>
 
       <div className='space-y-2'>

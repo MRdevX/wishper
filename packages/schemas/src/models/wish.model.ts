@@ -7,16 +7,7 @@ export interface IWish extends IBaseEntity {
   title: string;
   note?: string;
   status: WishStatus;
-  details: IWishDetails;
+  details: Record<string, any>;
   owner: IUser;
   wishlist?: IWishlist | null;
-}
-
-export interface IWishDetails {
-  price?: number;
-  url?: string;
-  imageUrl?: string;
-  priority?: 'low' | 'medium' | 'high';
-  description?: string;
-  isPurchased?: boolean;
 }

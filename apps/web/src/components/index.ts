@@ -2,7 +2,7 @@ export { PageLayout, PageCard, EmptyState } from './layout/page-layout';
 export { DashboardLayout } from './layout/dashboard-layout';
 export { Header } from './layout/header';
 
-export { StatusBadge, PriorityBadge } from './common/status-badge';
+export { StatusBadge } from './common/status-badge';
 export { DataGrid, DataGridActions } from './common/data-grid';
 export { StatsCard } from './common/stats-card';
 export { ActionButton } from './common/action-button';

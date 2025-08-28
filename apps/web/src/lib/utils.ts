@@ -55,14 +55,6 @@ export function getInitials(name: string): string {
     .slice(0, 2);
 }
 
-// Currency formatting
-export function formatCurrency(amount: number, currency = 'USD'): string {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency,
-  }).format(amount);
-}
-
 // Validation
 export function isValidEmail(email: string): boolean {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -78,12 +70,9 @@ export function transformWishForGrid(wish: IWish) {
   return {
     id: wish.id,
     title: wish.title,
-    description: wish.details?.description,
+    description: wish.note,
     status: wish.status,
     metadata: [
-      ...(wish.details?.price
-        ? [{ icon: '$', label: 'Price', value: formatCurrency(wish.details.price) }]
-        : []),
       ...(wish.wishlist ? [{ icon: '📋', label: 'Wishlist', value: wish.wishlist.name }] : []),
     ],
     createdAt: typeof wish.createdAt === 'string' ? wish.createdAt : wish.createdAt.toISOString(),
