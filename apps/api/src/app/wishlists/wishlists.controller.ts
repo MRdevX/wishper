@@ -10,13 +10,13 @@ import {
   HttpStatus,
   Query,
   UseGuards,
-  ForbiddenException,
 } from '@nestjs/common';
 import { WishlistsService } from './wishlists.service';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-wishlist.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { RequireOwnership } from '../auth/decorators/require-permission.decorator';
 
 @Controller('wishlists')
 @UseGuards(JwtAuthGuard)
@@ -43,34 +43,25 @@ export class WishlistsController {
   }
 
   @Get(':id')
+  @RequireOwnership()
   async findOne(@Param('id') id: string, @CurrentUser() user: any) {
-    const wishlist = await this.wishlistsService.findWithWishes(id);
-    if (wishlist.owner?.id !== user.userId) {
-      throw new ForbiddenException('Access denied');
-    }
-    return wishlist;
+    return this.wishlistsService.findWithWishes(id);
   }
 
   @Patch(':id')
+  @RequireOwnership()
   async update(
     @Param('id') id: string,
     @Body() updateWishlistDto: UpdateWishlistDto,
     @CurrentUser() user: any
   ) {
-    const existingWishlist = await this.wishlistsService.findById(id);
-    if (existingWishlist.owner?.id !== user.userId) {
-      throw new ForbiddenException('Access denied');
-    }
     return this.wishlistsService.updateWishlist(id, updateWishlistDto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
+  @RequireOwnership()
   async remove(@Param('id') id: string, @CurrentUser() user: any) {
-    const existingWishlist = await this.wishlistsService.findById(id);
-    if (existingWishlist.owner?.id !== user.userId) {
-      throw new ForbiddenException('Access denied');
-    }
     await this.wishlistsService.delete(id);
   }
 }

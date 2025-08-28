@@ -18,12 +18,14 @@ export * from './repositories/token.repository';
 
 export * from './guards/jwt-auth.guard';
 export * from './guards/local-auth.guard';
+export * from './guards/permissions.guard';
 
 export * from './strategies/jwt.strategy';
 export * from './strategies/local.strategy';
 
 export * from './decorators/current-user.decorator';
 export * from './decorators/public.decorator';
+export * from './decorators/require-permission.decorator';
 
 export * from './auth.module';
 export * from './tokens/tokens.module';

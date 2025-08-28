@@ -13,6 +13,7 @@ import { TokenRepository } from './repositories/token.repository';
 import { UsersModule } from '../users/users.module';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
+import { PermissionsGuard } from './guards/permissions.guard';
 
 @Module({
   imports: [
@@ -30,7 +31,8 @@ import { LocalStrategy } from './strategies/local.strategy';
     TokenRepository,
     JwtStrategy,
     LocalStrategy,
+    PermissionsGuard,
   ],
-  exports: [AuthService, TokenService],
+  exports: [AuthService, TokenService, PermissionsGuard],
 })
 export class AuthModule {}

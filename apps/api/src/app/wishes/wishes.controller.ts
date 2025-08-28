@@ -10,13 +10,13 @@ import {
   HttpStatus,
   Query,
   UseGuards,
-  ForbiddenException,
 } from '@nestjs/common';
 import { WishesService } from './wishes.service';
 import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { RequireOwnership } from '../auth/decorators/require-permission.decorator';
 
 @Controller('wishes')
 @UseGuards(JwtAuthGuard)
@@ -50,34 +50,25 @@ export class WishesController {
   }
 
   @Get(':id')
+  @RequireOwnership()
   async findOne(@Param('id') id: string, @CurrentUser() user: any) {
-    const wish = await this.wishesService.findWithRelations(id);
-    if (wish.owner?.id !== user.userId) {
-      throw new ForbiddenException('Access denied');
-    }
-    return wish;
+    return this.wishesService.findWithRelations(id);
   }
 
   @Patch(':id')
+  @RequireOwnership()
   async update(
     @Param('id') id: string,
     @Body() updateWishDto: UpdateWishDto,
     @CurrentUser() user: any
   ) {
-    const existingWish = await this.wishesService.findById(id);
-    if (existingWish.owner?.id !== user.userId) {
-      throw new ForbiddenException('Access denied');
-    }
     return this.wishesService.updateWish(id, updateWishDto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
+  @RequireOwnership()
   async remove(@Param('id') id: string, @CurrentUser() user: any) {
-    const existingWish = await this.wishesService.findById(id);
-    if (existingWish.owner?.id !== user.userId) {
-      throw new ForbiddenException('Access denied');
-    }
     await this.wishesService.delete(id);
   }
 }
