@@ -9,41 +9,41 @@ import { WishStatus } from '@repo/schemas';
 export class WishRepository extends BaseRepository<Wish> {
   constructor(
     @InjectRepository(Wish)
-    private readonly wishRepository: Repository<Wish>
+    private readonly wishRepo: Repository<Wish>
   ) {
-    super(wishRepository);
+    super(wishRepo);
   }
 
   async findByOwner(ownerId: string): Promise<Wish[]> {
-    return this.wishRepository.find({
+    return this.wishRepo.find({
       where: { owner: { id: ownerId } },
       relations: ['wishlist'],
     });
   }
 
   async findByWishlist(wishlistId: string): Promise<Wish[]> {
-    return this.wishRepository.find({
+    return this.wishRepo.find({
       where: { wishlist: { id: wishlistId } },
       relations: ['owner'],
     });
   }
 
   async findByOwnerAndStatus(ownerId: string, status: WishStatus): Promise<Wish[]> {
-    return this.wishRepository.find({
+    return this.wishRepo.find({
       where: { owner: { id: ownerId }, status },
       relations: ['wishlist'],
     });
   }
 
   async findWithRelations(id: string): Promise<Wish | null> {
-    return this.wishRepository.findOne({
+    return this.wishRepo.findOne({
       where: { id },
       relations: ['owner', 'wishlist'],
     });
   }
 
   async countByOwner(ownerId: string): Promise<number> {
-    return this.wishRepository.count({
+    return this.wishRepo.count({
       where: { owner: { id: ownerId } },
     });
   }
@@ -53,7 +53,7 @@ export class WishRepository extends BaseRepository<Wish> {
     skip: number = 0,
     take: number = 10
   ): Promise<{ wishes: Wish[]; total: number }> {
-    const [wishes, total] = await this.wishRepository.findAndCount({
+    const [wishes, total] = await this.wishRepo.findAndCount({
       where: { owner: { id: ownerId } },
       relations: ['wishlist'],
       skip,

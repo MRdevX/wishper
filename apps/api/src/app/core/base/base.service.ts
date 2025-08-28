@@ -1,3 +1,4 @@
+import { DeepPartial } from 'typeorm';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { BaseRepository } from './base.repository';
 import { BaseModel } from './base.entity';
@@ -6,12 +7,12 @@ import { BaseModel } from './base.entity';
 export abstract class BaseService<T extends BaseModel> {
   constructor(protected readonly repository: BaseRepository<T>) {}
 
-  async create(data: any): Promise<T> {
+  async create(data: DeepPartial<T>): Promise<T> {
     return this.repository.create(data);
   }
 
-  async findAll(): Promise<T[]> {
-    return this.repository.findAll();
+  async findAll(options?: any): Promise<T[]> {
+    return this.repository.findAll(options);
   }
 
   async findById(id: string): Promise<T> {
@@ -22,7 +23,19 @@ export abstract class BaseService<T extends BaseModel> {
     return entity;
   }
 
-  async update(id: string, data: any): Promise<T> {
+  async findByIdWithRelations(id: string, relations: string[] = []): Promise<T> {
+    const entity = await this.repository.findByIdWithRelations(id, relations);
+    if (!entity) {
+      throw new NotFoundException(`Entity with ID ${id} not found`);
+    }
+    return entity;
+  }
+
+  async findMany(where: any): Promise<T[]> {
+    return this.repository.findMany(where);
+  }
+
+  async update(id: string, data: DeepPartial<T>): Promise<T> {
     const entity = await this.repository.findById(id);
     if (!entity) {
       throw new NotFoundException(`Entity with ID ${id} not found`);
@@ -41,16 +54,14 @@ export abstract class BaseService<T extends BaseModel> {
       throw new NotFoundException(`Entity with ID ${id} not found`);
     }
 
-    try {
-      const deleted = await this.repository.delete(id);
-      if (!deleted) {
-        throw new NotFoundException(`Failed to delete entity with ID ${id}`);
-      }
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw error;
-      }
-      throw new Error(`Failed to delete entity: ${error.message}`);
+    const deleted = await this.repository.delete(id);
+    if (!deleted) {
+      throw new NotFoundException(`Failed to delete entity with ID ${id}`);
     }
+  }
+
+  async exists(id: string): Promise<boolean> {
+    const entity = await this.repository.findById(id);
+    return !!entity;
   }
 }

@@ -8,20 +8,20 @@ import { Wishlist } from '../entities/wishlist.entity';
 export class WishlistRepository extends BaseRepository<Wishlist> {
   constructor(
     @InjectRepository(Wishlist)
-    private readonly wishlistRepository: Repository<Wishlist>
+    private readonly wishlistRepo: Repository<Wishlist>
   ) {
-    super(wishlistRepository);
+    super(wishlistRepo);
   }
 
   async findByOwner(ownerId: string): Promise<Wishlist[]> {
-    return this.wishlistRepository.find({
+    return this.wishlistRepo.find({
       where: { owner: { id: ownerId } },
       relations: ['wishes'],
     });
   }
 
   async findWithWishes(id: string): Promise<Wishlist | null> {
-    return this.wishlistRepository.findOne({
+    return this.wishlistRepo.findOne({
       where: { id },
       relations: ['wishes', 'owner'],
     });
@@ -32,7 +32,7 @@ export class WishlistRepository extends BaseRepository<Wishlist> {
     skip: number = 0,
     take: number = 10
   ): Promise<{ wishlists: Wishlist[]; total: number }> {
-    const [wishlists, total] = await this.wishlistRepository.findAndCount({
+    const [wishlists, total] = await this.wishlistRepo.findAndCount({
       where: { owner: { id: ownerId } },
       relations: ['wishes'],
       skip,
@@ -44,13 +44,13 @@ export class WishlistRepository extends BaseRepository<Wishlist> {
   }
 
   async countByOwner(ownerId: string): Promise<number> {
-    return this.wishlistRepository.count({
+    return this.wishlistRepo.count({
       where: { owner: { id: ownerId } },
     });
   }
 
   async findByNameAndOwner(name: string, ownerId: string): Promise<Wishlist | null> {
-    return this.wishlistRepository.findOne({
+    return this.wishlistRepo.findOne({
       where: { name, owner: { id: ownerId } },
     });
   }

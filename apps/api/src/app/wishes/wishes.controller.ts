@@ -31,7 +31,7 @@ export class WishesController {
     @Query('ownerId') ownerId?: string
   ) {
     const userId = ownerId || user.userId;
-    return this.wishesService.create(createWishDto, userId);
+    return this.wishesService.createWish(createWishDto, userId);
   }
 
   @Get()
@@ -68,7 +68,7 @@ export class WishesController {
     if (existingWish.owner?.id !== user.userId) {
       throw new ForbiddenException('Access denied');
     }
-    return this.wishesService.update(id, updateWishDto);
+    return this.wishesService.updateWish(id, updateWishDto);
   }
 
   @Delete(':id')

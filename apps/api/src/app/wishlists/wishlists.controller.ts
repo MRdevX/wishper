@@ -31,7 +31,7 @@ export class WishlistsController {
     @Query('ownerId') ownerId?: string
   ) {
     const userId = ownerId || user.userId;
-    return this.wishlistsService.create(createWishlistDto, userId);
+    return this.wishlistsService.createWishlist(createWishlistDto, userId);
   }
 
   @Get()
@@ -61,7 +61,7 @@ export class WishlistsController {
     if (existingWishlist.owner?.id !== user.userId) {
       throw new ForbiddenException('Access denied');
     }
-    return this.wishlistsService.update(id, updateWishlistDto);
+    return this.wishlistsService.updateWishlist(id, updateWishlistDto);
   }
 
   @Delete(':id')

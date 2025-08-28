@@ -2,12 +2,10 @@ import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import type { IWish, IWishlist, IUser } from '@repo/schemas';
 
-// CSS utilities
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-// Date formatting
 export function formatDate(date: string | Date, options?: Intl.DateTimeFormatOptions): string {
   const dateObj = typeof date === 'string' ? new Date(date) : date;
   return dateObj.toLocaleDateString('en-US', {
@@ -37,7 +35,6 @@ export function formatRelativeTime(date: string | Date): string {
   return formatDate(date);
 }
 
-// Text utilities
 export function truncateText(text: string, maxLength: number): string {
   return text.length <= maxLength ? text : text.slice(0, maxLength) + '...';
 }
@@ -55,7 +52,6 @@ export function getInitials(name: string): string {
     .slice(0, 2);
 }
 
-// Validation
 export function isValidEmail(email: string): boolean {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
@@ -65,7 +61,6 @@ export function isValidPassword(password: string): boolean {
   return password.length >= 6;
 }
 
-// Data transformation
 export function transformWishForGrid(wish: IWish) {
   return {
     id: wish.id,
@@ -102,7 +97,6 @@ export function transformUserForGrid(user: IUser) {
   };
 }
 
-// Search utility
 export function searchItems<T>(items: T[], searchTerm: string, searchFields: (keyof T)[]): T[] {
   if (!searchTerm.trim()) return items;
 
@@ -115,7 +109,6 @@ export function searchItems<T>(items: T[], searchTerm: string, searchFields: (ke
   );
 }
 
-// Utility functions
 export function isEmpty(value: any): boolean {
   if (value === null || value === undefined) return true;
   if (typeof value === 'string') return value.trim() === '';
@@ -128,7 +121,6 @@ export function generateId(): string {
   return Math.random().toString(36).substr(2, 9);
 }
 
-// Performance utilities
 export function debounce<T extends (...args: any[]) => any>(
   func: T,
   wait: number

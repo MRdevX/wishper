@@ -14,13 +14,10 @@ async function bootstrap() {
   app.enableCors({ origin: true, credentials: true });
   app.setGlobalPrefix('api');
 
-  // Global exception filter
   app.useGlobalFilters(new HttpExceptionFilter());
 
-  // Global response interceptor
   app.useGlobalInterceptors(new ResponseInterceptor());
 
-  // Global validation pipe
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

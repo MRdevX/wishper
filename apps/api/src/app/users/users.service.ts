@@ -3,12 +3,15 @@ import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserRepository } from './repositories/user.repository';
+import { BaseService } from '../core/base/base.service';
 
 @Injectable()
-export class UsersService {
-  constructor(private readonly userRepository: UserRepository) {}
+export class UsersService extends BaseService<User> {
+  constructor(private readonly userRepository: UserRepository) {
+    super(userRepository);
+  }
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async createUser(createUserDto: CreateUserDto): Promise<User> {
     const existingUser = await this.userRepository.findByEmail(createUserDto.email);
     if (existingUser) {
       throw new ConflictException('User with this email already exists');
@@ -26,18 +29,6 @@ export class UsersService {
       password: hashedPassword,
       name,
     });
-  }
-
-  async findAll(): Promise<User[]> {
-    return this.userRepository.findAll();
-  }
-
-  async findById(id: string): Promise<User> {
-    const user = await this.userRepository.findById(id);
-    if (!user) {
-      throw new NotFoundException(`User with ID ${id} not found`);
-    }
-    return user;
   }
 
   async findByEmail(email: string): Promise<User | null> {
@@ -62,27 +53,6 @@ export class UsersService {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
     return user;
-  }
-
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
-    const user = await this.userRepository.findById(id);
-    if (!user) {
-      throw new NotFoundException(`User with ID ${id} not found`);
-    }
-
-    const updatedUser = await this.userRepository.update(id, updateUserDto);
-    if (!updatedUser) {
-      throw new NotFoundException(`User with ID ${id} not found`);
-    }
-    return updatedUser;
-  }
-
-  async delete(id: string): Promise<void> {
-    const user = await this.userRepository.findById(id);
-    if (!user) {
-      throw new NotFoundException(`User with ID ${id} not found`);
-    }
-    await this.userRepository.delete(id);
   }
 
   async updatePassword(userId: string, hashedPassword: string): Promise<User | null> {

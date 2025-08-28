@@ -31,10 +31,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
       message = exception.message;
     }
 
-    // Log error
     this.logger.error(`${request.method} ${request.url} - ${status} - ${message}`);
 
-    // Don't expose internal errors in production
     if (process.env.NODE_ENV === 'production' && status === HttpStatus.INTERNAL_SERVER_ERROR) {
       message = 'Internal server error';
     }

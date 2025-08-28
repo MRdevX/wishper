@@ -18,8 +18,6 @@ export class SettingsService {
     data: PasswordChangeData
   ): Promise<{ success: boolean; error?: string }> {
     try {
-      // TODO: Replace with actual API call when backend is ready
-
       await new Promise(resolve => setTimeout(resolve, 1000));
 
       if (data.currentPassword === 'wrong') {
@@ -37,8 +35,6 @@ export class SettingsService {
     settings: NotificationSettings
   ): Promise<{ success: boolean; error?: string }> {
     try {
-      // TODO: Replace with actual API call when backend is ready
-
       await new Promise(resolve => setTimeout(resolve, 1000));
 
       return { success: true };
@@ -52,8 +48,6 @@ export class SettingsService {
     theme: 'light' | 'dark' | 'system'
   ): Promise<{ success: boolean; error?: string }> {
     try {
-      // TODO: Replace with actual API call when backend is ready
-
       await new Promise(resolve => setTimeout(resolve, 500));
 
       localStorage.setItem('theme', theme);

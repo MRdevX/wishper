@@ -1,4 +1,3 @@
-// App configuration
 export const APP_CONFIG = {
   name: 'Wishper',
   description: 'Your Personal Wishlist App',
@@ -6,7 +5,6 @@ export const APP_CONFIG = {
   apiUrl: process.env.NEXT_PUBLIC_API_URL || 'https://api.wishper.link/api',
 } as const;
 
-// Re-export services
 export * from './services';
 
 export const ROUTES = {

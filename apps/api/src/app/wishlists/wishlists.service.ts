@@ -3,12 +3,15 @@ import { Wishlist } from './entities/wishlist.entity';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-wishlist.dto';
 import { WishlistRepository } from './repositories/wishlist.repository';
+import { BaseService } from '../core/base/base.service';
 
 @Injectable()
-export class WishlistsService {
-  constructor(private readonly wishlistRepository: WishlistRepository) {}
+export class WishlistsService extends BaseService<Wishlist> {
+  constructor(private readonly wishlistRepository: WishlistRepository) {
+    super(wishlistRepository);
+  }
 
-  async create(createWishlistDto: CreateWishlistDto, ownerId: string): Promise<Wishlist> {
+  async createWishlist(createWishlistDto: CreateWishlistDto, ownerId: string): Promise<Wishlist> {
     const existingWishlist = await this.wishlistRepository.findByNameAndOwner(
       createWishlistDto.name,
       ownerId
@@ -22,18 +25,6 @@ export class WishlistsService {
       ...createWishlistDto,
       owner: { id: ownerId } as any,
     });
-  }
-
-  async findAll(): Promise<Wishlist[]> {
-    return this.wishlistRepository.findAll();
-  }
-
-  async findById(id: string): Promise<Wishlist> {
-    const wishlist = await this.wishlistRepository.findById(id);
-    if (!wishlist) {
-      throw new NotFoundException(`Wishlist with ID ${id} not found`);
-    }
-    return wishlist;
   }
 
   async findWithWishes(id: string): Promise<Wishlist> {
@@ -60,7 +51,7 @@ export class WishlistsService {
     return this.wishlistRepository.countByOwner(ownerId);
   }
 
-  async update(id: string, updateWishlistDto: UpdateWishlistDto): Promise<Wishlist> {
+  async updateWishlist(id: string, updateWishlistDto: UpdateWishlistDto): Promise<Wishlist> {
     const wishlist = await this.wishlistRepository.findById(id);
     if (!wishlist) {
       throw new NotFoundException(`Wishlist with ID ${id} not found`);
@@ -77,29 +68,6 @@ export class WishlistsService {
       }
     }
 
-    const updatedWishlist = await this.wishlistRepository.update(id, updateWishlistDto);
-    if (!updatedWishlist) {
-      throw new NotFoundException(`Wishlist with ID ${id} not found`);
-    }
-    return updatedWishlist;
-  }
-
-  async delete(id: string): Promise<void> {
-    const wishlist = await this.wishlistRepository.findById(id);
-    if (!wishlist) {
-      throw new NotFoundException(`Wishlist with ID ${id} not found`);
-    }
-
-    try {
-      const deleted = await this.wishlistRepository.delete(id);
-      if (!deleted) {
-        throw new NotFoundException(`Failed to delete wishlist with ID ${id}`);
-      }
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw error;
-      }
-      throw new Error(`Failed to delete wishlist: ${error.message}`);
-    }
+    return super.update(id, updateWishlistDto);
   }
 }
