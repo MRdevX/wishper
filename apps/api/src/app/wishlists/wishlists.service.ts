@@ -89,6 +89,17 @@ export class WishlistsService {
     if (!wishlist) {
       throw new NotFoundException(`Wishlist with ID ${id} not found`);
     }
-    await this.wishlistRepository.delete(id);
+
+    try {
+      const deleted = await this.wishlistRepository.delete(id);
+      if (!deleted) {
+        throw new NotFoundException(`Failed to delete wishlist with ID ${id}`);
+      }
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new Error(`Failed to delete wishlist: ${error.message}`);
+    }
   }
 }
