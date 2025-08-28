@@ -10,8 +10,13 @@ export class DataService<T> {
   ) {}
 
   async getAll() {
-    const response = await this.getFn();
-    return response.success ? response.data : [];
+    try {
+      const response = await this.getFn();
+      return response.success ? response.data : [];
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      return [];
+    }
   }
 
   async create(data: any) {

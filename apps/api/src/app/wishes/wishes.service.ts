@@ -4,6 +4,7 @@ import { Wish } from './entities/wish.entity';
 import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';
 import { WishRepository } from './repositories/wish.repository';
+import { BaseService } from '../core/base/base.service';
 
 @Injectable()
 export class WishesService {
@@ -20,18 +21,6 @@ export class WishesService {
     }
 
     return this.wishRepository.create(wishData);
-  }
-
-  async findAll(): Promise<Wish[]> {
-    return this.wishRepository.findAll();
-  }
-
-  async findById(id: string): Promise<Wish> {
-    const wish = await this.wishRepository.findById(id);
-    if (!wish) {
-      throw new NotFoundException(`Wish with ID ${id} not found`);
-    }
-    return wish;
   }
 
   async findWithRelations(id: string): Promise<Wish> {
@@ -67,21 +56,33 @@ export class WishesService {
   }
 
   async update(id: string, updateWishDto: UpdateWishDto): Promise<Wish> {
-    const wish = await this.wishRepository.findById(id);
-    if (!wish) {
-      throw new NotFoundException(`Wish with ID ${id} not found`);
-    }
-
     const updateData: any = { ...updateWishDto };
     if (updateWishDto.wishlistId) {
       updateData.wishlist = { id: updateWishDto.wishlistId } as any;
     }
 
-    const updatedWish = await this.wishRepository.update(id, updateData);
-    if (!updatedWish) {
+    const wish = await this.wishRepository.findById(id);
+    if (!wish) {
       throw new NotFoundException(`Wish with ID ${id} not found`);
     }
+
+    const updatedWish = await this.wishRepository.update(id, updateData);
+    if (!updatedWish) {
+      throw new NotFoundException(`Failed to update wish with ID ${id}`);
+    }
     return updatedWish;
+  }
+
+  async findAll(): Promise<Wish[]> {
+    return this.wishRepository.findAll();
+  }
+
+  async findById(id: string): Promise<Wish> {
+    const wish = await this.wishRepository.findById(id);
+    if (!wish) {
+      throw new NotFoundException(`Wish with ID ${id} not found`);
+    }
+    return wish;
   }
 
   async delete(id: string): Promise<void> {

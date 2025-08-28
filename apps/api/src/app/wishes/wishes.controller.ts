@@ -56,15 +56,19 @@ export class WishesController {
 
   @Get(':id')
   async findOne(@Param('id') id: string, @CurrentUser() user: any) {
-    const wish = await this.wishesService.findWithRelations(id);
-    if (!wish) {
-      return ApiResponseDto.error('Wish not found');
-    }
+    try {
+      const wish = await this.wishesService.findWithRelations(id);
+      if (!wish) {
+        return ApiResponseDto.error('Wish not found');
+      }
 
-    if (wish.owner?.id !== user.userId) {
-      return ApiResponseDto.error('Access denied');
+      if (wish.owner?.id !== user.userId) {
+        return ApiResponseDto.error('Access denied');
+      }
+      return ApiResponseDto.success(wish);
+    } catch (error) {
+      return ApiResponseDto.error('Failed to fetch wish');
     }
-    return ApiResponseDto.success(wish);
   }
 
   @Patch(':id')
@@ -73,24 +77,40 @@ export class WishesController {
     @Body() updateWishDto: UpdateWishDto,
     @CurrentUser() user: any
   ) {
-    const existingWish = await this.wishesService.findById(id);
-    if (existingWish.owner?.id !== user.userId) {
-      return ApiResponseDto.error('Access denied');
-    }
+    try {
+      const existingWish = await this.wishesService.findById(id);
+      if (!existingWish) {
+        return ApiResponseDto.error('Wish not found');
+      }
 
-    const wish = await this.wishesService.update(id, updateWishDto);
-    return ApiResponseDto.success(wish, 'Wish updated successfully');
+      if (existingWish.owner?.id !== user.userId) {
+        return ApiResponseDto.error('Access denied');
+      }
+
+      const wish = await this.wishesService.update(id, updateWishDto);
+      return ApiResponseDto.success(wish, 'Wish updated successfully');
+    } catch (error) {
+      return ApiResponseDto.error('Failed to update wish');
+    }
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
   async remove(@Param('id') id: string, @CurrentUser() user: any) {
-    const existingWish = await this.wishesService.findById(id);
-    if (existingWish.owner?.id !== user.userId) {
-      return ApiResponseDto.error('Access denied');
-    }
+    try {
+      const existingWish = await this.wishesService.findById(id);
+      if (!existingWish) {
+        return ApiResponseDto.error('Wish not found');
+      }
 
-    await this.wishesService.delete(id);
-    return ApiResponseDto.success(null, 'Wish deleted successfully');
+      if (existingWish.owner?.id !== user.userId) {
+        return ApiResponseDto.error('Access denied');
+      }
+
+      await this.wishesService.delete(id);
+      return ApiResponseDto.success(null, 'Wish deleted successfully');
+    } catch (error) {
+      return ApiResponseDto.error('Failed to delete wish');
+    }
   }
 }

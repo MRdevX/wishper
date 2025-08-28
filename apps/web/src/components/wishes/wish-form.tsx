@@ -195,6 +195,17 @@ export function WishForm({
           rows={3}
         />
       </div>
+
+      <div className='space-y-2'>
+        <Label htmlFor='wishlistId'>Wishlist (Optional)</Label>
+        <Input
+          id='wishlistId'
+          type='text'
+          value={formData.wishlistId || ''}
+          onChange={e => handleChange('wishlistId', e.target.value)}
+          placeholder='Enter wishlist ID (optional)'
+        />
+      </div>
     </FormWrapper>
   );
 }
