@@ -1,6 +1,6 @@
 'use client';
 
-import { ProtectedRoute } from '@/features/auth/protected-route';
+import { PageWrapper } from '@/components/common';
 import { WishlistsLayout, WishlistsEmptyState, useWishlistsData } from '@/components/wishlists';
 
 function WishlistsContent() {
@@ -13,8 +13,8 @@ function WishlistsContent() {
 
 export default function WishlistsPage() {
   return (
-    <ProtectedRoute>
+    <PageWrapper>
       <WishlistsContent />
-    </ProtectedRoute>
+    </PageWrapper>
   );
 }

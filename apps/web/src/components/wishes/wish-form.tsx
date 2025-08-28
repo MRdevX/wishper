@@ -1,14 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@repo/ui/components/card';
-import { Button } from '@repo/ui/components/button';
 import { Input } from '@repo/ui/components/input';
 import { Label } from '@repo/ui/components/label';
 import { Textarea } from '@repo/ui/components/textarea';
@@ -19,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@repo/ui/components/select';
+import { FormWrapper } from '@/components/common';
 import { WishStatus } from '@repo/schemas';
 import type { ICreateWishDto, IUpdateWishDto } from '@repo/schemas';
 
@@ -89,138 +82,119 @@ export function WishForm({
   };
 
   return (
-    <Card className='mx-auto w-full max-w-2xl'>
-      <CardHeader>
-        <CardTitle>{mode === 'create' ? 'Create New Wish' : 'Edit Wish'}</CardTitle>
-        <CardDescription>
-          {mode === 'create' ? 'Add a new wish to your collection' : 'Update your wish details'}
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className='space-y-6'>
-          <div className='space-y-2'>
-            <Label htmlFor='title'>Title *</Label>
-            <Input
-              id='title'
-              type='text'
-              value={formData.title}
-              onChange={e => handleChange('title', e.target.value)}
-              required
-              placeholder='Enter wish title'
-            />
-          </div>
+    <FormWrapper
+      title={mode === 'create' ? 'Create New Wish' : 'Edit Wish'}
+      description={
+        mode === 'create' ? 'Add a new wish to your collection' : 'Update your wish details'
+      }
+      onSubmit={handleSubmit}
+      onCancel={onCancel}
+      loading={loading}
+      mode={mode}
+    >
+      <div className='space-y-2'>
+        <Label htmlFor='title'>Title *</Label>
+        <Input
+          id='title'
+          type='text'
+          value={formData.title}
+          onChange={e => handleChange('title', e.target.value)}
+          required
+          placeholder='Enter wish title'
+        />
+      </div>
 
-          <div className='space-y-2'>
-            <Label htmlFor='note'>Note</Label>
-            <Textarea
-              id='note'
-              value={formData.note || ''}
-              onChange={e => handleChange('note', e.target.value)}
-              placeholder='Additional notes about this wish'
-              rows={3}
-            />
-          </div>
+      <div className='space-y-2'>
+        <Label htmlFor='note'>Note</Label>
+        <Textarea
+          id='note'
+          value={formData.note || ''}
+          onChange={e => handleChange('note', e.target.value)}
+          placeholder='Additional notes about this wish'
+          rows={3}
+        />
+      </div>
 
-          <div className='space-y-2'>
-            <Label htmlFor='status'>Status</Label>
-            <Select value={formData.status} onValueChange={value => handleChange('status', value)}>
-              <SelectTrigger>
-                <SelectValue placeholder='Select status' />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={WishStatus.ACTIVE}>Active</SelectItem>
-                <SelectItem value={WishStatus.ACHIEVED}>Achieved</SelectItem>
-                <SelectItem value={WishStatus.ARCHIVED}>Archived</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+      <div className='space-y-2'>
+        <Label htmlFor='status'>Status</Label>
+        <Select value={formData.status} onValueChange={value => handleChange('status', value)}>
+          <SelectTrigger>
+            <SelectValue placeholder='Select status' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value={WishStatus.ACTIVE}>Active</SelectItem>
+            <SelectItem value={WishStatus.ACHIEVED}>Achieved</SelectItem>
+            <SelectItem value={WishStatus.ARCHIVED}>Archived</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
 
-          <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
-            <div className='space-y-2'>
-              <Label htmlFor='price'>Price</Label>
-              <Input
-                id='price'
-                type='number'
-                step='0.01'
-                min='0'
-                value={formData.details.price || ''}
-                onChange={e =>
-                  handleDetailChange(
-                    'price',
-                    e.target.value ? parseFloat(e.target.value) : undefined
-                  )
-                }
-                placeholder='0.00'
-              />
-            </div>
+      <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+        <div className='space-y-2'>
+          <Label htmlFor='price'>Price</Label>
+          <Input
+            id='price'
+            type='number'
+            step='0.01'
+            min='0'
+            value={formData.details.price || ''}
+            onChange={e =>
+              handleDetailChange('price', e.target.value ? parseFloat(e.target.value) : undefined)
+            }
+            placeholder='0.00'
+          />
+        </div>
 
-            <div className='space-y-2'>
-              <Label htmlFor='priority'>Priority</Label>
-              <Select
-                value={formData.details.priority || 'medium'}
-                onValueChange={value => handleDetailChange('priority', value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder='Select priority' />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value='low'>Low</SelectItem>
-                  <SelectItem value='medium'>Medium</SelectItem>
-                  <SelectItem value='high'>High</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
+        <div className='space-y-2'>
+          <Label htmlFor='priority'>Priority</Label>
+          <Select
+            value={formData.details.priority || 'medium'}
+            onValueChange={value => handleDetailChange('priority', value)}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder='Select priority' />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value='low'>Low</SelectItem>
+              <SelectItem value='medium'>Medium</SelectItem>
+              <SelectItem value='high'>High</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
 
-          <div className='space-y-2'>
-            <Label htmlFor='url'>URL</Label>
-            <Input
-              id='url'
-              type='url'
-              value={formData.details.url || ''}
-              onChange={e => handleDetailChange('url', e.target.value)}
-              placeholder='https://example.com'
-            />
-          </div>
+      <div className='space-y-2'>
+        <Label htmlFor='url'>URL</Label>
+        <Input
+          id='url'
+          type='url'
+          value={formData.details.url || ''}
+          onChange={e => handleDetailChange('url', e.target.value)}
+          placeholder='https://example.com'
+        />
+      </div>
 
-          <div className='space-y-2'>
-            <Label htmlFor='imageUrl'>Image URL</Label>
-            <Input
-              id='imageUrl'
-              type='url'
-              value={formData.details.imageUrl || ''}
-              onChange={e => handleDetailChange('imageUrl', e.target.value)}
-              placeholder='https://example.com/image.jpg'
-            />
-          </div>
+      <div className='space-y-2'>
+        <Label htmlFor='imageUrl'>Image URL</Label>
+        <Input
+          id='imageUrl'
+          type='url'
+          value={formData.details.imageUrl || ''}
+          onChange={e => handleDetailChange('imageUrl', e.target.value)}
+          placeholder='https://example.com/image.jpg'
+        />
+      </div>
 
-          <div className='space-y-2'>
-            <Label htmlFor='description'>Description</Label>
-            <Textarea
-              id='description'
-              value={formData.details.description || ''}
-              onChange={e => handleDetailChange('description', e.target.value)}
-              placeholder='Detailed description of the wish'
-              rows={3}
-            />
-          </div>
-
-          <div className='flex justify-end space-x-3 pt-6'>
-            <Button type='button' variant='outline' onClick={onCancel} disabled={loading}>
-              Cancel
-            </Button>
-            <Button type='submit' disabled={loading}>
-              {loading
-                ? mode === 'create'
-                  ? 'Creating...'
-                  : 'Updating...'
-                : mode === 'create'
-                  ? 'Create Wish'
-                  : 'Update Wish'}
-            </Button>
-          </div>
-        </form>
-      </CardContent>
-    </Card>
+      <div className='space-y-2'>
+        <Label htmlFor='description'>Description</Label>
+        <Textarea
+          id='description'
+          value={formData.details.description || ''}
+          onChange={e => handleDetailChange('description', e.target.value)}
+          placeholder='Detailed description of the wish'
+          rows={3}
+        />
+      </div>
+    </FormWrapper>
   );
 }

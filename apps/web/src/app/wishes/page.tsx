@@ -1,6 +1,6 @@
 'use client';
 
-import { ProtectedRoute } from '@/features/auth/protected-route';
+import { PageWrapper } from '@/components/common';
 import { WishesLayout, WishesEmptyState, useWishesData } from '@/components/wishes';
 
 function WishesContent() {
@@ -13,8 +13,8 @@ function WishesContent() {
 
 export default function WishesPage() {
   return (
-    <ProtectedRoute>
+    <PageWrapper>
       <WishesContent />
-    </ProtectedRoute>
+    </PageWrapper>
   );
 }

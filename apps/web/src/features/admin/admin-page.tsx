@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { Plus } from 'lucide-react';
 import { PageHeader, LoadingState, ErrorState, DataTableWrapper, useToast } from '@repo/ui';
-import { useAdminCrud } from '@/hooks/useAdminCrud';
+import { useCrud } from '@/hooks/useCrud';
 import { ColumnDef } from '@tanstack/react-table';
 
 interface IAdminPageProps<T extends { id: string }> {
@@ -38,7 +38,7 @@ export function AdminPage<T extends { id: string }>({
   FormComponent,
   onDeleteConfirm,
 }: IAdminPageProps<T>) {
-  const [state, actions] = useAdminCrud<T>(apiMethods);
+  const [state, actions] = useCrud<T>(apiMethods);
   const { showToast } = useToast();
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export function AdminPage<T extends { id: string }>({
     if (!shouldDelete) return;
 
     try {
-      await actions.deleteItem(item.id);
+      await actions.delete(item.id);
       showToast(`${title} deleted successfully`, 'success');
     } catch (error) {
       showToast(`Failed to delete ${title.toLowerCase()}`, 'error');
@@ -62,10 +62,10 @@ export function AdminPage<T extends { id: string }>({
   const handleSave = async (data: any) => {
     try {
       if (state.editingItem) {
-        await actions.updateItem(state.editingItem.id, data);
+        await actions.update(state.editingItem.id, data);
         showToast(`${title} updated successfully`, 'success');
       } else {
-        await actions.createItem(data);
+        await actions.create(data);
         showToast(`${title} created successfully`, 'success');
       }
     } catch (_error) {

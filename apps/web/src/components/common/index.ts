@@ -11,3 +11,5 @@ export { PasswordForm } from './password-form';
 export { NotificationSettings } from './notification-settings';
 export { ThemeSettings } from './theme-settings';
 export { AccountInfo } from './account-info';
+export { FormWrapper } from './form-wrapper';
+export { PageWrapper } from './page-wrapper';
